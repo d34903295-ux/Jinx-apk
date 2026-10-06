@@ -854,9 +854,15 @@ export function ChatView({
                 <div className="absolute size-28 rounded-full border border-dashed border-signal-400/30 animate-spin-slow" />
                 <div className="absolute size-36 rounded-full border border-white/[0.05]" />
                 <div className="absolute size-44 rounded-full border border-dotted border-white/[0.06] animate-spin-slower" />
-                <div className="size-20 rounded-3xl bg-linear-to-br from-signal-400 via-signal-500 to-signal-600 flex items-center justify-center text-ink-950 shadow-[0_0_35px_rgba(47,163,124,0.4)] animate-glow">
-                  <Logo size={42} />
-                </div>
+                <img
+                  src="/logo-jinx.png"
+                  width={88}
+                  height={88}
+                  alt="Jinx"
+                  style={{ borderRadius: 26 }}
+                  className="shadow-xl animate-glow select-none"
+                  draggable={false}
+                />
               </div>
 
               {/* Tag de Telemetría */}

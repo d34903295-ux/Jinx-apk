@@ -24,6 +24,27 @@ data class NativeModel(
 
 val NATIVE_MODELS: List<NativeModel> = listOf(
     NativeModel(
+        id = "gemma-3-270m-q4km",
+        label = "Minino · 270M",
+        language = "ES/EN",
+        fileName = "google_gemma-3-270m-it-Q4_K_M.gguf",
+        url = "https://huggingface.co/bartowski/google_gemma-3-270m-it-GGUF/resolve/main/google_gemma-3-270m-it-Q4_K_M.gguf",
+        expectedBytes = 253_115_168L,
+        sha256 = "c866c9f113f2e9aa2225c5997ede437392b8fa844ba5db9e4c77e315ffe20800",
+        ramNeededMB = 1024,
+        recommended = true,
+    ),
+    NativeModel(
+        id = "qwen-2.5-0.5b-q4km",
+        label = "Qwen 2.5 · 0.5B",
+        language = "ES/EN",
+        fileName = "Qwen2.5-0.5B-Instruct-Q4_K_M.gguf",
+        url = "https://huggingface.co/bartowski/Qwen2.5-0.5B-Instruct-GGUF/resolve/main/Qwen2.5-0.5B-Instruct-Q4_K_M.gguf",
+        expectedBytes = 397_808_192L,
+        sha256 = "6eb923e7d26e9cea28811e1a8e852009b21242fb157b26149d3b188f3a8c8653",
+        ramNeededMB = 1536,
+    ),
+    NativeModel(
         id = "llama-3.2-1b-q4km",
         label = "Llama 3.2 · 1B",
         language = "ES/EN",
@@ -32,7 +53,6 @@ val NATIVE_MODELS: List<NativeModel> = listOf(
         expectedBytes = 807_694_464L,
         sha256 = "6f85a640a97cf2bf5b8e764087b1e83da0fdb51d7c9fab7d0fece9385611df83",
         ramNeededMB = 2048,
-        recommended = true,
     ),
     NativeModel(
         id = "qwen-2.5-1.5b-q4km",

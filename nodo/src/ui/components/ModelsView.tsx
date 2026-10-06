@@ -15,7 +15,15 @@ import { setIsland, getIsland, haptic } from '../../core/native/island'
 import { showSnack } from '../../core/native/snackbar'
 
 function familyOf(id: string): BrandName {
-  return id.startsWith('qwen') ? 'alibabacloud' : 'meta'
+  if (id.startsWith('qwen')) return 'alibabacloud'
+  if (id.startsWith('gemma')) return 'google'
+  return 'meta'
+}
+
+function familyTitle(id: string): string {
+  if (id.startsWith('qwen')) return 'Qwen por Alibaba'
+  if (id.startsWith('gemma')) return 'Gemma por Google'
+  return 'Llama por Meta'
 }
 
 interface ModelsViewProps {
@@ -201,8 +209,8 @@ export function ModelsView({ onBack }: ModelsViewProps) {
               <div className="flex items-center justify-between gap-3">
                 <div className="min-w-0">
                   <h3 className="font-bold text-base text-ink-900 dark:text-white flex items-center gap-2">
-                    <span className="text-ink-400" title={m.id.startsWith('qwen') ? 'Qwen · Alibaba' : 'Llama · Meta'}>
-                      <BrandIcon name={familyOf(m.id)} size={15} title={m.id.startsWith('qwen') ? 'Qwen por Alibaba' : 'Llama por Meta'} />
+                    <span className="text-ink-400" title={familyTitle(m.id)}>
+                      <BrandIcon name={familyOf(m.id)} size={15} title={familyTitle(m.id)} />
                     </span>
                     {m.label}
                     {m.recommended && (
