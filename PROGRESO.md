@@ -22,6 +22,12 @@
 13. enterKeyHint=send ✔
 14. Filtro de documentos en Library ✔
 15. Release build OK ✔
+16. ErrorBoundary ✔
+17. Zoom accidental desactivado ✔
+18. color-scheme nativo ✔
+19. Autocapitalización en input ✔
+20. App renombrada a NODO ✔
+21. Archivos no usados eliminados ✔
 
 ## Siguiente
 - Revisar performance de blur/backdrop en WebView de Android (bajar blur en móvil)
