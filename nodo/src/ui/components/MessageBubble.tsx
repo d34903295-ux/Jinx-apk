@@ -157,6 +157,7 @@ export function MessageBubble({
               className="glass-card max-w-lg w-full sm:rounded-2xl rounded-t-3xl border border-signal-500/40 p-5 pb-[calc(1.25rem+env(safe-area-inset-bottom,0px))] sm:pb-5 shadow-2xl flex flex-col gap-3 text-ink-100 cursor-default shadow-[0_0_35px_-5px_rgba(0,245,160,0.2)] animate-sheet-up sm:animate-pop-in"
               onClick={(e) => e.stopPropagation()}
             >
+              <span className="mx-auto mb-2 h-1 w-10 rounded-full bg-white/15 sm:hidden" />
               <div className="flex items-center justify-between border-b border-white/10 pb-3">
                 <div className="flex items-center gap-2.5 min-w-0">
                   <span className="size-7 rounded-lg bg-signal-500/20 border border-signal-500/40 text-signal-400 font-mono font-bold text-xs flex items-center justify-center shadow-[0_0_10px_-2px_rgba(0,245,160,0.3)]">

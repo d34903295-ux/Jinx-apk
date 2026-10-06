@@ -359,6 +359,7 @@ export function LibraryView({ onBack, onAskDoc }: LibraryViewProps) {
             className="glass max-w-2xl w-full rounded-t-3xl sm:rounded-3xl border border-signal-500/30 p-6 pb-[calc(1.5rem+env(safe-area-inset-bottom,0px))] sm:pb-6 shadow-2xl flex flex-col gap-4 animate-sheet-up sm:animate-pop-in text-ink-900 dark:text-ink-100 max-h-[85vh] cursor-default"
             onClick={(e) => e.stopPropagation()}
           >
+            <span className="mx-auto mb-1 h-1 w-10 rounded-full bg-ink-400/30 sm:hidden" />
             <div className="flex items-center justify-between border-b border-ink-200/60 dark:border-white/10 pb-3">
               <div className="flex items-center gap-2.5">
                 <div className="size-8 rounded-xl bg-signal-500/20 text-signal-400 flex items-center justify-center">
