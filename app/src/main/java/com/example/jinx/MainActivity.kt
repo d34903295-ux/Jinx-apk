@@ -49,6 +49,16 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    override fun onPause() {
+        webView?.onPause()
+        super.onPause()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        webView?.onResume()
+    }
+
     override fun onDestroy() {
         webView?.destroy()
         webView = null
