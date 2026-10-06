@@ -8,6 +8,7 @@ import { ModelsView } from './ui/components/ModelsView'
 import { Icon, Logo } from './ui/components/Icon'
 import { DynamicIsland } from './ui/components/DynamicIsland'
 import { Snackbar } from './ui/components/Snackbar'
+import { ThinkingOrb } from 'thinking-orbs'
 import { activeNativeModel, nativeAction } from './core/native/bridge'
 import { t } from './i18n'
 
@@ -83,8 +84,8 @@ export function App() {
             <Logo size={36} />
           </div>
         </div>
-        <div className="flex items-center gap-2 text-sm text-ink-400 font-medium">
-          <Icon name="refresh" size={16} className="animate-spin text-signal-400" />
+        <div className="flex items-center gap-3 text-sm text-ink-400 font-medium">
+          <ThinkingOrb state="breathing" size={20} aria-label={t('boot.loading')} />
           <span>{t('boot.loading')}</span>
         </div>
         <span className="font-mono text-[10px] uppercase tracking-widest text-ink-500">

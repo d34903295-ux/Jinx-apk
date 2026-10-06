@@ -22,7 +22,8 @@
     "pdfjs-dist": "^6.4.299",
     "pyodide": "^314.0.7",
     "react": "^19.2.8",
-    "react-dom": "^19.2.8"
+    "react-dom": "^19.2.8",
+    "thinking-orbs": "^0.3.2"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.3.3",

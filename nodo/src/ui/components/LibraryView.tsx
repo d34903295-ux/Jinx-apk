@@ -12,6 +12,7 @@ import { isEmergencyPackInstalled, installEmergencyPack } from '../../core/rag/e
 import { Icon } from './Icon'
 import { ProgressBar } from './ProgressBar'
 import { Skeleton } from './Skeleton'
+import { ThinkingOrb } from 'thinking-orbs'
 
 interface LibraryViewProps {
   onBack: () => void
@@ -409,11 +410,7 @@ export function LibraryView({ onBack, onAskDoc }: LibraryViewProps) {
             {!summaryResult && (
               <div className="flex flex-col py-4 gap-3">
                 <div className="flex items-center gap-2.5">
-                  <span className="typing-dots" aria-hidden="true">
-                    <i />
-                    <i />
-                    <i />
-                  </span>
+                  <ThinkingOrb state="composing" size={20} aria-label="Resumiendo documento" />
                   <span className="text-sm font-medium text-ink-700 dark:text-ink-200">
                     {summaryProgress?.text ?? 'Iniciando análisis…'}
                   </span>

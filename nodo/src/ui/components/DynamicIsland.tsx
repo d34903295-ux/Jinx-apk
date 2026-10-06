@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { ThinkingOrb } from 'thinking-orbs'
 import { getIsland, subscribeIsland, type IslandState } from '../../core/native/island'
 import { Icon } from './Icon'
 
@@ -34,15 +35,16 @@ export function DynamicIsland({ onOpenModels }: { onOpenModels: () => void }) {
           expanded ? 'max-w-[92vw]' : 'max-w-[70vw]'
         }`}
       >
-        <span className="relative flex size-2.5 shrink-0 items-center justify-center">
-          {(state.mode === 'thinking' || state.mode === 'agent') && (
-            <span className="absolute size-2.5 rounded-full bg-signal-400 animate-ping" />
+        <span className="flex shrink-0 items-center justify-center">
+          {state.mode === 'thinking' || state.mode === 'agent' ? (
+            <ThinkingOrb state="working" size={20} aria-label={islandLabel(state)} />
+          ) : state.mode === 'listening' ? (
+            <ThinkingOrb state="listening" size={20} aria-label={islandLabel(state)} />
+          ) : (
+            <span className="relative flex size-2.5 items-center justify-center">
+              <span className="size-2 rounded-full bg-signal-400" />
+            </span>
           )}
-          <span
-            className={`size-2 rounded-full ${
-              state.mode === 'listening' ? 'bg-cyan-400' : 'bg-signal-400'
-            }`}
-          />
         </span>
         <span className="min-w-0 flex-1">
           <span className="block truncate text-xs font-semibold text-white">

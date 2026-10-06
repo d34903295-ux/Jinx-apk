@@ -10,6 +10,7 @@ import {
 } from '../../core/native/bridge'
 import { Icon } from './Icon'
 import { BrandIcon, type BrandName } from './BrandIcon'
+import { ThinkingOrb } from 'thinking-orbs'
 import { setIsland, getIsland, haptic } from '../../core/native/island'
 import { showSnack } from '../../core/native/snackbar'
 
@@ -236,7 +237,8 @@ export function ModelsView({ onBack }: ModelsViewProps) {
                       style={{ width: `${Math.max(2, Math.round((m.downloadedMB / m.totalMB) * 100))}%` }}
                     />
                   </div>
-                  <span className="font-mono text-[11px] text-signal-400">
+                  <span className="font-mono text-[11px] text-signal-400 flex items-center gap-2">
+                    {m.verifying && <ThinkingOrb state="solving" size={20} aria-label="Verificando integridad" />}
                     {m.verifying
                       ? 'Verificando integridad (SHA-256)…'
                       : `${fmtMB(m.downloadedMB)}/${fmtMB(m.totalMB)}${m.speedMBs !== undefined ? ` · ${m.speedMBs.toFixed(1)} MB/s · quedan ${fmtEta(m.etaSec ?? -1)}` : ''}`}

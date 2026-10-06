@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { ThinkingOrb } from 'thinking-orbs'
 import type { Citation, ToolCall } from '../../types'
 import { Icon } from './Icon'
 import { ToolCallCard } from './ToolCallCard'
@@ -79,13 +80,7 @@ export function MessageBubble({
         return <Markdown text={content} copyCode={(code) => void copyText(code)} />
       }
       if (!isUser && streaming && !content) {
-        return (
-          <span className="typing-dots" aria-label="La IA está escribiendo">
-            <i />
-            <i />
-            <i />
-          </span>
-        )
+        return <ThinkingOrb state="working" size={20} aria-label="La IA está escribiendo" />
       }
       return (
         <p className="break-words whitespace-pre-wrap">
