@@ -66,7 +66,7 @@ export const es = {
     'Usa Chrome o Edge actualizados (versión 113 o superior) en PC o Android. El modo de respaldo sin WebGPU (wllama) llegará en una próxima versión.',
   'setup.privacy': 'Tus datos nunca salen del dispositivo.',
 
-  'boot.loading': 'Iniciando NODO…',
+  'boot.loading': 'Iniciando Jinx…',
   'boot.loadError': 'No se pudo cargar el modelo: {msg}',
   'boot.retry': 'Reintentar',
   'boot.reinstall': 'Elegir otro modelo',

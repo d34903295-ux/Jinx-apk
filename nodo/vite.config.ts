@@ -36,8 +36,8 @@ export default defineConfig({
       filename: 'sw.ts',
       registerType: 'autoUpdate',
       manifest: {
-        name: 'NODO · IA 100% offline',
-        short_name: 'NODO',
+        name: 'Jinx · IA 100% offline',
+        short_name: 'Jinx',
         description:
           'Agente de IA que se instala una vez y funciona para siempre sin internet: chat, documentos con citas y código.',
         lang: 'es',

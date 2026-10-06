@@ -121,7 +121,7 @@ export function ChatView({
     }
   }, [nativeModel])
 
-  // Texto compartido desde otras apps (Compartir → NODO).
+  // Texto compartido desde otras apps (Compartir → Jinx).
   useEffect(() => {
     const pull = () => {
       try {
@@ -249,7 +249,7 @@ export function ChatView({
     const msgs = await getMessages(id)
     const body = msgs.map((m) => `${m.role === 'assistant' ? 'IA' : 'Yo'}: ${m.content}`).join('\n\n')
     const text = `${chat?.title ?? 'Conversación'}\n\n${body}`
-    const done = nativeAction((n) => n.shareText(chat?.title ?? 'Conversación NODO', text))
+    const done = nativeAction((n) => n.shareText(chat?.title ?? 'Conversación Jinx', text))
     if (done !== 'ok') {
       try {
         await navigator.clipboard.writeText(text)
@@ -547,7 +547,7 @@ export function ChatView({
               <Logo size={20} />
             </div>
             <div className="flex flex-col">
-              <span className="font-display font-bold tracking-tight text-lg text-ink-900 dark:text-white">NODO</span>
+              <span className="font-display font-bold tracking-tight text-lg text-ink-900 dark:text-white">Jinx</span>
               <span className="font-mono text-[9px] text-signal-400 tracking-wider uppercase">OFFGRID // v1.0</span>
             </div>
           </div>
@@ -862,7 +862,7 @@ export function ChatView({
               {/* Tag de Telemetría */}
               <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-ink-300">
                 <span className="size-1.5 rounded-full bg-signal-400 shadow-[0_0_6px_#2fa37c]" />
-                <span>NODO OFFGRID // MOTOR NATIVO</span>
+                <span>Jinx OFFGRID // MOTOR NATIVO</span>
               </div>
 
               <div className="flex flex-col gap-1.5">

@@ -116,12 +116,12 @@ export function App() {
             type="button"
             onClick={() => go('chat')}
             className="size-9 rounded-xl bg-linear-to-br from-signal-400 to-signal-600 flex items-center justify-center text-ink-950 cursor-pointer"
-            aria-label="NODO inicio" title="NODO inicio"
+            aria-label="Jinx inicio" title="Jinx inicio"
           >
             <Logo size={20} />
           </button>
           <div className="flex flex-col">
-            <span className="font-display font-bold tracking-tight text-lg text-ink-900 dark:text-white">NODO</span>
+            <span className="font-display font-bold tracking-tight text-lg text-ink-900 dark:text-white">Jinx</span>
             <span className="font-mono text-[9px] text-signal-400 tracking-wider uppercase">OFFGRID // v2.0</span>
           </div>
         </div>

@@ -176,7 +176,7 @@ export function ModelsView({ onBack }: ModelsViewProps) {
         {native && !ignoringBattery && (
           <div className="glass rounded-2xl border-ember-500/30 bg-ember-500/10 p-4 text-sm text-ember-600 dark:text-ember-300 flex flex-col gap-2 animate-fade-up">
             <span>
-              Para que las descargas grandes no se corten con la pantalla apagada, permite que NODO
+              Para que las descargas grandes no se corten con la pantalla apagada, permite que Jinx
               funcione sin restricciones de batería.
             </span>
             <button

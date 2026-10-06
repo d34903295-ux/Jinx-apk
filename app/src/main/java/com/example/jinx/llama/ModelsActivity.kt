@@ -83,7 +83,7 @@ class ModelsActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         LlamaEngine.attach(this)
         setContent {
-            MaterialTheme(colorScheme = darkNodo()) {
+            MaterialTheme(colorScheme = darkJinx()) {
                 Surface(modifier = Modifier.fillMaxSize(), color = Ink) {
                     GlassBackground {
                         ModelsScreen(
@@ -178,7 +178,7 @@ class ModelsActivity : ComponentActivity() {
     }
 }
 
-private fun darkNodo() = androidx.compose.material3.darkColorScheme(
+private fun darkJinx() = androidx.compose.material3.darkColorScheme(
     primary = Signal,
     background = Ink,
     surface = Color(0xFF0D111B),

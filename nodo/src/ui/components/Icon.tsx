@@ -87,24 +87,16 @@ export function Icon({ name, size = 18, ...rest }: IconProps) {
   )
 }
 
-/** Logo de NODO: tres nodos conectados. */
+/** Logo de Jinx: monograma JX. */
 export function Logo({ size = 28 }: { size?: number }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 64 64" aria-hidden="true">
-      <defs>
-        <linearGradient id="nodo-g" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stopColor="#7bc9a8" />
-          <stop offset="1" stopColor="#10b981" />
-        </linearGradient>
-      </defs>
-      <g stroke="url(#nodo-g)" strokeWidth={4} strokeLinecap="round">
-        <line x1="18" y1="20" x2="46" y2="20" />
-        <line x1="18" y1="20" x2="32" y2="46" />
-        <line x1="46" y1="20" x2="32" y2="46" />
-      </g>
-      <circle cx="18" cy="20" r="7" fill="url(#nodo-g)" />
-      <circle cx="46" cy="20" r="7" fill="url(#nodo-g)" />
-      <circle cx="32" cy="46" r="8" fill="#fbbf24" />
-    </svg>
+    <img
+      src="/logo-jinx.png"
+      width={size}
+      height={size}
+      alt="Jinx"
+      style={{ borderRadius: Math.max(6, size * 0.22) }}
+      draggable={false}
+    />
   )
 }

@@ -132,7 +132,7 @@ fun agentTools(): List<AgentTool> = listOf(
             val s = args["segundos"]?.toIntOrNull()?.coerceIn(1, 86400) ?: 60
             val i = Intent(AlarmClock.ACTION_SET_TIMER).apply {
                 putExtra(AlarmClock.EXTRA_LENGTH, s)
-                putExtra(AlarmClock.EXTRA_MESSAGE, args["mensaje"] ?: "NODO")
+                putExtra(AlarmClock.EXTRA_MESSAGE, args["mensaje"] ?: "Jinx")
                 putExtra(AlarmClock.EXTRA_SKIP_UI, false)
                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             }

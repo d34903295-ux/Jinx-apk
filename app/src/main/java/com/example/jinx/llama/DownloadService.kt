@@ -96,7 +96,7 @@ class DownloadService : Service() {
     private fun buildNotification(state: DownloadState, model: NativeModel): Notification {
         val b = NotificationCompat.Builder(this, CHANNEL_ID)
             .setSmallIcon(android.R.drawable.stat_sys_download)
-            .setContentTitle("NODO · ${model.label}")
+            .setContentTitle("Jinx · ${model.label}")
             .setOngoing(true)
             .setOnlyAlertOnce(true)
         when (state) {

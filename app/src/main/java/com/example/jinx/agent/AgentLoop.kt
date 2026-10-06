@@ -19,7 +19,7 @@ private const val MAX_STEPS = 5
 
 private fun toolsPrompt(tools: List<AgentTool>): String {
     val sb = StringBuilder()
-    sb.append("Eres NODO, un agente en un teléfono Android. ")
+    sb.append("Eres Jinx, un agente en un teléfono Android. ")
     sb.append("Responde SIEMPRE con una sola línea JSON, sin texto fuera:\n")
     sb.append("Para usar una herramienta: {\"tool\": \"nombre\", \"args\": {\"clave\": \"valor\"}}\n")
     sb.append("Para responder al usuario: {\"final\": \"tu respuesta\"}\n")
