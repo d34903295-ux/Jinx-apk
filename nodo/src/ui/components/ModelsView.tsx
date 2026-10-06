@@ -42,6 +42,7 @@ export function ModelsView({ onBack }: ModelsViewProps) {
   const [notice, setNotice] = useState<string | null>(null)
   const [testingId, setTestingId] = useState<string | null>(null)
   const [testOut, setTestOut] = useState('')
+  const [ignoringBattery, setIgnoringBattery] = useState(true)
   const native = hasNative()
 
   const refresh = () => {
@@ -49,6 +50,7 @@ export function ModelsView({ onBack }: ModelsViewProps) {
     try {
       setFreeMB(window.NodoNative!.freeSpaceMB())
       setRamMB(window.NodoNative!.totalRamMB())
+      setIgnoringBattery(window.NodoNative!.isIgnoringBattery())
     } catch {
       /* noop */
     }
@@ -143,6 +145,25 @@ export function ModelsView({ onBack }: ModelsViewProps) {
         {!native && (
           <div className="glass rounded-2xl border-cyan-500/30 bg-cyan-500/10 p-4 text-cyan-700 dark:text-cyan-300 text-sm">
             Vista previa en navegador: la descarga y la inferencia funcionan dentro del APK.
+          </div>
+        )}
+
+        {native && !ignoringBattery && (
+          <div className="glass rounded-2xl border-ember-500/30 bg-ember-500/10 p-4 text-sm text-ember-600 dark:text-ember-300 flex flex-col gap-2 animate-fade-up">
+            <span>
+              Para que las descargas grandes no se corten con la pantalla apagada, permite que NODO
+              funcione sin restricciones de batería.
+            </span>
+            <button
+              type="button"
+              onClick={() => {
+                nativeAction((n) => n.requestBatteryExemption())
+                setTimeout(refresh, 1500)
+              }}
+              className="btn-amber text-xs px-4 py-2 cursor-pointer self-start"
+            >
+              Permitir en segundo plano
+            </button>
           </div>
         )}
 

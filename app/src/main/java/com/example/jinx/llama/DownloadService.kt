@@ -7,9 +7,13 @@ import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.Binder
 import android.os.Build
 import android.os.IBinder
+import android.os.PowerManager
+import android.net.wifi.WifiManager
 import androidx.core.app.NotificationCompat
 import java.io.File
 import java.util.concurrent.Executors
@@ -128,6 +132,11 @@ class DownloadService : Service() {
     }
 
     private fun startDownload(model: NativeModel) {
+        if (!hasNetwork()) {
+            listener?.invoke(DownloadState.Error("Sin conexión a internet"))
+            stopSelf()
+            return
+        }
         // Espacio libre: exigir modelo + 500 MB de margen.
         val free = filesDir.usableSpace
         if (free < model.expectedBytes + 500L * 1024 * 1024) {
@@ -139,6 +148,43 @@ class DownloadService : Service() {
         resumeDownload(model)
     }
 
+    private fun hasNetwork(): Boolean {
+        val cm = getSystemService(ConnectivityManager::class.java) ?: return false
+        val net = cm.activeNetwork ?: return false
+        val caps = cm.getNetworkCapabilities(net) ?: return false
+        return caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) &&
+            caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
+    }
+
+    private var wakeLock: PowerManager.WakeLock? = null
+    private var wifiLock: WifiManager.WifiLock? = null
+
+    /** Mantiene CPU y WiFi despiertos durante la descarga (pantalla apagada). */
+    private fun acquireLocks() {
+        releaseLocks()
+        val pm = getSystemService(PowerManager::class.java)
+        wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "nodo:download").apply {
+            acquire(12 * 60 * 60 * 1000L)
+        }
+        val wm = applicationContext.getSystemService(WifiManager::class.java)
+        wifiLock = wm?.createWifiLock(WifiManager.WIFI_MODE_FULL_HIGH_PERF, "nodo:download")?.apply {
+            acquire()
+        }
+    }
+
+    private fun releaseLocks() {
+        try {
+            if (wakeLock?.isHeld == true) wakeLock?.release()
+        } catch (_: Exception) {
+        }
+        try {
+            if (wifiLock?.isHeld == true) wifiLock?.release()
+        } catch (_: Exception) {
+        }
+        wakeLock = null
+        wifiLock = null
+    }
+
     private fun resumeDownload(model: NativeModel) {
         currentModel = model
         val dl = ModelDownloader()
@@ -147,9 +193,11 @@ class DownloadService : Service() {
             listener?.invoke(s)
             notifyFor(s, model)
             if (s is DownloadState.Done || s is DownloadState.Error) {
+                releaseLocks()
                 stopForeground(STOP_FOREGROUND_DETACH)
             }
         }
+        acquireLocks()
         if (Build.VERSION.SDK_INT >= 29) {
             startForeground(
                 NOTIF_ID,
@@ -193,6 +241,7 @@ class DownloadService : Service() {
 
     override fun onDestroy() {
         downloader?.cancel()
+        releaseLocks()
         exec.shutdownNow()
         super.onDestroy()
     }

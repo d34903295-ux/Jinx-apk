@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
 import android.os.IBinder
+import android.os.PowerManager
 import android.util.Log
 import android.webkit.JavascriptInterface
 import java.io.File
@@ -252,6 +253,33 @@ class NodoBridge(
         val info = ActivityManager.MemoryInfo()
         am.getMemoryInfo(info)
         return info.totalMem / 1048576
+    }
+
+    /** ¿La app está exenta de optimización de batería? (descargas fiables). */
+    @JavascriptInterface
+    fun isIgnoringBattery(): Boolean {
+        val pm = context.getSystemService(PowerManager::class.java) ?: return false
+        return pm.isIgnoringBatteryOptimizations(context.packageName)
+    }
+
+    /** Abre el diálogo del sistema para eximir a NODO de optimización. */
+    @JavascriptInterface
+    fun requestBatteryExemption(): String {
+        return try {
+            if (isIgnoringBattery()) {
+                "already"
+            } else {
+                val intent = Intent(
+                    android.provider.Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS,
+                    android.net.Uri.parse("package:${context.packageName}"),
+                ).apply { addFlags(Intent.FLAG_ACTIVITY_NEW_TASK) }
+                context.startActivity(intent)
+                "ok"
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "battery exemption failed", e)
+            "error"
+        }
     }
 
     companion object {

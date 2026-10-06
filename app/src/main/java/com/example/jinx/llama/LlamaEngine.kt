@@ -49,6 +49,15 @@ val NATIVE_MODELS: List<NativeModel> = listOf(
         expectedBytes = 1_929_903_264L,
         ramNeededMB = 3584,
     ),
+    NativeModel(
+        id = "qwen-2.5-7b-q4km",
+        label = "Qwen 2.5 · 7B",
+        language = "ES/EN",
+        fileName = "Qwen2.5-7B-Instruct-Q4_K_M.gguf",
+        url = "https://huggingface.co/bartowski/Qwen2.5-7B-Instruct-GGUF/resolve/main/Qwen2.5-7B-Instruct-Q4_K_M.gguf",
+        expectedBytes = 4_683_074_240L,
+        ramNeededMB = 7168,
+    ),
 )
 
 /** Tamaños verificados contra las páginas de Hugging Face (bartowski, Q4_K_M). */

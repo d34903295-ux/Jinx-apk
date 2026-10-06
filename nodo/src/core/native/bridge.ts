@@ -30,6 +30,8 @@ export interface NodoNative {
   stopGenerate(): string
   freeSpaceMB(): number
   totalRamMB(): number
+  isIgnoringBattery(): boolean
+  requestBatteryExemption(): string
 }
 
 declare global {
