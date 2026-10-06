@@ -104,6 +104,18 @@ fun NodoWebViewScreen(
                         super.onPageFinished(view, url)
                         Log.d("NODO", "Página cargada exitosamente: $url")
                     }
+
+                    override fun onRenderProcessGone(
+                        view: WebView?,
+                        detail: android.webkit.RenderProcessGoneDetail?
+                    ): Boolean {
+                        Log.e("NODO", "Proceso de render perdido (crash), reiniciando WebView")
+                        view?.destroy()
+                        android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({
+                            recreate()
+                        }, 300)
+                        return true
+                    }
                 }
 
                 webChromeClient = object : WebChromeClient() {
