@@ -107,7 +107,7 @@ export function ModelsView({ onBack }: ModelsViewProps) {
         Volver al Chat
       </button>
 
-      <div className="w-full max-w-4xl mx-auto flex flex-col gap-4">
+      <div className="w-full max-w-4xl mx-auto flex flex-col gap-4 stagger">
         <div className="flex items-center gap-3">
           <div className="size-11 rounded-2xl bg-linear-to-br from-signal-400 to-signal-600 flex items-center justify-center text-ink-950 shadow-md shadow-signal-500/20">
             <Icon name="cpu" size={20} />

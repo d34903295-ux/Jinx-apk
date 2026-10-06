@@ -72,7 +72,7 @@ export function App() {
 
   if (booting) {
     return (
-      <div className="h-screen w-full flex flex-col items-center justify-center bg-ink-950 text-white gap-4 select-none app-backdrop safe-top safe-bottom safe-x">
+      <div className="h-dvh w-full flex flex-col items-center justify-center bg-ink-950 text-white gap-4 select-none app-backdrop safe-top safe-bottom safe-x">
         <div className="size-16 rounded-2xl bg-linear-to-br from-signal-400 to-signal-600 flex items-center justify-center text-ink-950 shadow-2xl shadow-signal-500/25 animate-pulse">
           <Logo size={36} />
         </div>
@@ -85,7 +85,7 @@ export function App() {
   }
 
   return (
-    <div className="h-screen w-full bg-ink-50 dark:bg-ink-950 safe-x safe-top flex flex-col overflow-hidden">
+    <div className="h-dvh w-full bg-ink-50 dark:bg-ink-950 safe-x safe-top flex flex-col overflow-hidden">
       {/* Drawer lateral (el logo lo abre) */}
       {drawerOpen && (
         <div
@@ -112,7 +112,7 @@ export function App() {
             <span className="font-mono text-[9px] text-signal-400 tracking-wider uppercase">OFFGRID // v2.0</span>
           </div>
         </div>
-        <nav className="flex-1 overflow-y-auto p-3 flex flex-col gap-1 scroll-thin">
+        <nav className="flex-1 overflow-y-auto p-3 flex flex-col gap-1 scroll-thin stagger">
           {TABS.map((tab) => (
             <button
               key={tab.id}
@@ -200,21 +200,21 @@ export function App() {
         )}
       </div>
 
-      {/* Barra inferior */}
-      <nav className="shrink-0 z-10 px-3 pt-1 safe-bottom">
-        <div className="glass rounded-2xl flex items-center justify-around py-1.5 shadow-2xl">
+      {/* Barra inferior Liquid Glass */}
+      <nav className="shrink-0 z-10 px-4 pt-1 safe-bottom">
+        <div className="glass-tabbar rounded-[28px] flex items-center justify-around py-2 px-1">
           {TABS.map((tab) => (
             <button
               key={tab.id}
               type="button"
               onClick={() => go(tab.id)}
-              className={`flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-xl transition cursor-pointer min-w-[56px] ${
-                view === tab.id ? 'text-signal-400' : 'text-ink-400 hover:text-ink-200'
+              className={`flex flex-col items-center gap-0.5 px-4 py-1.5 rounded-2xl transition-all duration-200 cursor-pointer min-w-[56px] active:scale-95 ${
+                view === tab.id ? 'text-signal-400 glass-tab-active' : 'text-ink-400 hover:text-ink-200'
               }`}
               aria-label={tab.label} title={tab.label}
             >
-              <Icon name={tab.icon} size={20} />
-              <span className="text-[10px] font-medium">{tab.label}</span>
+              <Icon name={tab.icon} size={21} />
+              <span className="text-[10px] font-semibold">{tab.label}</span>
             </button>
           ))}
         </div>

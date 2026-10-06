@@ -5,6 +5,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -32,7 +34,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import java.util.concurrent.Executors
@@ -98,7 +102,19 @@ private fun AgentScreen(
         AGENT_PERMISSIONS.filter { (perm, _) -> !hasPermission(context, perm) }
     }
 
-    Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(
+                Brush.radialGradient(
+                    0.0f to Color(0xFF00F5A0).copy(alpha = 0.06f),
+                    0.6f to Color.Transparent,
+                    center = Offset(200f, 0f),
+                    radius = 900f,
+                ),
+            )
+            .padding(16.dp),
+    ) {
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
             TextButton(onClick = onBack) { Text("‹ Volver", color = Signal) }
             Text("AGENTE", color = Color.Gray, style = MaterialTheme.typography.labelSmall)
@@ -172,7 +188,10 @@ private fun AgentScreen(
                     AgentStep.Kind.FINAL -> Color.White
                     AgentStep.Kind.THINKING -> Color.Gray
                 }
-                Card(colors = CardDefaults.cardColors(containerColor = Color(0xFF0D111B))) {
+                Card(
+                    colors = CardDefaults.cardColors(containerColor = Color(0xFF0D111B).copy(alpha = 0.72f)),
+                    border = BorderStroke(1.dp, Color.White.copy(alpha = 0.1f)),
+                ) {
                     Text(s.text, color = color, modifier = Modifier.padding(10.dp), style = MaterialTheme.typography.bodySmall)
                 }
             }

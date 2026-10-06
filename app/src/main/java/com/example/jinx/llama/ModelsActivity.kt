@@ -9,7 +9,9 @@ import android.os.Bundle
 import android.os.IBinder
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -39,7 +41,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import java.io.File
@@ -72,7 +76,8 @@ class ModelsActivity : ComponentActivity() {
         setContent {
             MaterialTheme(colorScheme = darkNodo()) {
                 Surface(modifier = Modifier.fillMaxSize(), color = Ink) {
-                    ModelsScreen(
+                    GlassBackground {
+                        ModelsScreen(
                         filesDir = filesDir,
                         statesFlow = states,
                         onDownload = { m -> DownloadService.start(this, m.id); refreshSoon() },
@@ -84,6 +89,26 @@ class ModelsActivity : ComponentActivity() {
                     )
                 }
             }
+        }
+    }
+    }
+
+    /** Fondo Liquid: glows radiales volt/cian sobre tinta. */
+    @Composable
+    private fun GlassBackground(content: @Composable () -> Unit) {
+        androidx.compose.foundation.layout.Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(
+                    androidx.compose.ui.graphics.Brush.radialGradient(
+                        0.0f to Color(0xFF00F5A0).copy(alpha = 0.07f),
+                        0.6f to Color.Transparent,
+                        center = Offset(200f, 0f),
+                        radius = 900f,
+                    ),
+                ),
+        ) {
+            content()
         }
     }
 
@@ -212,7 +237,10 @@ private fun ModelCard(
     onTest: () -> Unit,
 ) {
     val tooHeavy = model.ramNeededMB > 6144
-    Card(colors = CardDefaults.cardColors(containerColor = Color(0xFF0D111B))) {
+    Card(
+        colors = CardDefaults.cardColors(containerColor = Color(0xFF0D111B).copy(alpha = 0.72f)),
+        border = androidx.compose.foundation.BorderStroke(1.dp, Color.White.copy(alpha = 0.1f)),
+    ) {
         Column(Modifier.padding(14.dp)) {
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                 Text(model.label, color = Color.White, style = MaterialTheme.typography.titleMedium)

@@ -114,7 +114,7 @@ export function SettingsView({
   )
 
   return (
-    <div className="relative min-h-screen w-full flex flex-col p-4 pb-[calc(1rem+env(safe-area-inset-bottom,0px))] sm:p-6 lg:p-10 app-backdrop select-none overflow-y-auto">
+    <div className="relative min-h-dvh w-full flex flex-col p-4 pb-[calc(1rem+env(safe-area-inset-bottom,0px))] sm:p-6 lg:p-10 app-backdrop select-none overflow-y-auto">
       <button
         type="button"
         onClick={onBack}

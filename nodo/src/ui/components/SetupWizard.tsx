@@ -99,7 +99,7 @@ export function SetupWizard({ onComplete, canCancel = false, onCancel }: SetupWi
   }
 
   return (
-    <div className="relative min-h-screen w-full flex flex-col items-center justify-center p-4 py-[calc(1rem+env(safe-area-inset-top,0px))] pb-[calc(1rem+env(safe-area-inset-bottom,0px))] sm:p-6 lg:p-10 app-backdrop select-none">
+    <div className="relative min-h-dvh w-full flex flex-col items-center justify-center p-4 py-[calc(1rem+env(safe-area-inset-top,0px))] pb-[calc(1rem+env(safe-area-inset-bottom,0px))] sm:p-6 lg:p-10 app-backdrop select-none">
       {/* Botón cancelar/volver si ya tiene modelo */}
       {canCancel && onCancel && (
         <button

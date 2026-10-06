@@ -485,7 +485,7 @@ export function ChatView({
   }
 
   return (
-    <div className="flex h-screen w-full overflow-hidden bg-ink-50 dark:bg-ink-950 text-ink-900 dark:text-ink-100 select-none app-backdrop">
+    <div className="flex h-dvh w-full overflow-hidden bg-ink-50 dark:bg-ink-950 text-ink-900 dark:text-ink-100 select-none app-backdrop">
       {/* Overlay para móvil */}
       {sidebarOpen && (
         <div
