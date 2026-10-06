@@ -33,6 +33,9 @@ export interface NodoNative {
   totalRamMB(): number
   isIgnoringBattery(): boolean
   requestBatteryExemption(): string
+  hasLocationPermission(): boolean
+  hasCameraPermission(): boolean
+  openAppSettings(): string
 }
 
 declare global {
@@ -115,4 +118,22 @@ export function nativeAction(fn: (n: NodoNative) => string): string {
   } catch {
     return 'error'
   }
+}
+
+/** Generación en una sola promesa (para resúmenes y tareas puntuales). */
+export function nativeGenerateOnce(prompt: string, maxTokens: number): Promise<string> {
+  return new Promise((resolve, reject) => {
+    if (!hasNative()) {
+      reject(new Error('Sin motor nativo'))
+      return
+    }
+    try {
+      nativeGenerate(prompt, maxTokens, (kind, text) => {
+        if (kind === 'done') resolve(text)
+        else if (kind === 'error') reject(new Error(text))
+      })
+    } catch (e) {
+      reject(e instanceof Error ? e : new Error(String(e)))
+    }
+  })
 }

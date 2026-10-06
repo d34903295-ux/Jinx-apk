@@ -54,7 +54,7 @@ export default defineConfig({
         ],
       },
       injectManifest: {
-        globPatterns: ['**/*.{js,css,html,svg,png,webp,woff2,wasm,json,md}'],
+        globPatterns: ['**/*.{js,css,html,svg,png,webp,woff2,wasm,json,md,onnx}'],
         // Los bundles de WebLLM y ONNX Runtime superan el límite de 2 MiB.
         maximumFileSizeToCacheInBytes: 35 * 1024 * 1024,
       },

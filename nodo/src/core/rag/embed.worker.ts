@@ -1,13 +1,14 @@
 import { pipeline, env } from '@huggingface/transformers'
 
-// Configuración para entorno navegador offline: usar Cache API y modelos remotos una vez
-env.allowLocalModels = false
-env.useBrowserCache = true
+// 100% offline: el modelo de embeddings viaja empaquetado en /models.
+env.allowLocalModels = true
+env.allowRemoteModels = false
+env.useBrowserCache = false
 
 let embedder: any = null
 let loadingPromise: Promise<any> | null = null
 
-const DEFAULT_MODEL = 'Xenova/all-MiniLM-L6-v2'
+const DEFAULT_MODEL = '/models/all-MiniLM-L6-v2'
 
 async function getEmbedder(model = DEFAULT_MODEL) {
   if (embedder) return embedder

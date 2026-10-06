@@ -181,6 +181,7 @@ export function App() {
             activeModelId={activeNativeModel()}
             onBack={() => setView('chat')}
             onModelChanged={() => setView('chat')}
+            onOpenModels={() => setView('models')}
             theme={theme}
             onToggleTheme={handleToggleTheme}
           />

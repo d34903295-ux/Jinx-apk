@@ -1,5 +1,5 @@
 import { getDocument, getDocumentChunks } from './ingest'
-import { llm } from '../llm/llmClient'
+import { hasNative, nativeGenerateOnce } from '../native/bridge'
 
 export interface SummarizeProgress {
   stage: 'mapping' | 'reducing' | 'done'
@@ -10,13 +10,21 @@ export interface SummarizeProgress {
 
 /**
  * Resumen de documento completo mediante estrategia Map-Reduce para no sobrecargar el contexto.
+ * Usa el motor nativo (100% offline).
  */
 export async function summarizeDocument(
   docId: number,
   onProgress?: (p: SummarizeProgress) => void
 ): Promise<string> {
+  if (!hasNative()) throw new Error('Sin motor nativo. Descarga un modelo en Modelos.')
   const doc = await getDocument(docId)
   if (!doc) throw new Error('Documento no encontrado.')
+
+  const toText = (msgs: { role: string; content: string }[]): string =>
+    msgs.map((m) => (m.role === 'system' ? `Instrucciones: ${m.content}` : `Usuario: ${m.content}`)).join('\n\n')
+
+  const gen = (msgs: { role: string; content: string }[]): Promise<string> =>
+    nativeGenerateOnce(toText(msgs), 512)
 
   const chunks = await getDocumentChunks(docId)
   if (chunks.length === 0) throw new Error('El documento no contiene texto indexado.')
@@ -43,7 +51,7 @@ export async function summarizeDocument(
       },
     ]
 
-    return llm.generate(prompt, () => {})
+    return gen(prompt)
   }
 
   // Caso 2: Documento largo -> Map-Reduce
@@ -78,7 +86,7 @@ export async function summarizeDocument(
       },
     ]
 
-    const partialSummary = await llm.generate(prompt, () => {})
+    const partialSummary = await gen(prompt)
     batchSummaries.push(partialSummary)
   }
 
@@ -106,7 +114,7 @@ export async function summarizeDocument(
     },
   ]
 
-  const finalSummary = await llm.generate(finalPrompt, () => {})
+  const finalSummary = await gen(finalPrompt)
   onProgress?.({
     stage: 'done',
     currentBatch: 1,

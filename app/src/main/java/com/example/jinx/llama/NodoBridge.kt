@@ -291,6 +291,32 @@ class NodoBridge(
         }
     }
 
+    @JavascriptInterface
+    fun hasLocationPermission(): Boolean =
+        context.checkSelfPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) ==
+            android.content.pm.PackageManager.PERMISSION_GRANTED
+
+    @JavascriptInterface
+    fun hasCameraPermission(): Boolean =
+        context.checkSelfPermission(android.Manifest.permission.CAMERA) ==
+            android.content.pm.PackageManager.PERMISSION_GRANTED
+
+    /** Abre los ajustes del sistema de la app (permisos, batería, notificaciones). */
+    @JavascriptInterface
+    fun openAppSettings(): String {
+        return try {
+            val intent = Intent(
+                android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                android.net.Uri.parse("package:${context.packageName}"),
+            ).apply { addFlags(Intent.FLAG_ACTIVITY_NEW_TASK) }
+            context.startActivity(intent)
+            "ok"
+        } catch (e: Exception) {
+            Log.e(TAG, "openAppSettings failed", e)
+            "error"
+        }
+    }
+
     companion object {
         private const val TAG = "NODO_BRIDGE"
     }
