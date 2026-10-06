@@ -22,6 +22,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.graphics.toColorInt
 
+import com.example.jinx.llama.NodoBridge
+
 class MainActivity : ComponentActivity() {
 
     private var webView: WebView? = null
@@ -29,6 +31,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        requestNotificationPermission()
 
         // Manejo del botón atrás en el historial de navegación web
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
@@ -52,6 +55,15 @@ class MainActivity : ComponentActivity() {
     override fun onPause() {
         webView?.onPause()
         super.onPause()
+    }
+
+    private fun requestNotificationPermission() {
+        if (android.os.Build.VERSION.SDK_INT >= 33 &&
+            checkSelfPermission(android.Manifest.permission.POST_NOTIFICATIONS) !=
+            android.content.pm.PackageManager.PERMISSION_GRANTED
+        ) {
+            requestPermissions(arrayOf(android.Manifest.permission.POST_NOTIFICATIONS), 41)
+        }
     }
 
     override fun onResume() {
@@ -165,6 +177,8 @@ fun NodoWebViewScreen(
                         return true
                     }
                 }
+
+                addJavascriptInterface(NodoBridge(context), "NodoNative")
 
                 loadUrl("https://appassets.androidplatform.net/index.html")
                 onWebViewCreated(this)
