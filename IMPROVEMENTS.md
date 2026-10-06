@@ -68,3 +68,10 @@
 - Resumenes de documentos migrados al motor nativo.
 - Ajustes reescrito: modelo nativo, RAM/espacio reales, permisos con boton a ajustes del sistema.
 - APK 62.2MB en Descargas. BUILD OK.
+
+## Ciclo 9 - Liquid Glass total (skills Emil + liquid-glass-widgets)
+- Instaladas 15 skills de diseno en .agents/skills (+ liquid-glass-widgets/SKILL.md).
+- CSS: curvas expo/spring/sheet, duraciones <300ms, specular inset + hairline, glass-tabbar flotante con pildora activa, glass-sheet, stagger, dvh, touch-manipulation, inputs 16px en tactil, overscroll contain, reduced-transparency.
+- Quitado user-scalable=no (regla mobile-native). theme-color por esquema + interactive-widget.
+- Compose: cards translucidas con hairline + fondo con glows en Modelos y Agente.
+- APK 97MB en Descargas. BUILD OK.
