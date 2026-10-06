@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "build:android": "tsc -b && vite build && node -e \"require('fs').cpSync('dist', '../app/src/main/assets/www', {recursive: true})\"",
+    "build:android": "tsc -b && vite build && node -e \"require('fs').rmSync('../app/src/main/assets/www', {recursive: true, force: true})\" && node -e \"require('fs').cpSync('dist', '../app/src/main/assets/www', {recursive: true})\"",
     "lint": "oxlint",
     "preview": "vite preview"
   },
