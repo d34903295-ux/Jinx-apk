@@ -84,3 +84,9 @@
 - Marcas CC0 inline: Meta/Qwen/HF en tarjetas de modelo.
 - Auditoria taste-skill: header sin duplicados, tarjetas honestas, boot con identidad.
 - APK 97MB en Descargas. BUILD OK + tsc limpio.
+
+## Ciclo 11 - Chat mejorado + tests
+- Markdown sin dependencias (codigo con copiar, negrita, listas) en respuestas.
+- Reintentar ultima respuesta; temporizador en la isla (IA pensando N s).
+- Tests JVM ModelLogicTest 4/4 verdes (progreso, SHA-256, catalogo).
+- APK 97MB en Descargas. BUILD + tsc OK.
