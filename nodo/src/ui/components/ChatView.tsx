@@ -14,7 +14,7 @@ import { buildChatMessages, buildRagMessages, type HistoryMessage } from '../../
 import { searchChunks } from '../../core/rag/search'
 import { runAgentLoop } from '../../core/agent/loop'
 import { labelForModelId } from '../../core/llm/models'
-import { useLLM, useOnline, useOfflineStatus } from '../hooks/useNodo'
+import { useLLM, useOnline, useOfflineStatus, useWakeLockWhileGenerating } from '../hooks/useNodo'
 import { Icon, Logo } from './Icon'
 import { MessageBubble } from './MessageBubble'
 import { OfflineBadge } from './OfflineBadge'
@@ -46,6 +46,7 @@ export function ChatView({
   const llmState = useLLM()
   const online = useOnline()
   const offlineStatus = useOfflineStatus(activeModelId)
+  useWakeLockWhileGenerating()
 
   const [chats, setChats] = useState<ChatRecord[]>([])
   const [activeChatId, setActiveChatId] = useState<number | null>(null)

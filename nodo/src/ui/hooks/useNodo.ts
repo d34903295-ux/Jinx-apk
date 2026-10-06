@@ -7,6 +7,24 @@ export function useLLM(): LLMState {
   return useSyncExternalStore(llm.subscribe, llm.getState)
 }
 
+/** Mantiene la pantalla encendida mientras el modelo genera (Wake Lock API). */
+export function useWakeLockWhileGenerating(): void {
+  const llmState = useLLM()
+  useEffect(() => {
+    if (llmState.status !== 'generating') return
+    let lock: WakeLockSentinel | null = null
+    let alive = true
+    navigator.wakeLock?.request('screen').then((l) => {
+      if (alive) lock = l
+      else l.release()
+    }).catch(() => {})
+    return () => {
+      alive = false
+      lock?.release().catch(() => {})
+    }
+  }, [llmState.status])
+}
+
 /** true si el navegador reporta conexión de red. */
 export function useOnline(): boolean {
   const [online, setOnline] = useState(() => navigator.onLine)
