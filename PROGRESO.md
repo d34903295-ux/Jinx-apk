@@ -16,6 +16,12 @@
 7. confirm/alert funcionales en WebView (bug real: confirm() siempre false → borrados rotos; añadido diálogo nativo + confirm en borrar chat) ✔
 8. onRenderProcessGone recupera crash del renderer ✔
 9. installer.ts: manejo de errores amigable + try/catch offline status ✔
+10. Blur reducido en móvil ✔
+11. Scroll no forzado al revisar mensajes antiguos ✔
+12. Asa de arrastre en modales ✔
+13. enterKeyHint=send ✔
+14. Filtro de documentos en Library ✔
+15. Release build OK ✔
 
 ## Siguiente
 - Revisar performance de blur/backdrop en WebView de Android (bajar blur en móvil)
