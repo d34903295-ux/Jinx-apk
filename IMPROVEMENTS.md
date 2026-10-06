@@ -75,3 +75,12 @@
 - Quitado user-scalable=no (regla mobile-native). theme-color por esquema + interactive-widget.
 - Compose: cards translucidas con hairline + fondo con glows en Modelos y Agente.
 - APK 97MB en Descargas. BUILD OK.
+
+## Ciclo 10 - Premium sobrio (5 recursos + taste-skill)
+- Paleta: grafito/marfil, esmeralda profundo #2FA37C, acero; 60+ restos de neon neutralizados; botones solidos; contrastes verificados >=4.5.
+- DynamicIsland.tsx real (descarga/pensando/dictado/agente) + store island.ts + haptics nativos.
+- Material: elevaciones, ripple, snackbar global, focus-visible; snackbar sustituye banners en Modelos/Ajustes.
+- Skeletons, breathing en empty states, modo rendimiento con switch en Ajustes.
+- Marcas CC0 inline: Meta/Qwen/HF en tarjetas de modelo.
+- Auditoria taste-skill: header sin duplicados, tarjetas honestas, boot con identidad.
+- APK 97MB en Descargas. BUILD OK + tsc limpio.
