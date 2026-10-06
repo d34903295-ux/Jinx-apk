@@ -395,6 +395,22 @@
   }
 }
 
+/* Blur más barato en pantallas pequeñas (WebView Android) */
+@media (max-width: 640px) {
+  .glass {
+    backdrop-filter: blur(8px) saturate(150%);
+    -webkit-backdrop-filter: blur(8px) saturate(150%);
+  }
+  .dark .glass {
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+  .command-bar {
+    backdrop-filter: blur(12px) saturate(160%);
+    -webkit-backdrop-filter: blur(12px) saturate(160%);
+  }
+}
+
 /* En pantallas táctiles (Android) el hover se "pega": desactivarlo */
 @media (hover: none) {
   .glass-card:hover {
