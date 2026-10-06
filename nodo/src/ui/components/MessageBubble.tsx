@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import type { Citation, ToolCall } from '../../types'
 import { Icon } from './Icon'
 import { ToolCallCard } from './ToolCallCard'
+import { Markdown } from './Markdown'
 
 interface MessageBubbleProps {
   role: 'user' | 'assistant'
@@ -22,6 +23,15 @@ export function MessageBubble({
   const [speaking, setSpeaking] = useState(false)
   const [activeCitation, setActiveCitation] = useState<Citation | null>(null)
   const isUser = role === 'user'
+
+  const copyText = async (text: string): Promise<boolean> => {
+    try {
+      await navigator.clipboard.writeText(text)
+      return true
+    } catch {
+      return false
+    }
+  }
 
   useEffect(() => {
     return () => {
@@ -55,18 +65,19 @@ export function MessageBubble({
   }
 
   const copy = async () => {
-    try {
-      await navigator.clipboard.writeText(content)
+    const ok = await copyText(content)
+    if (ok) {
       setCopied(true)
       setTimeout(() => setCopied(false), 1500)
-    } catch {
-      /* Portapapeles no disponible */
     }
   }
 
   // Renderizar texto con citas interactivas [1], [2], etc.
   const renderFormattedContent = () => {
     if (isUser || !citations || citations.length === 0) {
+      if (!isUser && !streaming) {
+        return <Markdown text={content} copyCode={(code) => void copyText(code)} />
+      }
       return (
         <p className="break-words whitespace-pre-wrap">
           {content}

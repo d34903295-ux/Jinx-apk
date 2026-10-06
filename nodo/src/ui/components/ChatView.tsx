@@ -6,6 +6,7 @@ import {
   createChat,
   deleteChat,
   renameChat,
+  deleteMessage,
   getMessages,
   addMessage,
   titleFrom,
@@ -142,6 +143,17 @@ export function ChatView({
       document.removeEventListener('visibilitychange', onVisible)
     }
   }, [])
+
+  // Temporizador visible en la isla mientras la IA piensa.
+  useEffect(() => {
+    if (!generating) return
+    const t0 = Date.now()
+    const id = setInterval(() => {
+      const s = Math.floor((Date.now() - t0) / 1000)
+      setIsland({ mode: 'thinking', label: `IA pensando… ${s}s` })
+    }, 1000)
+    return () => clearInterval(id)
+  }, [generating])
 
   // Pantalla encendida mientras genera el motor nativo.
   useEffect(() => {
@@ -458,8 +470,23 @@ export function ChatView({
     setIsland({ mode: 'hidden' })
   }
 
-  const handleStop = () => {
+  const canRegenerate =
+    !generating &&
+    messages.length >= 2 &&
+    messages[messages.length - 1]?.role === 'assistant' &&
+    messages[messages.length - 2]?.role === 'user'
+
+  const handleRegenerate = async () => {
+    if (!canRegenerate) return
+    const lastAssistant = messages[messages.length - 1]!
+    const lastUser = messages[messages.length - 2]!
     generationRef.current += 1
+    await deleteMessage(lastAssistant.id)
+    setMessages(messages.slice(0, -1))
+    await handleSend(lastUser.content)
+  }
+
+  const handleStop = () => {    generationRef.current += 1
     try {
       stopRef.current?.()
     } catch {
@@ -1010,6 +1037,19 @@ export function ChatView({
         {/* Barra de Entrada de Mensajes */}
         <div className="p-4 sm:p-6 pt-0 safe-bottom">
           <div className="max-w-3xl mx-auto flex flex-col gap-2">
+            {canRegenerate && (
+              <div className="flex justify-end px-1">
+                <button
+                  type="button"
+                  onClick={() => void handleRegenerate()}
+                  className="inline-flex items-center gap-1.5 font-mono text-[11px] text-ink-400 hover:text-signal-300 transition cursor-pointer"
+                  aria-label="Reintentar respuesta" title="Reintentar respuesta"
+                >
+                  <Icon name="refresh" size={13} />
+                  Reintentar
+                </button>
+              </div>
+            )}
             {dictNotice && (
               <div className="rounded-xl border border-cyan-500/30 bg-cyan-500/10 px-3 py-2 text-xs text-cyan-700 dark:text-cyan-300 animate-fade-up">
                 {dictNotice}

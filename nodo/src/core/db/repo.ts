@@ -40,6 +40,10 @@ export async function renameChat(chatId: number, title: string): Promise<void> {
   await db.chats.update(chatId, { title: name, updatedAt: Date.now() })
 }
 
+export async function deleteMessage(messageId: number): Promise<void> {
+  await db.messages.delete(messageId)
+}
+
 // ---------- Mensajes ----------
 
 export function getMessages(chatId: number): Promise<MessageRecord[]> {
