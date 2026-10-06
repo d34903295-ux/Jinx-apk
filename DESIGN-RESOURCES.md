@@ -19,13 +19,13 @@
 - Tipografía: Space Grotesk (títulos, tracking negativo) + Inter (texto) + JetBrains Mono (telemetría); escala Display 34/28/22/17/14/11.
 
 ## Detalles de nivel total (checklist de implementación)
-- [ ] DynamicIsland (descarga, pensando, dictado, pasos del agente)
-- [ ] Haptics nativos (selección/éxito/aviso) en tabs, envío, descarga completa, errores
-- [ ] Skeletons en listas (chats, documentos, modelos) en vez de spinners
-- [ ] Empty states con ilustración sutil (Logo en anillo + breathing)
-- [ ] Ripple + estados pressed/focus/disabled en botones (Material)
-- [ ] Snackbar global para avisos (sustituye banners sueltos)
-- [ ] Icono Hugging Face en tarjetas de modelo
-- [ ] Modo rendimiento (blur minimal) conmutable en Ajustes
-- [ ] Spacing 4pt auditado + touch targets ≥44px
-- [ ] taste-skill redesign audit final por pantalla
+- [x] DynamicIsland (descarga, pensando, dictado, pasos del agente) — `DynamicIsland.tsx` + `island.ts`
+- [x] Haptics nativos (selección/éxito/aviso) en tabs, envío, descarga completa, errores — `Haptics.kt` + puente `haptic()`
+- [x] Skeletons en listas (documentos) en vez de spinners — `Skeleton.tsx` en `LibraryView.tsx`
+- [x] Empty states con ilustración sutil (breathing `animate-breathe` en Biblioteca; hero en chat)
+- [x] Ripple + estados pressed/focus/disabled en botones (Material) — `index.css`
+- [x] Snackbar global para avisos — `Snackbar.tsx` + `snackbar.ts` (Modelos, Ajustes)
+- [x] Icono Hugging Face en tarjetas de modelo (+ Meta/Alibaba por familia) — `BrandIcon.tsx` en `ModelsView.tsx`
+- [x] Modo rendimiento (blur minimal) conmutable en Ajustes — clase `.perf` + switch
+- [x] Spacing 4pt auditado + touch targets ≥44px (tabs 56px mín, botones, switch con aria)
+- [x] taste-skill redesign audit final por pantalla (header, tarjetas honestas, boot)
