@@ -723,6 +723,7 @@ export function ChatView({
                 value={input}
                 onChange={handleInputChange}
                 onKeyDown={handleKeyDown}
+                enterKeyHint="send"
                 rows={1}
                 placeholder={isLoading ? t('chat.waitModel') : 'Pregunta algo, pide un script en Python o consulta tus documentos...'}
                 disabled={isLoading}
