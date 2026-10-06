@@ -61,3 +61,10 @@
 - QA en emulador/dispositivo (adb no disponible ahora — sin dispositivo conectado)
 - Tests instrumentados para diálogos nativos
 - Tamaño APK: inspeccionar assets pesados
+
+## Ciclo 8 - 100% offline real (code-reviewer, security-engineer)
+- Embeddings MiniLM empaquetados en el APK (allowRemoteModels=false).
+- Fuentes Space Grotesk + JetBrains Mono auto-hospedadas; fuera links a Google.
+- Resumenes de documentos migrados al motor nativo.
+- Ajustes reescrito: modelo nativo, RAM/espacio reales, permisos con boton a ajustes del sistema.
+- APK 62.2MB en Descargas. BUILD OK.
