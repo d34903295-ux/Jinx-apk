@@ -22,6 +22,7 @@ data class DownloadProgress(
 sealed interface DownloadState {
     data object Idle : DownloadState
     data class Running(val progress: DownloadProgress) : DownloadState
+    data class Verifying(val downloadedBytes: Long, val totalBytes: Long) : DownloadState
     data class Paused(val downloadedBytes: Long, val totalBytes: Long) : DownloadState
     data class Done(val file: File) : DownloadState
     data class Error(val message: String) : DownloadState
@@ -144,11 +145,18 @@ class ModelDownloader(private val client: OkHttpClient = defaultClient()) {
                 }
             }
             if (part.length() == model.expectedBytes) {
-                if (!part.renameTo(final)) {
-                    emit(DownloadState.Error("No se pudo mover el archivo final"))
-                    return
+                emit(DownloadState.Verifying(part.length(), model.expectedBytes))
+                val okHash = model.sha256.isEmpty() || sha256Of(part) == model.sha256.lowercase()
+                if (okHash) {
+                    if (!part.renameTo(final)) {
+                        emit(DownloadState.Error("No se pudo mover el archivo final"))
+                        return
+                    }
+                    emit(DownloadState.Done(final))
+                } else {
+                    part.delete()
+                    emit(DownloadState.Error("Integridad fallida (SHA-256). Descarga de nuevo."))
                 }
-                emit(DownloadState.Done(final))
             } else {
                 emit(DownloadState.Error("Tamaño final inesperado: ${part.length()}"))
             }
@@ -167,6 +175,20 @@ class ModelDownloader(private val client: OkHttpClient = defaultClient()) {
 
     companion object {
         private const val TAG = "NODO_DL"
+
+        /** SHA-256 en minúsculas del archivo. */
+        fun sha256Of(file: File): String {
+            val digest = java.security.MessageDigest.getInstance("SHA-256")
+            file.inputStream().use { stream ->
+                val buf = ByteArray(1024 * 1024)
+                while (true) {
+                    val n = stream.read(buf)
+                    if (n < 0) break
+                    digest.update(buf, 0, n)
+                }
+            }
+            return digest.digest().joinToString("") { "%02x".format(it) }
+        }
 
         fun defaultClient(): OkHttpClient = OkHttpClient.Builder()
             .connectTimeout(30, TimeUnit.SECONDS)

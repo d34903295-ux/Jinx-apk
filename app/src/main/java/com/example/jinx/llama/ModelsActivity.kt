@@ -68,6 +68,7 @@ class ModelsActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        LlamaEngine.attach(this)
         setContent {
             MaterialTheme(colorScheme = darkNodo()) {
                 Surface(modifier = Modifier.fillMaxSize(), color = Ink) {
@@ -274,6 +275,9 @@ private fun ModelCard(
                     is DownloadState.Error -> {
                         Button(onClick = onResume) { Text("Reintentar") }
                         OutlinedButton(onClick = onDelete) { Text("Eliminar") }
+                    }
+                    is DownloadState.Verifying -> {
+                        Text("Verificando…", color = Color.Gray)
                     }
                 }
             }

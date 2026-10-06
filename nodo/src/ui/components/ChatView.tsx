@@ -5,13 +5,14 @@ import {
   listChats,
   createChat,
   deleteChat,
+  renameChat,
   getMessages,
   addMessage,
   titleFrom,
 } from '../../core/db/repo'
 import { buildChatMessages, buildRagMessages, type HistoryMessage } from '../../core/agent/prompts'
 import { searchChunks } from '../../core/rag/search'
-import { hasNative, activeNativeModel, listNativeModels, nativeAction, nativeGenerate } from '../../core/native/bridge'
+import { hasNative, activeNativeModel, listNativeModels, nativeAction, nativeGenerate, nativeAgentTask, nativeDictation } from '../../core/native/bridge'
 import { Icon, Logo } from './Icon'
 import { MessageBubble } from './MessageBubble'
 
@@ -45,9 +46,51 @@ export function ChatView({
   const [messages, setMessages] = useState<MessageRecord[]>([])
   const [input, setInput] = useState('')
   const [generating, setGenerating] = useState(false)
+  const [agentOn, setAgentOn] = useState(false)
+  const [dictating, setDictating] = useState(false)
+  const [dictNotice, setDictNotice] = useState<string | null>(null)
+  const dictateStop = useRef<(() => void) | null>(null)
+  const dictateBase = useRef('')
+
+  const toggleDictation = () => {
+    if (dictating) {
+      try {
+        dictateStop.current?.()
+      } catch {
+        /* noop */
+      }
+      dictateStop.current = null
+      setDictating(false)
+      return
+    }
+    if (!hasNative()) return
+    dictateBase.current = input
+    setDictNotice(null)
+    setDictating(true)
+    const stop = nativeDictation((kind, text) => {
+      if (kind === 'partial') {
+        setInput(`${dictateBase.current}${dictateBase.current ? ' ' : ''}${text}`)
+      } else if (kind === 'final') {
+        setInput(`${dictateBase.current}${dictateBase.current ? ' ' : ''}${text} `)
+        dictateBase.current = ''
+        setDictating(false)
+      } else if (kind === 'need-model') {
+        nativeAction((n) => n.downloadVoskModel())
+        setDictNotice('Descargando voz en español (~38 MB)… pulsa el micrófono de nuevo al terminar.')
+        setDictating(false)
+      } else if (kind === 'error') {
+        setDictNotice(text === 'timeout' ? 'No se escuchó nada.' : `Micrófono: ${text}`)
+        setDictating(false)
+      }
+    })
+    dictateStop.current = stop
+  }
   const [streamingContent, setStreamingContent] = useState<string | null>(null)
   const [streamingCitations, setStreamingCitations] = useState<Citation[]>([])
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [chatQuery, setChatQuery] = useState('')
+  const [editingId, setEditingId] = useState<number | null>(null)
+  const [editTitle, setEditTitle] = useState('')
   const stopRef = useRef<(() => void) | null>(null)
 
   // Modelo nativo activo (puente JNI). Se relee al montar y cada 2s si no hay.
@@ -170,6 +213,29 @@ export function ChatView({
     setSidebarOpen(false)
   }
 
+  const handleRenameChat = async (id: number) => {
+    await renameChat(id, editTitle)
+    setEditingId(null)
+    setEditTitle('')
+    await refreshChats()
+  }
+
+  const handleShareChat = async (id: number, e: React.MouseEvent) => {
+    e.stopPropagation()
+    const chat = chats.find((c) => c.id === id)
+    const msgs = await getMessages(id)
+    const body = msgs.map((m) => `${m.role === 'assistant' ? 'IA' : 'Yo'}: ${m.content}`).join('\n\n')
+    const text = `${chat?.title ?? 'Conversación'}\n\n${body}`
+    const done = nativeAction((n) => n.shareText(chat?.title ?? 'Conversación NODO', text))
+    if (done !== 'ok') {
+      try {
+        await navigator.clipboard.writeText(text)
+      } catch {
+        /* sin portapapeles */
+      }
+    }
+  }
+
   const handleDeleteChat = async (id: number, e: React.MouseEvent) => {
     e.stopPropagation()
     if (!confirm(t('chat.confirmDelete'))) return
@@ -217,6 +283,10 @@ export function ChatView({
     if (!content || generating) return
     if (!hasNative() || !nativeModel) {
       onOpenModels()
+      return
+    }
+    if (agentOn) {
+      await handleAgentSend(content)
       return
     }
     const gen = ++generationRef.current
@@ -300,6 +370,74 @@ export function ChatView({
             }
             const finalMessages = await getMessages(currentChatId)
             setMessages(finalMessages)
+            setStreamingContent(null)
+            setStreamingCitations([])
+            setGenerating(false)
+            resolve()
+          })()
+        }
+      })
+      stopRef.current = stop
+    })
+    stopRef.current = null
+  }
+
+  /** Envío en modo agente: el modelo usa herramientas del teléfono. */
+  const handleAgentSend = async (content: string) => {
+    const gen = ++generationRef.current
+    const isCurrent = () => gen === generationRef.current
+
+    let currentChatId = activeChatId
+    if (currentChatId === null) {
+      currentChatId = await createChat(titleFrom(content))
+      setActiveChatId(currentChatId)
+      await refreshChats()
+    }
+    await addMessage(currentChatId, 'user', content)
+    const updatedMessages = await getMessages(currentChatId)
+    setMessages(updatedMessages)
+    setInput('')
+    if (textareaRef.current) {
+      textareaRef.current.style.height = 'auto'
+    }
+
+    setGenerating(true)
+    setStreamingContent('Agente trabajando…')
+    setStreamingCitations([])
+    await new Promise<void>((resolve) => {
+      const stop = nativeAgentTask(content, (kind, text) => {
+        if (!isCurrent()) {
+          resolve()
+          return
+        }
+        if (kind === 'step') {
+          setStreamingContent((prev) => `${prev ?? ''}\n• ${text}`.slice(-1500))
+        } else if (kind === 'done') {
+          void (async () => {
+            const clean = text.replace(/^FINAL:\s*/, '')
+            if (text) {
+              await addMessage(currentChatId, 'assistant', clean || text, [])
+              if (!isCurrent()) {
+                resolve()
+                return
+              }
+              setMessages(await getMessages(currentChatId))
+            }
+            if (isCurrent()) {
+              setStreamingContent(null)
+              setStreamingCitations([])
+              setGenerating(false)
+            }
+            resolve()
+          })()
+        } else if (kind === 'error') {
+          void (async () => {
+            await addMessage(currentChatId, 'assistant', t('chat.error', { msg: text }), [])
+            if (!isCurrent()) {
+              resolve()
+              return
+            }
+            setMessages(await getMessages(currentChatId))
             setStreamingContent(null)
             setStreamingCitations([])
             setGenerating(false)
@@ -453,27 +591,43 @@ export function ChatView({
           <span className="text-[11px] font-semibold uppercase tracking-wider text-ink-400 px-2 py-1">
             {t('chat.history')}
           </span>
+          {chats.length > 3 && (
+            <div className="px-2 pb-1">
+              <input
+                type="search"
+                value={chatQuery}
+                onChange={(e) => setChatQuery(e.target.value)}
+                placeholder="Filtrar…"
+                aria-label="Filtrar conversaciones"
+                className="w-full rounded-lg border border-ink-200/70 dark:border-white/10 bg-white/40 dark:bg-white/[0.04] py-1.5 px-3 text-xs text-ink-900 dark:text-white focus:border-signal-500 focus:outline-none"
+              />
+            </div>
+          )}
 
           {chats.length === 0 ? (
             <p className="text-xs text-ink-400 px-2 py-4 italic">
               {t('chat.noChats')}
             </p>
           ) : (
-            chats.map((c) => {
+            chats
+              .filter((c) => c.title.toLowerCase().includes(chatQuery.trim().toLowerCase()))
+              .map((c) => {
               const active = c.id === activeChatId
+              const editing = editingId === c.id
               return (
                 <div
                   key={c.id}
                   role="button"
                   tabIndex={0}
                   onClick={() => {
+                    if (editing) return
                     generationRef.current += 1
                     nativeAction((n) => n.stopGenerate())
                     setActiveChatId(c.id)
                     setSidebarOpen(false)
                   }}
                   onKeyDown={(e) => {
-                    if (e.key === 'Enter') {
+                    if (e.key === 'Enter' && !editing) {
                       generationRef.current += 1
                       nativeAction((n) => n.stopGenerate())
                       setActiveChatId(c.id)
@@ -486,15 +640,56 @@ export function ChatView({
                       : 'text-ink-600 dark:text-ink-300 hover:bg-ink-100 dark:hover:bg-white/[0.04]'
                   }`}
                 >
-                  <span className="truncate pr-6">{c.title}</span>
-                  <button
-                    type="button"
-                    onClick={(e) => handleDeleteChat(c.id, e)}
-                    className="absolute right-2 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition p-1 hover:text-danger-500 rounded"
-                    aria-label={t('chat.deleteChat')} title={t('chat.deleteChat')}
-                  >
-                    <Icon name="trash" size={14} />
-                  </button>
+                  {editing ? (
+                    <input
+                      autoFocus
+                      value={editTitle}
+                      onChange={(e) => setEditTitle(e.target.value)}
+                      onClick={(e) => e.stopPropagation()}
+                      onKeyDown={(e) => {
+                        e.stopPropagation()
+                        if (e.key === 'Enter') void handleRenameChat(c.id)
+                        if (e.key === 'Escape') setEditingId(null)
+                      }}
+                      onBlur={() => setEditingId(null)}
+                      aria-label="Renombrar conversación"
+                      className="w-full rounded-lg border border-signal-500/50 bg-transparent px-2 py-1 text-sm focus:outline-none"
+                    />
+                  ) : (
+                    <>
+                      <span className="truncate pr-16">{c.title}</span>
+                      <span className="absolute right-2 flex items-center gap-0.5 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition">
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            setEditingId(c.id)
+                            setEditTitle(c.title)
+                          }}
+                          className="p-1 hover:text-signal-400 rounded"
+                          aria-label="Renombrar" title="Renombrar"
+                        >
+                          <Icon name="edit" size={13} />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={(e) => void handleShareChat(c.id, e)}
+                          className="p-1 hover:text-signal-400 rounded"
+                          aria-label="Compartir" title="Compartir"
+                        >
+                          <Icon name="share" size={13} />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={(e) => handleDeleteChat(c.id, e)}
+                          className="p-1 hover:text-danger-500 rounded"
+                          aria-label={t('chat.deleteChat')} title={t('chat.deleteChat')}
+                        >
+                          <Icon name="trash" size={14} />
+                        </button>
+                      </span>
+                    </>
+                  )}
                 </div>
               )
             })
@@ -801,6 +996,11 @@ export function ChatView({
         {/* Barra de Entrada de Mensajes */}
         <div className="p-4 sm:p-6 pt-0 safe-bottom">
           <div className="max-w-3xl mx-auto flex flex-col gap-2">
+            {dictNotice && (
+              <div className="rounded-xl border border-cyan-500/30 bg-cyan-500/10 px-3 py-2 text-xs text-cyan-700 dark:text-cyan-300 animate-fade-up">
+                {dictNotice}
+              </div>
+            )}
             <div className="command-bar rounded-2xl p-2.5 sm:p-3 flex items-end gap-2 transition">
               <textarea
                 ref={textareaRef}
@@ -815,6 +1015,17 @@ export function ChatView({
                 disabled={!nativeModel}
                 className="flex-1 bg-transparent px-2 py-1 text-sm sm:text-base resize-none focus:outline-none placeholder:text-ink-400 max-h-44 scroll-thin text-ink-900 dark:text-white"
               />
+
+              <button
+                type="button"
+                onClick={toggleDictation}
+                className={`p-2.5 rounded-xl shrink-0 cursor-pointer transition ${
+                  dictating ? 'bg-cyan-500/20 text-cyan-300' : 'text-ink-400 hover:text-ink-100'
+                }`}
+                aria-label={dictating ? 'Detener dictado' : 'Dictar por voz'} title={dictating ? 'Detener dictado' : 'Dictar por voz'}
+              >
+                <Icon name="mic" size={18} className={dictating ? 'animate-pulse' : ''} />
+              </button>
 
               {isGenerating ? (
                 <button
@@ -838,17 +1049,32 @@ export function ChatView({
               )}
             </div>
 
-            {/* Estado del motor + ayuda de teclado */}
-            <div className="flex items-center justify-between px-1">
-              <button
-                type="button"
-                onClick={onOpenModels}
-                className="inline-flex items-center gap-2 px-3 py-1 rounded-full font-mono text-[11px] font-semibold tracking-wider uppercase transition cursor-pointer bg-signal-500/15 text-signal-400 border border-signal-500/40"
-                aria-label="Abrir Modelos de IA" title="Abrir Modelos de IA"
-              >
-                <span className="size-1.5 rounded-full bg-signal-400 shadow-[0_0_6px_#00f5a0]" />
-                <span>{nativeModel ? `IA NATIVA · ${nativeModelLabel()}` : 'SIN IA · DESCARGAR'}</span>
-              </button>
+            {/* Estado del motor + modo agente + ayuda de teclado */}
+            <div className="flex items-center justify-between px-1 gap-2">
+              <div className="flex items-center gap-2 min-w-0">
+                <button
+                  type="button"
+                  onClick={onOpenModels}
+                  className="inline-flex items-center gap-2 px-3 py-1 rounded-full font-mono text-[11px] font-semibold tracking-wider uppercase transition cursor-pointer bg-signal-500/15 text-signal-400 border border-signal-500/40 shrink-0"
+                  aria-label="Abrir Modelos de IA" title="Abrir Modelos de IA"
+                >
+                  <span className="size-1.5 rounded-full bg-signal-400 shadow-[0_0_6px_#00f5a0]" />
+                  <span className="truncate">{nativeModel ? `IA · ${nativeModelLabel()}` : 'SIN IA'}</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setAgentOn((v) => !v)}
+                  className={`inline-flex items-center gap-2 px-3 py-1 rounded-full font-mono text-[11px] font-semibold tracking-wider uppercase transition cursor-pointer shrink-0 ${
+                    agentOn
+                      ? 'bg-cyan-500/15 text-cyan-300 border border-cyan-500/40'
+                      : 'bg-white/5 text-ink-400 border border-white/10'
+                  }`}
+                  aria-label="Activar modo agente" title="El modelo puede usar linterna, ubicación, temporizador y más"
+                >
+                  <span className={`size-1.5 rounded-full ${agentOn ? 'bg-cyan-400' : 'bg-ink-500'}`} />
+                  <span>AGENTE {agentOn ? 'ON' : 'OFF'}</span>
+                </button>
+              </div>
 
               <span className="font-mono text-[10px] text-ink-400 hidden sm:block tracking-wide">
                 ↵ Enviar · Shift + ↵ Salto de línea

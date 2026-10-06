@@ -40,6 +40,8 @@ export function SettingsView({
   const [activeLabel, setActiveLabel] = useState('')
   const [ramMB, setRamMB] = useState(0)
   const [freeMB, setFreeMB] = useState(0)
+  const [engineCtx, setEngineCtx] = useState(2048)
+  const [engineThreads, setEngineThreads] = useState(0)
   const [perms, setPerms] = useState({ location: false, camera: false, battery: true })
 
   const refreshAll = async () => {
@@ -52,6 +54,9 @@ export function SettingsView({
         setActiveLabel(found ? found.label : '')
         setRamMB(window.NodoNative!.totalRamMB())
         setFreeMB(window.NodoNative!.freeSpaceMB())
+        const [nc, nt] = window.NodoNative!.getEnginePrefs().split(',').map(Number)
+        if (nc) setEngineCtx(nc)
+        setEngineThreads(nt ?? 0)
         setPerms({
           location: window.NodoNative!.hasLocationPermission(),
           camera: window.NodoNative!.hasCameraPermission(),
@@ -163,6 +168,68 @@ export function SettingsView({
           >
             Ir a Modelos
           </button>
+        </div>
+
+        {/* Motor */}
+        <div className="glass rounded-3xl p-5 flex flex-col gap-3">
+          <span className="text-xs font-semibold uppercase tracking-wider text-ink-400">
+            Motor (se aplica al cargar el modelo)
+          </span>
+          <div className="flex items-center justify-between gap-3">
+            <div>
+              <h4 className="text-sm font-semibold text-ink-900 dark:text-white">Contexto</h4>
+              <p className="text-xs text-ink-400">Memoria de conversación</p>
+            </div>
+            <div className="flex gap-1.5">
+              {[1024, 2048, 4096].map((v) => (
+                <button
+                  key={v}
+                  type="button"
+                  onClick={() => {
+                    setEngineCtx(v)
+                    nativeAction((n) => n.setEnginePrefs(v, engineThreads))
+                  }}
+                  className={`px-3 py-1.5 rounded-lg font-mono text-xs cursor-pointer border transition ${
+                    engineCtx === v
+                      ? 'border-signal-500/60 text-signal-400 bg-signal-500/10'
+                      : 'border-white/10 text-ink-400'
+                  }`}
+                >
+                  {v / 1024}k
+                </button>
+              ))}
+            </div>
+          </div>
+          <div className="flex items-center justify-between gap-3">
+            <div>
+              <h4 className="text-sm font-semibold text-ink-900 dark:text-white">Hilos CPU</h4>
+              <p className="text-xs text-ink-400">Auto según el teléfono</p>
+            </div>
+            <div className="flex gap-1.5">
+              {[
+                { v: 0, label: 'Auto' },
+                { v: 2, label: '2' },
+                { v: 4, label: '4' },
+                { v: 6, label: '6' },
+              ].map((o) => (
+                <button
+                  key={o.v}
+                  type="button"
+                  onClick={() => {
+                    setEngineThreads(o.v)
+                    nativeAction((n) => n.setEnginePrefs(engineCtx, o.v))
+                  }}
+                  className={`px-3 py-1.5 rounded-lg font-mono text-xs cursor-pointer border transition ${
+                    engineThreads === o.v
+                      ? 'border-signal-500/60 text-signal-400 bg-signal-500/10'
+                      : 'border-white/10 text-ink-400'
+                  }`}
+                >
+                  {o.label}
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
 
         {/* Dispositivo */}

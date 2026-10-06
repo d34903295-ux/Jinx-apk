@@ -80,6 +80,28 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    private var micCallback: (() -> Unit)? = null
+
+    private val micPermissionLauncher =
+        registerForActivityResult(
+            androidx.activity.result.contract.ActivityResultContracts.RequestPermission(),
+        ) { granted ->
+            if (granted) micCallback?.invoke()
+            micCallback = null
+        }
+
+    /** Pide RECORD_AUDIO y ejecuta el callback al conceder. */
+    fun requestMic(onGranted: () -> Unit) {
+        if (checkSelfPermission(android.Manifest.permission.RECORD_AUDIO) ==
+            android.content.pm.PackageManager.PERMISSION_GRANTED
+        ) {
+            onGranted()
+            return
+        }
+        micCallback = onGranted
+        micPermissionLauncher.launch(android.Manifest.permission.RECORD_AUDIO)
+    }
+
     override fun onPause() {
         webView?.onPause()
         super.onPause()

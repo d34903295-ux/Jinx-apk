@@ -29,7 +29,7 @@ extern "C" {
 
 JNIEXPORT jlong JNICALL
 Java_com_example_jinx_llama_LlamaBridge_initModel(JNIEnv * env, jobject /*thiz*/,
-                                                  jstring jpath, jint n_ctx) {
+                                                  jstring jpath, jint n_ctx, jint n_threads) {
     const char * path = env->GetStringUTFChars(jpath, nullptr);
     LOGI("Loading model: %s", path);
 
@@ -45,9 +45,9 @@ Java_com_example_jinx_llama_LlamaBridge_initModel(JNIEnv * env, jobject /*thiz*/
         return 0;
     }
 
-    unsigned ncpu = std::thread::hardware_concurrency();
+    unsigned ncpu = n_threads > 0 ? (unsigned) n_threads : std::thread::hardware_concurrency();
     if (ncpu == 0) ncpu = 4;
-    if (ncpu > 6) ncpu = 6; // techo para no freir la bateria
+    if (ncpu > 8) ncpu = 8; // techo para no freir la bateria
 
     llama_context_params cparams = llama_context_default_params();
     cparams.n_ctx = n_ctx > 0 ? (uint32_t) n_ctx : 2048;

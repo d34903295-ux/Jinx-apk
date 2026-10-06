@@ -16,6 +16,8 @@ data class NativeModel(
     val url: String,
     /** Tamaño esperado en bytes (verificación de integridad). */
     val expectedBytes: Long,
+    /** SHA-256 del archivo (X-Linked-ETag de Hugging Face). */
+    val sha256: String,
     val ramNeededMB: Int,
     val recommended: Boolean = false,
 )
@@ -28,6 +30,7 @@ val NATIVE_MODELS: List<NativeModel> = listOf(
         fileName = "Llama-3.2-1B-Instruct-Q4_K_M.gguf",
         url = "https://huggingface.co/bartowski/Llama-3.2-1B-Instruct-GGUF/resolve/main/Llama-3.2-1B-Instruct-Q4_K_M.gguf",
         expectedBytes = 807_694_464L,
+        sha256 = "6f85a640a97cf2bf5b8e764087b1e83da0fdb51d7c9fab7d0fece9385611df83",
         ramNeededMB = 2048,
         recommended = true,
     ),
@@ -38,6 +41,7 @@ val NATIVE_MODELS: List<NativeModel> = listOf(
         fileName = "Qwen2.5-1.5B-Instruct-Q4_K_M.gguf",
         url = "https://huggingface.co/bartowski/Qwen2.5-1.5B-Instruct-GGUF/resolve/main/Qwen2.5-1.5B-Instruct-Q4_K_M.gguf",
         expectedBytes = 986_048_768L,
+        sha256 = "1adf0b11065d8ad2e8123ea110d1ec956dab4ab038eab665614adba04b6c3370",
         ramNeededMB = 2560,
     ),
     NativeModel(
@@ -47,6 +51,7 @@ val NATIVE_MODELS: List<NativeModel> = listOf(
         fileName = "Qwen2.5-3B-Instruct-Q4_K_M.gguf",
         url = "https://huggingface.co/bartowski/Qwen2.5-3B-Instruct-GGUF/resolve/main/Qwen2.5-3B-Instruct-Q4_K_M.gguf",
         expectedBytes = 1_929_903_264L,
+        sha256 = "9c9f56a391a3abbd5b89d0245bf6106081bcc3173119d4229235dd9d23253f94",
         ramNeededMB = 3584,
     ),
     NativeModel(
@@ -56,6 +61,7 @@ val NATIVE_MODELS: List<NativeModel> = listOf(
         fileName = "Qwen2.5-7B-Instruct-Q4_K_M.gguf",
         url = "https://huggingface.co/bartowski/Qwen2.5-7B-Instruct-GGUF/resolve/main/Qwen2.5-7B-Instruct-Q4_K_M.gguf",
         expectedBytes = 4_683_074_240L,
+        sha256 = "65b8fcd92af6b4fefa935c625d1ac27ea29dcb6ee14589c55a8f115ceaaa1423",
         ramNeededMB = 7168,
     ),
 )
@@ -100,7 +106,29 @@ object LlamaEngine {
     }
 
     /** Carga el modelo en hilo de fondo. onDone(true) = listo. */
-    fun load(filesDir: File, model: NativeModel, nCtx: Int = 2048, onDone: (Boolean) -> Unit) {
+    fun load(filesDir: File, model: NativeModel, onDone: (Boolean) -> Unit) {
+        val (nCtx, nThreads) = enginePrefs(filesDir)
+        loadWith(filesDir, model, nCtx, nThreads, onDone)
+    }
+
+    private var prefsCache: android.content.SharedPreferences? = null
+
+    /** Fija el contexto para leer ajustes del motor. Llamar al arrancar. */
+    fun attach(context: android.content.Context) {
+        prefsCache = context.applicationContext.getSharedPreferences("nodo", android.content.Context.MODE_PRIVATE)
+    }
+
+    /** (nCtx, nThreads). nThreads 0 = automático. */
+    fun enginePrefs(filesDir: File): Pair<Int, Int> {
+        val p = prefsCache
+        return if (p == null) {
+            Pair(2048, 0)
+        } else {
+            Pair(p.getInt("engine_nctx", 2048), p.getInt("engine_threads", 0))
+        }
+    }
+
+    fun loadWith(filesDir: File, model: NativeModel, nCtx: Int, nThreads: Int, onDone: (Boolean) -> Unit) {
         if (!LlamaBridge.ensureLoaded()) {
             _state.value = EngineState.Error("Motor nativo no disponible en este dispositivo")
             onDone(false)
@@ -116,7 +144,7 @@ object LlamaEngine {
                     onDone(false)
                     return@execute
                 }
-                val h = LlamaBridge.initModel(file.absolutePath, nCtx)
+                val h = LlamaBridge.initModel(file.absolutePath, nCtx, nThreads)
                 if (h == 0L) {
                     _state.value = EngineState.Error("No se pudo cargar el modelo (RAM insuficiente?)")
                     onDone(false)

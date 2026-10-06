@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import type { Citation, ToolCall } from '../../types'
 import { Icon } from './Icon'
 import { ToolCallCard } from './ToolCallCard'
@@ -19,8 +19,40 @@ export function MessageBubble({
   streaming = false,
 }: MessageBubbleProps) {
   const [copied, setCopied] = useState(false)
+  const [speaking, setSpeaking] = useState(false)
   const [activeCitation, setActiveCitation] = useState<Citation | null>(null)
   const isUser = role === 'user'
+
+  useEffect(() => {
+    return () => {
+      try {
+        window.speechSynthesis?.cancel()
+      } catch {
+        /* noop */
+      }
+    }
+  }, [])
+
+  const speak = () => {
+    try {
+      const synth = window.speechSynthesis
+      if (!synth) return
+      if (speaking) {
+        synth.cancel()
+        setSpeaking(false)
+        return
+      }
+      const utter = new SpeechSynthesisUtterance(content)
+      utter.lang = 'es-ES'
+      utter.onend = () => setSpeaking(false)
+      utter.onerror = () => setSpeaking(false)
+      synth.cancel()
+      synth.speak(utter)
+      setSpeaking(true)
+    } catch {
+      /* sin TTS */
+    }
+  }
 
   const copy = async () => {
     try {
@@ -144,6 +176,17 @@ export function MessageBubble({
             <Icon name={copied ? 'check' : 'copy'} size={12} className={copied ? 'text-signal-400' : ''} />
             <span>{copied ? 'Copiado' : 'Copiar'}</span>
           </button>
+          {!isUser && (
+            <button
+              type="button"
+              onClick={speak}
+              className="inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 font-mono text-[10px] text-ink-400 hover:text-ink-200 transition"
+              aria-label={speaking ? 'Detener lectura' : 'Leer en voz alta'} title={speaking ? 'Detener lectura' : 'Leer en voz alta'}
+            >
+              <Icon name={speaking ? 'stop' : 'speak'} size={12} className={speaking ? 'text-signal-400' : ''} />
+              <span>{speaking ? 'Leyendo' : 'Escuchar'}</span>
+            </button>
+          )}
         </div>
 
         {/* Modal / Diálogo táctico de cita seleccionada */}

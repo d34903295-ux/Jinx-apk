@@ -24,6 +24,9 @@ class NodoBridge(
     private val context: Context,
     private val emitJs: (String) -> Unit,
 ) {
+    init {
+        LlamaEngine.attach(context)
+    }
     private val exec = Executors.newCachedThreadPool()
     private var service: DownloadService? = null
 
@@ -106,6 +109,11 @@ class NodoBridge(
                 is DownloadState.Paused -> {
                     o.put("state", "paused")
                     o.put("downloadedMB", st.downloadedBytes / 1048576)
+                }
+                is DownloadState.Verifying -> {
+                    o.put("state", "downloading")
+                    o.put("downloadedMB", st.downloadedBytes / 1048576)
+                    o.put("verifying", true)
                 }
                 is DownloadState.Error -> {
                     o.put("state", "error")
@@ -251,6 +259,42 @@ class NodoBridge(
         return "ok"
     }
 
+    // ---------- agente ----------
+
+    private val agentCancelled = java.util.concurrent.atomic.AtomicBoolean(false)
+
+    /**
+     * Ejecuta una tarea con el bucle ReAct (herramientas del teléfono).
+     * Eventos: start | step | done | error.
+     */
+    @JavascriptInterface
+    fun agentTask(task: String, cbId: String): String {
+        agentCancelled.set(false)
+        exec.execute {
+            try {
+                emitCb(cbId, "start", "")
+                val res = com.example.jinx.agent.runAgent(
+                    context,
+                    task,
+                    onStep = { step -> emitCb(cbId, "step", step.kind.name + ": " + step.text) },
+                    isCancelled = { agentCancelled.get() },
+                )
+                emitCb(cbId, "done", res)
+            } catch (e: Exception) {
+                Log.e(TAG, "agent failed", e)
+                emitCb(cbId, "error", e.message ?: "Error")
+            }
+        }
+        return "ok"
+    }
+
+    @JavascriptInterface
+    fun stopAgent(): String {
+        agentCancelled.set(true)
+        LlamaEngine.stop()
+        return "ok"
+    }
+
     // ---------- dispositivo ----------
 
     @JavascriptInterface
@@ -323,6 +367,112 @@ class NodoBridge(
         val t = com.example.jinx.MainActivity.pendingSharedText
         com.example.jinx.MainActivity.pendingSharedText = null
         return t ?: ""
+    }
+
+    /** Comparte texto con otras apps (chooser del sistema). */
+    @JavascriptInterface
+    fun shareText(title: String, text: String): String {
+        return try {
+            val intent = Intent(Intent.ACTION_SEND).apply {
+                type = "text/plain"
+                putExtra(Intent.EXTRA_SUBJECT, title)
+                putExtra(Intent.EXTRA_TEXT, text)
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            }
+            context.startActivity(
+                Intent.createChooser(intent, title).apply {
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                },
+            )
+            "ok"
+        } catch (e: Exception) {
+            Log.e(TAG, "share failed", e)
+            "error"
+        }
+    }
+
+    /** Ajustes del motor: "nCtx,threads" (threads 0 = auto). */
+    @JavascriptInterface
+    fun getEnginePrefs(): String {
+        val (nCtx, nThreads) = LlamaEngine.enginePrefs(context.filesDir)
+        return "$nCtx,$nThreads"
+    }
+
+    @JavascriptInterface
+    fun setEnginePrefs(nCtx: Int, nThreads: Int): String {
+        val c = nCtx.coerceIn(1024, 4096)
+        val t = nThreads.coerceIn(0, 8)
+        prefs().edit().putInt("engine_nctx", c).putInt("engine_threads", t).apply()
+        LlamaEngine.attach(context)
+        // Se aplica la próxima vez que se cargue el modelo.
+        return "ok"
+    }
+
+    /** Estado del modelo de voz: ready | downloading | none. */
+    @JavascriptInterface
+    fun voskState(): String {
+        val filesDir = context.filesDir
+        if (com.example.jinx.speech.VoskManager.isReady(filesDir)) return "ready"
+        val zip = com.example.jinx.speech.VoskManager.downloadedZip(filesDir)
+        if (zip.exists() && zip.length() > 0) return "downloading"
+        return "none"
+    }
+
+    /** Descarga el modelo de voz en segundo plano (con notificación). */
+    @JavascriptInterface
+    fun downloadVoskModel(): String {
+        DownloadService.start(context, com.example.jinx.speech.VOSK_MODEL.id)
+        return "ok"
+    }
+
+    /** ¿Permiso de micrófono concedido? */
+    @JavascriptInterface
+    fun hasMicPermission(): Boolean {
+        return context.checkSelfPermission(android.Manifest.permission.RECORD_AUDIO) ==
+            android.content.pm.PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun emitDict(cbId: String, kind: String, text: String) {
+        val js = "window.__nodoDictation&&window.__nodoDictation(" +
+            JSONObject.quote(cbId) + "," +
+            JSONObject.quote(kind) + "," +
+            JSONObject.quote(text) + ")"
+        emitJs(js)
+    }
+
+    /**
+     * Inicia el dictado. Pide el permiso de micrófono si falta.
+     * Eventos: partial | final | error.
+     */
+    @JavascriptInterface
+    fun startDictation(cbId: String): String {
+        val activity = context as? com.example.jinx.MainActivity
+        if (activity == null) {
+            emitDict(cbId, "error", "Sin actividad")
+            return "error"
+        }
+        if (!com.example.jinx.speech.VoskManager.isReady(context.filesDir)) {
+            emitDict(cbId, "need-model", "")
+            return "need-model"
+        }
+        activity.requestMic {
+            com.example.jinx.speech.VoskManager.start(
+                context.filesDir,
+                object : com.example.jinx.speech.VoskManager.Listener {
+                    override fun onPartial(text: String) = emitDict(cbId, "partial", text)
+                    override fun onFinal(text: String) = emitDict(cbId, "final", text)
+                    override fun onError(message: String) = emitDict(cbId, "error", message)
+                },
+            )
+            emitDict(cbId, "start", "")
+        }
+        return "ok"
+    }
+
+    @JavascriptInterface
+    fun stopDictation(): String {
+        com.example.jinx.speech.VoskManager.stop()
+        return "ok"
     }
 
     companion object {

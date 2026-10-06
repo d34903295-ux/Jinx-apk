@@ -11,6 +11,7 @@ export interface NativeModelInfo {
   state: 'none' | 'downloading' | 'paused' | 'ready' | 'active' | 'error'
   downloadedMB: number
   totalMB: number
+  verifying?: boolean
   speedMBs?: number
   etaSec?: number
   error?: string
@@ -29,6 +30,8 @@ export interface NodoNative {
   setActiveModel(id: string): string
   generate(prompt: string, maxTokens: number, cbId: string): string
   stopGenerate(): string
+  agentTask(task: string, cbId: string): string
+  stopAgent(): string
   freeSpaceMB(): number
   totalRamMB(): number
   isIgnoringBattery(): boolean
@@ -37,12 +40,21 @@ export interface NodoNative {
   hasCameraPermission(): boolean
   openAppSettings(): string
   consumeSharedText(): string
+  shareText(title: string, text: string): string
+  getEnginePrefs(): string
+  setEnginePrefs(nCtx: number, nThreads: number): string
+  voskState(): string
+  downloadVoskModel(): string
+  hasMicPermission(): boolean
+  startDictation(cbId: string): string
+  stopDictation(): string
 }
 
 declare global {
   interface Window {
     NodoNative?: NodoNative
     __nodoCb?: (cbId: string, kind: string, text: string) => void
+    __nodoDictation?: (cbId: string, kind: string, text: string) => void
   }
 }
 
@@ -68,7 +80,7 @@ export function activeNativeModel(): string {
   }
 }
 
-type Cb = (kind: 'start' | 'token' | 'done' | 'error', text: string) => void
+type Cb = (kind: 'start' | 'token' | 'done' | 'error' | 'step', text: string) => void
 const callbacks = new Map<string, Cb>()
 let seq = 0
 
@@ -121,7 +133,30 @@ export function nativeAction(fn: (n: NodoNative) => string): string {
   }
 }
 
-/** Generación en una sola promesa (para resúmenes y tareas puntuales). */
+/** Tarea agéntica con pasos visibles. Devuelve función para cancelar. */
+export function nativeAgentTask(task: string, onEvent: Cb): () => void {
+  ensureDispatcher()
+  const cbId = `a${Date.now()}_${seq++}`
+  callbacks.set(cbId, onEvent)
+  let res = 'no-model'
+  try {
+    res = window.NodoNative!.agentTask(task, cbId)
+  } catch {
+    res = 'error'
+  }
+  if (res !== 'ok') {
+    callbacks.delete(cbId)
+    onEvent('error', 'Error al iniciar la tarea')
+  }
+  return () => {
+    try {
+      window.NodoNative?.stopAgent()
+    } catch {
+      /* noop */
+    }
+    callbacks.delete(cbId)
+  }
+}
 export function nativeGenerateOnce(prompt: string, maxTokens: number): Promise<string> {
   return new Promise((resolve, reject) => {
     if (!hasNative()) {
@@ -137,4 +172,35 @@ export function nativeGenerateOnce(prompt: string, maxTokens: number): Promise<s
       reject(e instanceof Error ? e : new Error(String(e)))
     }
   })
+}
+
+/** Dictado por voz offline. Eventos: start | partial | final | error | need-model. */
+export function nativeDictation(onEvent: (kind: string, text: string) => void): () => void {
+  const cbId = `d${Date.now()}_${seq++}`
+  const handler = (id: string, kind: string, text: string) => {
+    if (id !== cbId) return
+    onEvent(kind, text)
+    if (kind === 'final' || kind === 'error' || kind === 'need-model') {
+      window.__nodoDictation = undefined
+    }
+  }
+  window.__nodoDictation = handler
+  try {
+    const res = window.NodoNative!.startDictation(cbId)
+    if (res !== 'ok') {
+      window.__nodoDictation = undefined
+      onEvent('error', 'Error al iniciar el micrófono')
+    }
+  } catch {
+    window.__nodoDictation = undefined
+    onEvent('error', 'Error al iniciar el micrófono')
+  }
+  return () => {
+    try {
+      window.NodoNative?.stopDictation()
+    } catch {
+      /* noop */
+    }
+    window.__nodoDictation = undefined
+  }
 }

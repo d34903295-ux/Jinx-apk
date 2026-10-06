@@ -21,8 +21,8 @@ object LlamaBridge {
         }
     }
 
-    /** Devuelve un handle (>0) o 0 si falla. */
-    external fun initModel(path: String, nCtx: Int): Long
+    /** Devuelve un handle (>0) o 0 si falla. nThreads 0 = automático. */
+    external fun initModel(path: String, nCtx: Int, nThreads: Int): Long
 
     interface GenerateCallback {
         fun onToken(piece: String)

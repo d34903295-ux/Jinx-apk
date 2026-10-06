@@ -34,6 +34,9 @@ class DownloadService : Service() {
         const val ACTION_RESUME = "com.example.jinx.llama.RESUME"
         const val ACTION_CANCEL = "com.example.jinx.llama.CANCEL"
 
+        /** Catálogo completo descargable (modelos IA + voz). */
+        fun allModels() = NATIVE_MODELS + com.example.jinx.speech.VOSK_MODEL
+
         fun start(context: Context, modelId: String) {
             val i = Intent(context, DownloadService::class.java).setAction(ACTION_START)
             i.putExtra(EXTRA_MODEL_ID, modelId)
@@ -66,7 +69,7 @@ class DownloadService : Service() {
         when (intent?.action) {
             ACTION_START -> {
                 val id = intent.getStringExtra(EXTRA_MODEL_ID) ?: return START_NOT_STICKY
-                val model = NATIVE_MODELS.firstOrNull { it.id == id } ?: return START_NOT_STICKY
+                val model = allModels().firstOrNull { it.id == id } ?: return START_NOT_STICKY
                 startDownload(model)
             }
             ACTION_PAUSE -> downloader?.pause()
@@ -112,6 +115,10 @@ class DownloadService : Service() {
                 b.setContentText("En pausa · ${state.downloadedBytes / 1048576}/${state.totalBytes / 1048576} MB")
                     .addAction(android.R.drawable.ic_media_play, "Reanudar", actionIntent(ACTION_RESUME))
                     .addAction(android.R.drawable.ic_menu_close_clear_cancel, "Cancelar", actionIntent(ACTION_CANCEL))
+            }
+            is DownloadState.Verifying -> {
+                b.setContentText("Verificando integridad (SHA-256)…")
+                    .setProgress(0, 0, true)
             }
             is DownloadState.Done -> {
                 b.setContentText("Descarga completa y verificada")

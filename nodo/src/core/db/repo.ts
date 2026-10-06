@@ -34,6 +34,12 @@ export async function deleteChat(chatId: number): Promise<void> {
   })
 }
 
+export async function renameChat(chatId: number, title: string): Promise<void> {
+  const name = title.trim().slice(0, 80)
+  if (!name) return
+  await db.chats.update(chatId, { title: name, updatedAt: Date.now() })
+}
+
 // ---------- Mensajes ----------
 
 export function getMessages(chatId: number): Promise<MessageRecord[]> {

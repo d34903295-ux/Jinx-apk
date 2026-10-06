@@ -8,6 +8,7 @@ import {
   searchNotes,
 } from '../../core/db/repo'
 import { Icon } from './Icon'
+import { nativeAction } from '../../core/native/bridge'
 
 interface NotesViewProps {
   onBack: () => void
@@ -90,6 +91,14 @@ export function NotesView({ onBack, onSendToChat }: NotesViewProps) {
     await navigator.clipboard.writeText(`${note.title}\n\n${note.body}`)
     setCopiedId(note.id)
     setTimeout(() => setCopiedId(null), 2000)
+  }
+
+  const handleShare = async (note: NoteRecord) => {
+    const text = `${note.title}\n\n${note.body}`
+    const done = nativeAction((n) => n.shareText(note.title, text))
+    if (done !== 'ok') {
+      await handleCopy(note)
+    }
   }
 
   return (
@@ -252,10 +261,19 @@ export function NotesView({ onBack, onSendToChat }: NotesViewProps) {
                       type="button"
                       onClick={() => handleCopy(activeNote)}
                       className="btn-ghost text-xs px-2 py-1 gap-1 cursor-pointer"
-                      aria-label="Copiar nota" title="Copiar nota"
+                      title="Copiar nota"
                     >
                       <Icon name={copiedId === activeNote.id ? 'check' : 'copy'} size={13} />
                       {copiedId === activeNote.id ? 'Copiado' : 'Copiar'}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => void handleShare(activeNote)}
+                      className="btn-ghost text-xs px-2 py-1 gap-1 cursor-pointer"
+                      aria-label="Compartir nota" title="Compartir nota"
+                    >
+                      <Icon name="share" size={13} />
+                      Compartir
                     </button>
                     <button
                       type="button"

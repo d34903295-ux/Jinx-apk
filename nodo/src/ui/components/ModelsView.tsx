@@ -209,8 +209,9 @@ export function ModelsView({ onBack }: ModelsViewProps) {
                     />
                   </div>
                   <span className="font-mono text-[11px] text-signal-400">
-                    {fmtMB(m.downloadedMB)}/{fmtMB(m.totalMB)}
-                    {m.speedMBs !== undefined && ` · ${m.speedMBs.toFixed(1)} MB/s · quedan ${fmtEta(m.etaSec ?? -1)}`}
+                    {m.verifying
+                      ? 'Verificando integridad (SHA-256)…'
+                      : `${fmtMB(m.downloadedMB)}/${fmtMB(m.totalMB)}${m.speedMBs !== undefined ? ` · ${m.speedMBs.toFixed(1)} MB/s · quedan ${fmtEta(m.etaSec ?? -1)}` : ''}`}
                   </span>
                 </div>
               )}
