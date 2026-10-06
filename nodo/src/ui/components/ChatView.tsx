@@ -92,9 +92,14 @@ export function ChatView({
     }
   }, [activeChatId])
 
-  // Auto-scroll al final en nuevos mensajes o streaming
+  // Auto-scroll al final, pero sin robar el scroll si el usuario subió
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+    const el = messagesEndRef.current?.parentElement
+    if (!el) return
+    const nearBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 180
+    if (nearBottom) {
+      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+    }
   }, [messages, streamingContent])
 
   // Auto-resize del textarea
