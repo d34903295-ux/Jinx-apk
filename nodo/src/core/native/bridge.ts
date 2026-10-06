@@ -48,6 +48,7 @@ export interface NodoNative {
   hasMicPermission(): boolean
   startDictation(cbId: string): string
   stopDictation(): string
+  haptic(kind: string): string
 }
 
 declare global {

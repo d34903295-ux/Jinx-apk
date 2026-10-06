@@ -5,7 +5,7 @@ import { db } from './schema'
 
 // ---------- Ajustes ----------
 
-export type SettingKey = 'activeModel' | 'theme'
+export type SettingKey = 'activeModel' | 'theme' | 'perfMode'
 
 export async function getSetting<T>(key: SettingKey): Promise<T | undefined> {
   const row = await db.settings.get(key)

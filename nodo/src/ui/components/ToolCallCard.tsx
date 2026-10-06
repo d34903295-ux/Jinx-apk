@@ -87,7 +87,7 @@ export function ToolCallCard({ toolCall, isLive = false }: ToolCallCardProps) {
             </span>
           ) : (
             <span className="inline-flex items-center gap-1 font-mono text-[10px] text-signal-400 font-bold uppercase tracking-wider">
-              <span className="size-1.5 rounded-full bg-signal-400 shadow-[0_0_6px_#00f5a0]" />
+              <span className="size-1.5 rounded-full bg-signal-400 shadow-[0_0_6px_#2fa37c]" />
               DONE 200
             </span>
           )}
@@ -101,7 +101,7 @@ export function ToolCallCard({ toolCall, isLive = false }: ToolCallCardProps) {
         className="w-full flex items-center justify-between p-3 text-left transition hover:bg-white/[0.03] cursor-pointer"
       >
         <div className="flex items-center gap-2.5 min-w-0">
-          <div className="size-7 rounded-lg bg-signal-500/10 border border-signal-500/20 text-signal-400 flex items-center justify-center shrink-0 shadow-[0_0_10px_-2px_rgba(0,245,160,0.2)]">
+          <div className="size-7 rounded-lg bg-signal-500/10 border border-signal-500/20 text-signal-400 flex items-center justify-center shrink-0 shadow-[0_0_10px_-2px_rgba(47,163,124,0.2)]">
             <Icon name={toolIcon(toolCall.name)} size={14} />
           </div>
           <div className="flex flex-col min-w-0">
@@ -169,7 +169,7 @@ export function ToolCallCard({ toolCall, isLive = false }: ToolCallCardProps) {
                   {copied ? 'COPIED' : 'COPY'}
                 </button>
               </div>
-              <pre className="font-mono text-[11px] text-emerald-200 bg-[#06100c] border border-signal-500/30 p-2.5 rounded-lg overflow-x-auto whitespace-pre-wrap max-h-48 scroll-thin shadow-[inset_0_0_15px_rgba(0,245,160,0.05)]">
+              <pre className="font-mono text-[11px] text-emerald-200 bg-[#06100c] border border-signal-500/30 p-2.5 rounded-lg overflow-x-auto whitespace-pre-wrap max-h-48 scroll-thin shadow-[inset_0_0_15px_rgba(47,163,124,0.05)]">
                 {toolCall.result}
               </pre>
             </div>

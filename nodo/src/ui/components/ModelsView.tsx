@@ -9,6 +9,13 @@ import {
   type NodoNative,
 } from '../../core/native/bridge'
 import { Icon } from './Icon'
+import { BrandIcon, type BrandName } from './BrandIcon'
+import { setIsland, getIsland, haptic } from '../../core/native/island'
+import { showSnack } from '../../core/native/snackbar'
+
+function familyOf(id: string): BrandName {
+  return id.startsWith('qwen') ? 'alibabacloud' : 'meta'
+}
 
 interface ModelsViewProps {
   onBack: () => void
@@ -39,11 +46,16 @@ export function ModelsView({ onBack }: ModelsViewProps) {
   const [models, setModels] = useState<NativeModelInfo[]>([])
   const [freeMB, setFreeMB] = useState(0)
   const [ramMB, setRamMB] = useState(0)
-  const [notice, setNotice] = useState<string | null>(null)
   const [testingId, setTestingId] = useState<string | null>(null)
   const [testOut, setTestOut] = useState('')
   const [ignoringBattery, setIgnoringBattery] = useState(true)
   const native = hasNative()
+
+  const announce = (text: string, tone: 'info' | 'success' | 'error' = 'info') => {
+    showSnack(text, tone)
+    if (tone === 'error') haptic('warning')
+    else if (tone === 'success') haptic('success')
+  }
 
   const refresh = () => {
     setModels(listNativeModels())
@@ -61,7 +73,26 @@ export function ModelsView({ onBack }: ModelsViewProps) {
     const id = setInterval(() => {
       const list = listNativeModels()
       setModels(list)
-      if (!list.some((m) => m.state === 'downloading')) return
+      const dl = list.find((m) => m.state === 'downloading')
+      if (dl) {
+        setIsland({
+          mode: 'downloading',
+          label: `Descargando ${dl.label}`,
+          fraction: dl.totalMB > 0 ? dl.downloadedMB / dl.totalMB : 0,
+          detail: `${fmtMB(dl.downloadedMB)}/${fmtMB(dl.totalMB)}${dl.speedMBs !== undefined ? ` · ${dl.speedMBs.toFixed(1)} MB/s` : ''}`,
+        })
+      } else if (getIsland().mode === 'downloading') {
+        const done = list.find((m) => m.state === 'ready' || m.state === 'active')
+        if (done) {
+          haptic('success')
+          setIsland({ mode: 'done', label: `${done.label} listo` })
+          setTimeout(() => {
+            if (getIsland().mode === 'done') setIsland({ mode: 'hidden' })
+          }, 2500)
+        } else {
+          setIsland({ mode: 'hidden' })
+        }
+      }
     }, 1000)
     return () => clearInterval(id)
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -69,16 +100,15 @@ export function ModelsView({ onBack }: ModelsViewProps) {
 
   const act = (label: string, fn: (n: NodoNative) => string) => {
     const r = nativeAction(fn)
-    if (r === 'nospace') setNotice('No hay espacio suficiente para ese modelo.')
-    else if (r !== 'ok') setNotice(`Acción "${label}" no disponible (${r}).`)
-    else setNotice(null)
+    if (r === 'nospace') announce('No hay espacio suficiente para ese modelo.', 'error')
+    else if (r !== 'ok') announce(`"${label}" no disponible (${r}).`, 'error')
     refresh()
   }
 
   const startTest = (m: NativeModelInfo) => {
     const set = nativeAction((n) => n.setActiveModel(m.id))
     if (set !== 'ok') {
-      setNotice('Activa el modelo primero.')
+      announce('Activa el modelo primero.', 'error')
       return
     }
     setTestingId(m.id)
@@ -136,12 +166,6 @@ export function ModelsView({ onBack }: ModelsViewProps) {
           )}
         </div>
 
-        {notice && (
-          <div className="glass rounded-2xl border-ember-500/30 bg-ember-500/10 p-4 text-ember-600 dark:text-ember-300 text-sm animate-fade-up">
-            {notice}
-          </div>
-        )}
-
         {!native && (
           <div className="glass rounded-2xl border-cyan-500/30 bg-cyan-500/10 p-4 text-cyan-700 dark:text-cyan-300 text-sm">
             Vista previa en navegador: la descarga y la inferencia funcionan dentro del APK.
@@ -176,6 +200,9 @@ export function ModelsView({ onBack }: ModelsViewProps) {
               <div className="flex items-center justify-between gap-3">
                 <div className="min-w-0">
                   <h3 className="font-bold text-base text-ink-900 dark:text-white flex items-center gap-2">
+                    <span className="text-ink-400" title={m.id.startsWith('qwen') ? 'Qwen · Alibaba' : 'Llama · Meta'}>
+                      <BrandIcon name={familyOf(m.id)} size={15} title={m.id.startsWith('qwen') ? 'Qwen por Alibaba' : 'Llama por Meta'} />
+                    </span>
                     {m.label}
                     {m.recommended && (
                       <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-signal-500/15 text-signal-400 border border-signal-500/40">
@@ -183,7 +210,8 @@ export function ModelsView({ onBack }: ModelsViewProps) {
                       </span>
                     )}
                   </h3>
-                  <p className="font-mono text-[11px] text-ink-400 mt-0.5">
+                  <p className="font-mono text-[11px] text-ink-400 mt-0.5 flex items-center gap-1.5">
+                    <BrandIcon name="huggingface" size={12} title="Pesos de Hugging Face" />
                     {fmtMB(m.totalMB)} · RAM ~{(m.ramMB / 1024).toFixed(1)} GB · {m.language}
                   </p>
                 </div>

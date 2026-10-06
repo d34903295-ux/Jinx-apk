@@ -71,7 +71,7 @@ export function MessageBubble({
         <p className="break-words whitespace-pre-wrap">
           {content}
           {streaming && (
-            <span className="ml-1 inline-block h-4 w-[2px] translate-y-0.5 bg-signal-400 shadow-[0_0_8px_#00f5a0] animate-caret" />
+            <span className="ml-1 inline-block h-4 w-[2px] translate-y-0.5 bg-signal-400 shadow-[0_0_8px_#2fa37c] animate-caret" />
           )}
         </p>
       )
@@ -92,7 +92,7 @@ export function MessageBubble({
                   key={i}
                   type="button"
                   onClick={() => setActiveCitation(citation)}
-                  className="mx-1 inline-flex items-center justify-center rounded border border-signal-500/40 bg-signal-500/15 px-1.5 py-0.5 font-mono text-[11px] font-bold text-signal-400 transition hover:bg-signal-500/30 hover:shadow-[0_0_8px_rgba(0,245,160,0.3)] hover:scale-105 active:scale-95 cursor-pointer"
+                  className="mx-1 inline-flex items-center justify-center rounded border border-signal-500/40 bg-signal-500/15 px-1.5 py-0.5 font-mono text-[11px] font-bold text-signal-400 transition hover:bg-signal-500/30 hover:shadow-[0_0_8px_rgba(47,163,124,0.3)] hover:scale-105 active:scale-95 cursor-pointer"
                   title={`${citation.docName} (Pág. ${citation.page})`}
                 >
                   [{indexNum}]
@@ -103,7 +103,7 @@ export function MessageBubble({
           return <span key={i}>{part}</span>
         })}
         {streaming && (
-          <span className="ml-1 inline-block h-4 w-[2px] translate-y-0.5 bg-signal-400 shadow-[0_0_8px_#00f5a0] animate-caret" />
+          <span className="ml-1 inline-block h-4 w-[2px] translate-y-0.5 bg-signal-400 shadow-[0_0_8px_#2fa37c] animate-caret" />
         )}
       </div>
     )
@@ -113,7 +113,7 @@ export function MessageBubble({
     <div className={`group flex animate-fade-up ${isUser ? 'justify-end' : 'justify-start'} gap-2.5`}>
       {/* Avatar IA */}
       {!isUser && (
-        <div className="size-7 rounded-xl bg-linear-to-br from-signal-400 to-signal-600 flex items-center justify-center text-ink-950 font-mono text-[10px] font-bold shadow-[0_0_12px_rgba(0,245,160,0.35)] shrink-0 mt-1 select-none">
+        <div className="size-7 rounded-xl bg-linear-to-br from-signal-400 to-signal-600 flex items-center justify-center text-ink-950 font-mono text-[10px] font-bold shadow-[0_0_12px_rgba(47,163,124,0.35)] shrink-0 mt-1 select-none">
           AI
         </div>
       )}
@@ -130,7 +130,7 @@ export function MessageBubble({
           {!isUser && toolCalls && toolCalls.length > 0 && (
             <div className="mb-2.5 flex flex-col gap-1 border-b border-white/[0.07] pb-2">
               <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-ink-400 flex items-center gap-1.5">
-                <span className="size-1.5 rounded-full bg-signal-400 shadow-[0_0_6px_#00f5a0]" />
+                <span className="size-1.5 rounded-full bg-signal-400 shadow-[0_0_6px_#2fa37c]" />
                 HERRAMIENTAS EJECUTADAS:
               </span>
               {toolCalls.map((tc, idx) => (
@@ -197,13 +197,13 @@ export function MessageBubble({
             onClick={() => setActiveCitation(null)}
           >
             <div
-              className="glass-card max-w-lg w-full sm:rounded-2xl rounded-t-3xl border border-signal-500/40 p-5 pb-[calc(1.25rem+env(safe-area-inset-bottom,0px))] sm:pb-5 shadow-2xl flex flex-col gap-3 text-ink-100 cursor-default shadow-[0_0_35px_-5px_rgba(0,245,160,0.2)] animate-sheet-up sm:animate-pop-in"
+              className="glass-card max-w-lg w-full sm:rounded-2xl rounded-t-3xl border border-signal-500/40 p-5 pb-[calc(1.25rem+env(safe-area-inset-bottom,0px))] sm:pb-5 shadow-2xl flex flex-col gap-3 text-ink-100 cursor-default shadow-[0_0_35px_-5px_rgba(47,163,124,0.2)] animate-sheet-up sm:animate-pop-in"
               onClick={(e) => e.stopPropagation()}
             >
               <span className="mx-auto mb-2 h-1 w-10 rounded-full bg-white/15 sm:hidden" />
               <div className="flex items-center justify-between border-b border-white/10 pb-3">
                 <div className="flex items-center gap-2.5 min-w-0">
-                  <span className="size-7 rounded-lg bg-signal-500/20 border border-signal-500/40 text-signal-400 font-mono font-bold text-xs flex items-center justify-center shadow-[0_0_10px_-2px_rgba(0,245,160,0.3)]">
+                  <span className="size-7 rounded-lg bg-signal-500/20 border border-signal-500/40 text-signal-400 font-mono font-bold text-xs flex items-center justify-center shadow-[0_0_10px_-2px_rgba(47,163,124,0.3)]">
                     {activeCitation.index}
                   </span>
                   <div className="min-w-0">

@@ -6,6 +6,8 @@ import { NotesView } from './ui/components/NotesView'
 import { SettingsView } from './ui/components/SettingsView'
 import { ModelsView } from './ui/components/ModelsView'
 import { Icon, Logo } from './ui/components/Icon'
+import { DynamicIsland } from './ui/components/DynamicIsland'
+import { Snackbar } from './ui/components/Snackbar'
 import { activeNativeModel, nativeAction } from './core/native/bridge'
 import { t } from './i18n'
 
@@ -38,6 +40,8 @@ export function App() {
       } else {
         document.documentElement.classList.remove('dark')
       }
+      const perf = await getSetting<boolean>('perfMode')
+      if (perf) document.documentElement.classList.add('perf')
       setView('chat')
       setBooting(false)
     }
@@ -80,12 +84,17 @@ export function App() {
           <Icon name="refresh" size={16} className="animate-spin text-signal-400" />
           <span>{t('boot.loading')}</span>
         </div>
+        <span className="font-mono text-[10px] uppercase tracking-widest text-ink-500">
+          IA 100% offline
+        </span>
       </div>
     )
   }
 
   return (
     <div className="h-dvh w-full bg-ink-50 dark:bg-ink-950 safe-x safe-top flex flex-col overflow-hidden">
+      <DynamicIsland onOpenModels={() => go('models')} />
+      <Snackbar />
       {/* Drawer lateral (el logo lo abre) */}
       {drawerOpen && (
         <div

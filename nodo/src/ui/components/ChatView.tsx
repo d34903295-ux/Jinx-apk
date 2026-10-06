@@ -13,6 +13,7 @@ import {
 import { buildChatMessages, buildRagMessages, type HistoryMessage } from '../../core/agent/prompts'
 import { searchChunks } from '../../core/rag/search'
 import { hasNative, activeNativeModel, listNativeModels, nativeAction, nativeGenerate, nativeAgentTask, nativeDictation } from '../../core/native/bridge'
+import { setIsland, haptic } from '../../core/native/island'
 import { Icon, Logo } from './Icon'
 import { MessageBubble } from './MessageBubble'
 
@@ -61,12 +62,15 @@ export function ChatView({
       }
       dictateStop.current = null
       setDictating(false)
+      setIsland({ mode: 'hidden' })
       return
     }
     if (!hasNative()) return
     dictateBase.current = input
     setDictNotice(null)
     setDictating(true)
+    haptic('selection')
+    setIsland({ mode: 'listening', label: 'Escuchando…', onTap: () => toggleDictation() })
     const stop = nativeDictation((kind, text) => {
       if (kind === 'partial') {
         setInput(`${dictateBase.current}${dictateBase.current ? ' ' : ''}${text}`)
@@ -74,13 +78,20 @@ export function ChatView({
         setInput(`${dictateBase.current}${dictateBase.current ? ' ' : ''}${text} `)
         dictateBase.current = ''
         setDictating(false)
+        setIsland({ mode: 'hidden' })
+        haptic('success')
       } else if (kind === 'need-model') {
         nativeAction((n) => n.downloadVoskModel())
         setDictNotice('Descargando voz en español (~38 MB)… pulsa el micrófono de nuevo al terminar.')
         setDictating(false)
+        setIsland({ mode: 'hidden' })
       } else if (kind === 'error') {
         setDictNotice(text === 'timeout' ? 'No se escuchó nada.' : `Micrófono: ${text}`)
         setDictating(false)
+        setIsland({ mode: 'hidden' })
+        haptic('warning')
+      } else if (kind === 'start') {
+        setIsland({ mode: 'listening', label: 'Escuchando…', onTap: () => toggleDictation() })
       }
     })
     dictateStop.current = stop
@@ -333,6 +344,8 @@ export function ChatView({
     // Streaming desde el motor nativo (llama.cpp)
     const promptText = messagesToText(promptMessages)
     setGenerating(true)
+    haptic('selection')
+    setIsland({ mode: 'thinking', label: agentOn ? 'Agente trabajando…' : 'IA pensando…' })
     setStreamingContent('')
     setStreamingCitations(activeCitations)
     await new Promise<void>((resolve) => {
@@ -354,11 +367,7 @@ export function ChatView({
               const finalMessages = await getMessages(currentChatId)
               setMessages(finalMessages)
             }
-            if (isCurrent()) {
-              setStreamingContent(null)
-              setStreamingCitations([])
-              setGenerating(false)
-            }
+            if (isCurrent()) finishGeneration()
             resolve()
           })()
         } else if (kind === 'error') {
@@ -370,9 +379,7 @@ export function ChatView({
             }
             const finalMessages = await getMessages(currentChatId)
             setMessages(finalMessages)
-            setStreamingContent(null)
-            setStreamingCitations([])
-            setGenerating(false)
+            finishGeneration()
             resolve()
           })()
         }
@@ -423,11 +430,7 @@ export function ChatView({
               }
               setMessages(await getMessages(currentChatId))
             }
-            if (isCurrent()) {
-              setStreamingContent(null)
-              setStreamingCitations([])
-              setGenerating(false)
-            }
+            if (isCurrent()) finishGeneration()
             resolve()
           })()
         } else if (kind === 'error') {
@@ -438,9 +441,7 @@ export function ChatView({
               return
             }
             setMessages(await getMessages(currentChatId))
-            setStreamingContent(null)
-            setStreamingCitations([])
-            setGenerating(false)
+            finishGeneration()
             resolve()
           })()
         }
@@ -448,6 +449,13 @@ export function ChatView({
       stopRef.current = stop
     })
     stopRef.current = null
+  }
+
+  const finishGeneration = () => {
+    setStreamingContent(null)
+    setStreamingCitations([])
+    setGenerating(false)
+    setIsland({ mode: 'hidden' })
   }
 
   const handleStop = () => {
@@ -461,6 +469,7 @@ export function ChatView({
     setStreamingContent(null)
     setStreamingCitations([])
     setGenerating(false)
+    setIsland({ mode: 'hidden' })
     void refreshChats()
   }
 
@@ -507,7 +516,7 @@ export function ChatView({
         {/* Cabecera Sidebar */}
         <div className="p-4 border-b border-white/[0.07] flex items-center justify-between bg-white/[0.02]">
           <div className="flex items-center gap-2.5">
-            <div className="size-8 rounded-xl bg-linear-to-br from-signal-400 to-signal-600 flex items-center justify-center text-ink-950 shadow-[0_0_15px_rgba(0,245,160,0.35)]">
+            <div className="size-8 rounded-xl bg-linear-to-br from-signal-400 to-signal-600 flex items-center justify-center text-ink-950 shadow-[0_0_15px_rgba(47,163,124,0.35)]">
               <Logo size={20} />
             </div>
             <div className="flex flex-col">
@@ -749,7 +758,7 @@ export function ChatView({
 
             <div className="flex flex-col min-w-0">
               <h2 className="text-sm font-semibold truncate text-white flex items-center gap-1.5">
-                <span className="size-1.5 rounded-full bg-signal-400 shadow-[0_0_6px_#00f5a0]" />
+                <span className="size-1.5 rounded-full bg-signal-400 shadow-[0_0_6px_#2fa37c]" />
                 {activeChatId
                   ? chats.find((c) => c.id === activeChatId)?.title ?? t('chat.newChat')
                   : t('chat.newChat')}
@@ -795,15 +804,6 @@ export function ChatView({
               <Icon name="copy" size={14} />
               <span className="hidden sm:inline">Notas</span>
             </button>
-            <button
-              type="button"
-              onClick={onOpenModels}
-              className="btn-ghost text-xs px-2.5 py-1.5 gap-1.5 border border-ink-200/60 dark:border-white/10 text-ink-700 dark:text-ink-200 hover:text-signal-400 cursor-pointer"
-              aria-label="Abrir Modelos de IA" title="Abrir Modelos de IA"
-            >
-              <Icon name="cpu" size={14} />
-              <span className="hidden sm:inline">IA</span>
-            </button>
             {onOpenSettings && (
               <button
                 type="button"
@@ -826,14 +826,14 @@ export function ChatView({
               <div className="relative flex items-center justify-center my-1 select-none">
                 <div className="absolute size-28 rounded-full border border-signal-400/25 animate-pulse" />
                 <div className="absolute size-36 rounded-full border border-white/[0.05]" />
-                <div className="size-20 rounded-3xl bg-linear-to-br from-signal-400 via-signal-500 to-signal-600 flex items-center justify-center text-ink-950 shadow-[0_0_35px_rgba(0,245,160,0.4)] animate-glow">
+                <div className="size-20 rounded-3xl bg-linear-to-br from-signal-400 via-signal-500 to-signal-600 flex items-center justify-center text-ink-950 shadow-[0_0_35px_rgba(47,163,124,0.4)] animate-glow">
                   <Logo size={42} />
                 </div>
               </div>
 
               {/* Tag de Telemetría */}
               <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-ink-300">
-                <span className="size-1.5 rounded-full bg-signal-400 shadow-[0_0_6px_#00f5a0]" />
+                <span className="size-1.5 rounded-full bg-signal-400 shadow-[0_0_6px_#2fa37c]" />
                 <span>NODO OFFGRID // MOTOR NATIVO</span>
               </div>
 
@@ -857,98 +857,112 @@ export function ChatView({
                 </button>
               )}
 
-              {/* 4 Tarjetas de Capacidad Táctica */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 w-full text-left my-1">
+              {/* 4 Tarjetas de capacidad real */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 w-full text-left my-1 stagger">
                 {/* Card 1: RAG */}
                 <div
                   role="button"
                   tabIndex={0}
                   onClick={() => onOpenLibrary()}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') onOpenLibrary()
+                  }}
                   className="glass-card rounded-2xl p-3.5 flex items-start gap-3 cursor-pointer group"
                 >
-                  <div className="size-9 rounded-xl bg-signal-500/10 border border-signal-500/30 text-signal-400 flex items-center justify-center shrink-0 group-hover:scale-105 transition shadow-[0_0_10px_-2px_rgba(0,245,160,0.25)]">
+                  <div className="size-9 rounded-xl bg-signal-500/10 border border-signal-500/30 text-signal-400 flex items-center justify-center shrink-0 group-hover:scale-105 transition">
                     <Icon name="library" size={17} />
                   </div>
                   <div className="flex flex-col min-w-0">
                     <span className="text-xs font-bold text-white group-hover:text-signal-300 transition">
-                      Document RAG (NotebookLM)
+                      Documentos con citas
                     </span>
                     <span className="text-[11px] text-ink-400 leading-snug mt-0.5">
-                      Sube PDFs y consulta con citaciones clicables [1], [2] a nivel de página.
+                      Sube PDFs y pregunta con citas clicables [1], [2] por página.
                     </span>
                   </div>
                 </div>
 
-                {/* Card 2: Pyodide */}
+                {/* Card 2: Notas */}
                 <div
                   role="button"
                   tabIndex={0}
-                  onClick={() => void handleSend('Ejecuta un script en Python para calcular los primeros 10 números de Fibonacci')}
+                  onClick={() => {
+                    onOpenNotes()
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') onOpenNotes()
+                  }}
                   className="glass-card rounded-2xl p-3.5 flex items-start gap-3 cursor-pointer group"
                 >
-                  <div className="size-9 rounded-xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 flex items-center justify-center shrink-0 group-hover:scale-105 transition shadow-[0_0_10px_-2px_rgba(0,210,255,0.25)]">
-                    <Icon name="cpu" size={17} />
+                  <div className="size-9 rounded-xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 flex items-center justify-center shrink-0 group-hover:scale-105 transition">
+                    <Icon name="copy" size={17} />
                   </div>
                   <div className="flex flex-col min-w-0">
                     <span className="text-xs font-bold text-white group-hover:text-cyan-300 transition">
-                      Python Sandbox (Pyodide)
+                      Notas privadas
                     </span>
                     <span className="text-[11px] text-ink-400 leading-snug mt-0.5">
-                      Ejecuta código científico en WebAssembly con watchdog de 15 segundos.
+                      Guarda ideas y pregúntale a la IA sobre ellas.
                     </span>
                   </div>
                 </div>
 
-                {/* Card 3: Math */}
+                {/* Card 3: Modelos */}
                 <div
                   role="button"
                   tabIndex={0}
-                  onClick={() => void handleSend('Calcula sqrt(256) + 14 * 3.5 usando la calculadora')}
+                  onClick={() => onOpenModels()}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') onOpenModels()
+                  }}
                   className="glass-card rounded-2xl p-3.5 flex items-start gap-3 cursor-pointer group"
                 >
-                  <div className="size-9 rounded-xl bg-ember-500/10 border border-ember-500/30 text-ember-400 flex items-center justify-center shrink-0 group-hover:scale-105 transition shadow-[0_0_10px_-2px_rgba(255,184,0,0.25)]">
-                    <Icon name="sparkles" size={17} />
+                  <div className="size-9 rounded-xl bg-ember-500/10 border border-ember-500/30 text-ember-400 flex items-center justify-center shrink-0 group-hover:scale-105 transition">
+                    <Icon name="cpu" size={17} />
                   </div>
                   <div className="flex flex-col min-w-0">
                     <span className="text-xs font-bold text-white group-hover:text-ember-300 transition">
-                      Motor Matemático Seguro
+                      Modelos offline
                     </span>
                     <span className="text-[11px] text-ink-400 leading-snug mt-0.5">
-                      Parser algebraico y trigonométrico sin usar llamadas eval() arbitrarias.
+                      Descarga Llama o Qwen una vez y úsalos sin internet.
                     </span>
                   </div>
                 </div>
 
-                {/* Card 4: Emergency */}
+                {/* Card 4: Agente */}
                 <div
                   role="button"
                   tabIndex={0}
-                  onClick={() => void handleSend('¿Cuáles son los pasos de RCP y torniquete en caso de emergencia?')}
+                  onClick={() => void handleSend('Dime la hora y cuánta batería tiene el teléfono')}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') void handleSend('Dime la hora y cuánta batería tiene el teléfono')
+                  }}
                   className="glass-card rounded-2xl p-3.5 flex items-start gap-3 cursor-pointer group"
                 >
-                  <div className="size-9 rounded-xl bg-danger-500/10 border border-danger-500/30 text-danger-400 flex items-center justify-center shrink-0 group-hover:scale-105 transition shadow-[0_0_10px_-2px_rgba(239,68,68,0.25)]">
-                    <Icon name="shield" size={17} />
+                  <div className="size-9 rounded-xl bg-danger-500/10 border border-danger-500/30 text-danger-400 flex items-center justify-center shrink-0 group-hover:scale-105 transition">
+                    <Icon name="sparkles" size={17} />
                   </div>
                   <div className="flex flex-col min-w-0">
                     <span className="text-xs font-bold text-white group-hover:text-danger-300 transition">
-                      Kit de Supervivencia
+                      Agente del teléfono
                     </span>
                     <span className="text-[11px] text-ink-400 leading-snug mt-0.5">
-                      Manuales de primeros auxilios, purificación de agua y protocolos PAS.
+                      Activa el modo AGENTE y pide tareas: linterna, ubicación, temporizador.
                     </span>
                   </div>
                 </div>
               </div>
 
-              {/* Sugerencias Rápidas de Agente */}
+              {/* Consultas rápidas */}
               <div className="w-full flex flex-col gap-1.5 mt-1">
                 <span className="font-mono text-[10px] font-semibold uppercase tracking-wider text-ink-400 text-left px-1">
                   CONSULTAS RÁPIDAS:
                 </span>
                 {[
-                  'Calcula sqrt(256) + 14 * 3.5 usando la calculadora',
-                  'Ejecuta un script en Python para calcular los primeros 6 números primos',
-                  '¿Cuáles son los pasos de RCP y torniquete en caso de emergencia?',
+                  'Explícame la fotosíntesis en 3 puntos',
+                  'Escribe un haiku sobre la lluvia',
+                  'Dame 3 ideas para ahorrar batería del móvil',
                 ].map((sug) => (
                   <button
                     key={sug}
@@ -1031,7 +1045,7 @@ export function ChatView({
                 <button
                   type="button"
                   onClick={handleStop}
-                  className="rounded-xl bg-danger-500/20 text-danger-400 hover:bg-danger-500/30 p-2.5 transition shrink-0 cursor-pointer shadow-[0_0_12px_rgba(239,68,68,0.3)]"
+                  className="rounded-xl bg-danger-500/20 text-danger-400 hover:bg-danger-500/30 p-2.5 transition shrink-0 cursor-pointer shadow-[0_0_12px_rgba(201,106,94,0.3)]"
                   aria-label={t('chat.stop')} title={t('chat.stop')}
                 >
                   <Icon name="stop" size={18} />
@@ -1058,7 +1072,7 @@ export function ChatView({
                   className="inline-flex items-center gap-2 px-3 py-1 rounded-full font-mono text-[11px] font-semibold tracking-wider uppercase transition cursor-pointer bg-signal-500/15 text-signal-400 border border-signal-500/40 shrink-0"
                   aria-label="Abrir Modelos de IA" title="Abrir Modelos de IA"
                 >
-                  <span className="size-1.5 rounded-full bg-signal-400 shadow-[0_0_6px_#00f5a0]" />
+                  <span className="size-1.5 rounded-full bg-signal-400 shadow-[0_0_6px_#2fa37c]" />
                   <span className="truncate">{nativeModel ? `IA · ${nativeModelLabel()}` : 'SIN IA'}</span>
                 </button>
                 <button

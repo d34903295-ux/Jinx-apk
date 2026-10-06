@@ -475,6 +475,20 @@ class NodoBridge(
         return "ok"
     }
 
+    /** Táctil semántico: selection | success | warning. */
+    @JavascriptInterface
+    fun haptic(kind: String): String {
+        try {
+            when (kind) {
+                "success" -> com.example.jinx.haptics.Haptics.success(context)
+                "warning" -> com.example.jinx.haptics.Haptics.warning(context)
+                else -> com.example.jinx.haptics.Haptics.selection(context)
+            }
+        } catch (_: Exception) {
+        }
+        return "ok"
+    }
+
     companion object {
         private const val TAG = "NODO_BRIDGE"
     }

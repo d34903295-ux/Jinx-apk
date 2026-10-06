@@ -151,7 +151,7 @@ export function NotesView({ onBack, onSendToChat }: NotesViewProps) {
                 value={searchQuery}
                 onChange={handleSearchChange}
                 aria-label="Buscar en notas" placeholder="Buscar en tus notas..."
-                className="w-full rounded-xl border border-white/10 bg-white/[0.04] py-2 pl-8 pr-3 text-xs sm:text-sm text-white focus:border-signal-500 focus:outline-none focus:shadow-[0_0_15px_rgba(0,245,160,0.2)] transition"
+                className="w-full rounded-xl border border-white/10 bg-white/[0.04] py-2 pl-8 pr-3 text-xs sm:text-sm text-white focus:border-signal-500 focus:outline-none focus:shadow-[0_0_15px_rgba(47,163,124,0.2)] transition"
               />
               <span className="absolute left-2.5 top-2.5 text-ink-400">
                 <Icon name="search" size={14} />
@@ -174,7 +174,7 @@ export function NotesView({ onBack, onSendToChat }: NotesViewProps) {
                       onClick={() => handleSelectNote(n)}
                       className={`p-3 rounded-2xl cursor-pointer transition flex flex-col gap-1 border text-left ${
                         isSelected
-                          ? 'border-signal-500/50 bg-signal-500/15 text-white shadow-[0_0_15px_-3px_rgba(0,245,160,0.25)]'
+                          ? 'border-signal-500/50 bg-signal-500/15 text-white shadow-[0_0_15px_-3px_rgba(47,163,124,0.25)]'
                           : 'border-white/[0.05] hover:border-white/10 hover:bg-white/[0.03] text-ink-300'
                       }`}
                     >

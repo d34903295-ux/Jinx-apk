@@ -12,7 +12,9 @@ import {
   type StorageInfo,
 } from '../../core/offline/storage'
 import { db } from '../../core/db/schema'
+import { getSetting, setSetting } from '../../core/db/repo'
 import { Icon } from './Icon'
+import { showSnack } from '../../core/native/snackbar'
 
 interface SettingsViewProps {
   onBack: () => void
@@ -35,13 +37,12 @@ export function SettingsView({
   theme,
 }: SettingsViewProps) {
   const [storage, setStorage] = useState<StorageInfo | null>(null)
-  const [error, setError] = useState<string | null>(null)
-  const [successMsg, setSuccessMsg] = useState<string | null>(null)
   const [activeLabel, setActiveLabel] = useState('')
   const [ramMB, setRamMB] = useState(0)
   const [freeMB, setFreeMB] = useState(0)
   const [engineCtx, setEngineCtx] = useState(2048)
   const [engineThreads, setEngineThreads] = useState(0)
+  const [perfMode, setPerfMode] = useState(false)
   const [perms, setPerms] = useState({ location: false, camera: false, battery: true })
 
   const refreshAll = async () => {
@@ -70,17 +71,25 @@ export function SettingsView({
 
   useEffect(() => {
     void refreshAll()
+    void getSetting<boolean>('perfMode').then((v) => setPerfMode(!!v))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  const togglePerf = async () => {
+    const next = !perfMode
+    setPerfMode(next)
+    document.documentElement.classList.toggle('perf', next)
+    await setSetting('perfMode', next)
+    showSnack(next ? 'Modo rendimiento activado.' : 'Modo rendimiento desactivado.', 'info')
+  }
 
   const handleRequestPersistence = async () => {
     const granted = await requestPersistence()
     await refreshAll()
-    if (granted) {
-      setSuccessMsg('¡Persistencia de almacenamiento concedida!')
-    } else {
-      setError('El sistema denegó la persistencia automática.')
-    }
+    showSnack(
+      granted ? 'Persistencia de almacenamiento concedida.' : 'El sistema denegó la persistencia.',
+      granted ? 'success' : 'error',
+    )
   }
 
   const handleClearAllData = async () => {
@@ -92,7 +101,7 @@ export function SettingsView({
       await db.chats.clear()
       await db.messages.clear()
     })
-    setSuccessMsg('Datos locales eliminados.')
+    showSnack('Datos locales eliminados.', 'success')
   }
 
   const permRow = (label: string, granted: boolean, hint: string) => (
@@ -125,7 +134,7 @@ export function SettingsView({
         Volver al Chat
       </button>
 
-      <div className="w-full max-w-4xl mx-auto flex flex-col gap-6 pb-12">
+      <div className="w-full max-w-4xl mx-auto flex flex-col gap-6 pb-12 stagger">
         <div className="flex items-center gap-3 border-b border-ink-200/60 dark:border-white/10 pb-5">
           <div className="size-12 rounded-2xl bg-linear-to-br from-signal-400 to-signal-600 flex items-center justify-center text-ink-950 shadow-lg shadow-signal-500/20">
             <Icon name="settings" size={24} />
@@ -137,19 +146,6 @@ export function SettingsView({
             </p>
           </div>
         </div>
-
-        {successMsg && (
-          <div className="glass rounded-2xl border-signal-500/30 bg-signal-500/10 p-4 text-signal-700 dark:text-signal-300 flex items-center gap-3 animate-fade-up">
-            <Icon name="check" size={20} className="shrink-0" />
-            <span className="text-sm font-medium">{successMsg}</span>
-          </div>
-        )}
-        {error && (
-          <div className="glass rounded-2xl border-ember-500/30 bg-ember-500/10 p-4 text-ember-600 dark:text-ember-300 flex items-center gap-3 animate-fade-up">
-            <Icon name="alert" size={20} className="shrink-0" />
-            <span className="text-sm font-medium">{error}</span>
-          </div>
-        )}
 
         {/* Modelo activo */}
         <div className="glass rounded-3xl p-5 flex items-center justify-between gap-3">
@@ -304,6 +300,29 @@ export function SettingsView({
           <span className="text-xs font-semibold uppercase tracking-wider text-ink-400">
             Preferencias
           </span>
+          <div className="flex items-center justify-between py-2 border-b border-ink-200/50 dark:border-white/5">
+            <div>
+              <h4 className="text-sm font-semibold text-ink-900 dark:text-white">Modo rendimiento</h4>
+              <p className="text-xs text-ink-400">Sin blur ni animaciones si el teléfono va lento</p>
+            </div>
+            <button
+              type="button"
+              role="switch"
+              aria-checked={perfMode}
+              aria-label="Modo rendimiento"
+              onClick={() => void togglePerf()}
+              className={`relative h-7 w-12 shrink-0 rounded-full transition-colors cursor-pointer ${
+                perfMode ? 'bg-signal-600' : 'bg-white/10'
+              }`}
+            >
+              <span
+                className={`absolute top-1 size-5 rounded-full bg-white shadow transition-all ${
+                  perfMode ? 'left-6' : 'left-1'
+                }`}
+              />
+            </button>
+          </div>
+
           <div className="flex items-center justify-between py-2 border-b border-ink-200/50 dark:border-white/5">
             <div>
               <h4 className="text-sm font-semibold text-ink-900 dark:text-white">Tema visual</h4>

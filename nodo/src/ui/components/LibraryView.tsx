@@ -11,6 +11,7 @@ import { formatBytes } from '../../core/offline/storage'
 import { isEmergencyPackInstalled, installEmergencyPack } from '../../core/rag/emergencyPack'
 import { Icon } from './Icon'
 import { ProgressBar } from './ProgressBar'
+import { Skeleton } from './Skeleton'
 
 interface LibraryViewProps {
   onBack: () => void
@@ -177,9 +178,9 @@ export function LibraryView({ onBack, onAskDoc }: LibraryViewProps) {
         </div>
 
         {/* Banner / Tarjeta de Paquete de Emergencia */}
-        <div className="glass-card rounded-2xl border-ember-500/30 p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-linear-to-r from-ember-500/10 via-white/[0.02] to-transparent shadow-[0_0_25px_-5px_rgba(255,184,0,0.15)]">
+        <div className="glass-card rounded-2xl border-ember-500/30 p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-linear-to-r from-ember-500/10 via-white/[0.02] to-transparent shadow-[0_0_25px_-5px_rgba(201,150,60,0.15)]">
           <div className="flex items-center gap-3.5">
-            <div className="size-11 rounded-xl bg-ember-500/15 border border-ember-500/30 text-ember-400 flex items-center justify-center shrink-0 shadow-[0_0_12px_rgba(255,184,0,0.25)]">
+            <div className="size-11 rounded-xl bg-ember-500/15 border border-ember-500/30 text-ember-400 flex items-center justify-center shrink-0 shadow-[0_0_12px_rgba(201,150,60,0.25)]">
               <Icon name="shield" size={22} />
             </div>
             <div>
@@ -205,7 +206,7 @@ export function LibraryView({ onBack, onAskDoc }: LibraryViewProps) {
           <div className="shrink-0">
             {emergencyInstalled ? (
               <span className="font-mono text-xs text-signal-400 flex items-center gap-1.5 font-semibold">
-                <span className="size-2 rounded-full bg-signal-400 shadow-[0_0_6px_#00f5a0]" />
+                <span className="size-2 rounded-full bg-signal-400 shadow-[0_0_6px_#2fa37c]" />
                 DISPONIBLE EN BASE LOCAL
               </span>
             ) : (
@@ -273,7 +274,7 @@ export function LibraryView({ onBack, onAskDoc }: LibraryViewProps) {
             onClick={() => fileInputRef.current?.click()}
             className="border-2 border-dashed border-ink-300/60 dark:border-white/10 rounded-3xl p-10 flex flex-col items-center justify-center text-center gap-3 cursor-pointer hover:border-signal-500/50 hover:bg-signal-500/[0.02] transition"
           >
-            <div className="size-16 rounded-2xl bg-ink-200/50 dark:bg-white/5 flex items-center justify-center text-ink-400">
+            <div className="size-16 rounded-2xl bg-ink-200/50 dark:bg-white/5 flex items-center justify-center text-ink-400 animate-breathe">
               <Icon name="fileText" size={32} />
             </div>
             <h3 className="font-semibold text-base text-ink-800 dark:text-ink-100">
@@ -286,6 +287,14 @@ export function LibraryView({ onBack, onAskDoc }: LibraryViewProps) {
         )}
 
         {/* Lista de Documentos */}
+        {loadingDocs && (
+          <div className="flex flex-col gap-3" aria-label="Cargando documentos">
+            <Skeleton className="h-4 w-40" />
+            <Skeleton className="h-[76px] w-full" />
+            <Skeleton className="h-[76px] w-full" />
+            <Skeleton className="h-[76px] w-full" />
+          </div>
+        )}
         {docs.length > 0 && (
           <div className="flex flex-col gap-3">
             <div className="flex items-center justify-between gap-3">
@@ -307,7 +316,7 @@ export function LibraryView({ onBack, onAskDoc }: LibraryViewProps) {
                   className="glass-card rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition hover:border-signal-500/40"
                 >
                   <div className="flex items-center gap-3.5 min-w-0">
-                    <div className="size-10 rounded-xl bg-signal-500/15 border border-signal-500/30 text-signal-400 flex items-center justify-center shrink-0 shadow-[0_0_10px_-2px_rgba(0,245,160,0.25)]">
+                    <div className="size-10 rounded-xl bg-signal-500/15 border border-signal-500/30 text-signal-400 flex items-center justify-center shrink-0 shadow-[0_0_10px_-2px_rgba(47,163,124,0.25)]">
                       <Icon name="fileText" size={20} />
                     </div>
                     <div className="min-w-0">

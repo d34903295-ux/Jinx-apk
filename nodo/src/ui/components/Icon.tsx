@@ -93,7 +93,7 @@ export function Logo({ size = 28 }: { size?: number }) {
     <svg width={size} height={size} viewBox="0 0 64 64" aria-hidden="true">
       <defs>
         <linearGradient id="nodo-g" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stopColor="#5eead4" />
+          <stop offset="0" stopColor="#7bc9a8" />
           <stop offset="1" stopColor="#10b981" />
         </linearGradient>
       </defs>
