@@ -13,7 +13,12 @@
 - aria-label en inputs/textareas — commit a11y
 - Estado: BUILD OK
 
-## Ciclo 3 — auditoría lifecycle/batería (agentes: code-reviewer, mobile-app-builder)
+## Ciclo 3 — auditoría lifecycle/batería + bug de concurrencia (agentes: code-reviewer, mobile-app-builder)
+- onPause/onResume del WebView en MainActivity — commit perf
+- Token de generación: el stream viejo ya no contamina la vista al cambiar de chat (+stop) — commit fix
+- Estado: BUILD OK
+
+## Ciclo 4 — robustez de arranque (agentes: code-reviewer, sre)
 - Pendiente de iniciar
 
 ## Ideas pendientes

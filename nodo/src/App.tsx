@@ -20,6 +20,15 @@ export function App() {
   // Inicialización de tema y modelo guardado
   useEffect(() => {
     let alive = true
+    let timedOut = false
+    // Red de seguridad: nunca dejar el splash colgado más de 20s
+    const bootTimer = setTimeout(() => {
+      if (!alive) return
+      timedOut = true
+      console.warn('Boot timeout: continuando a configuración')
+      setView('setup')
+      setBooting(false)
+    }, 20000)
     async function boot() {
       // 1. Tema
       const savedTheme = (await getSetting<'dark' | 'light'>('theme')) ?? 'dark'
@@ -34,7 +43,7 @@ export function App() {
       // 2. Estado offline y modelo
       try {
         const status = await getOfflineStatus()
-        if (!alive) return
+        if (!alive || timedOut) return
         if (status.modelId) {
           setActiveModel(status.modelId)
           setView('chat')
@@ -47,16 +56,18 @@ export function App() {
           setView('setup')
         }
       } catch (err) {
-        if (!alive) return
+        if (!alive || timedOut) return
         console.error('Boot error:', err)
         setView('setup')
       } finally {
-        if (alive) setBooting(false)
+        clearTimeout(bootTimer)
+        if (alive && !timedOut) setBooting(false)
       }
     }
     void boot()
     return () => {
       alive = false
+      clearTimeout(bootTimer)
     }
   }, [])
 
