@@ -22,7 +22,22 @@
 - Timeout de 20s en el boot de App.tsx — commit stability
 - Estado: BUILD OK
 
-## Ciclo 5 — pendiente (rotar a: ux-architect, performance-benchmarker, security-engineer re-auditoría)
+## Ciclo 7 — rediseño total + chat nativo (agentes: frontend-developer, mobile-builder, code-reviewer, a11y)
+- App abre directo al chat: eliminado el setup forzado de WebLLM (causa del
+  0% eterno). Sin IA, el chat guía a Modelos.
+- Nueva navegación: drawer (logo) + bottom bar con Chat/Docs/Modelos/Notas/Ajustes.
+- Nueva vista Modelos en React: estados, Descargar/Pausar/Reanudar/Eliminar/
+  Usar/Probar con streaming, avisos de espacio y peso, RAM/libre visibles.
+- ChatView migrado al puente nativo: RAG local + generate con streaming,
+  token de generación, stop real, CTA de descarga, chip de modelo nativo.
+  Modo agente (WebLLM) retirado temporalmente.
+- NodoBridge ampliado: modelsJson, descargas, generate con eventos
+  start/token/done/error hacia window.__nodoCb.
+- Incidencia: commit con fallo Kotlin (scope webView en apply) -> fix +
+  amend. Regla reforzada: verificar BUILD antes de commitear.
+- APK 46.3MB en Descargas.
+- Estado: BUILD OK
+- Pendiente en teléfono: descarga Llama 3.2 1B + "Probar modelo" + chat real.
 
 ## Ciclo 6 — diagnóstico 0% + motor nativo (agentes: mobile-builder, code-reviewer, security-engineer)
 - Causa del 0%: WebLLM emite "Start to fetch params" una vez con progreso 0 y
