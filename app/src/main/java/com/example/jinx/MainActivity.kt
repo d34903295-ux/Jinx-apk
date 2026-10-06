@@ -112,7 +112,7 @@ fun NodoWebViewScreen(
                         Log.e("NODO", "Proceso de render perdido (crash), reiniciando WebView")
                         view?.destroy()
                         android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({
-                            recreate()
+                            (view?.context as? MainActivity)?.recreate()
                         }, 300)
                         return true
                     }
