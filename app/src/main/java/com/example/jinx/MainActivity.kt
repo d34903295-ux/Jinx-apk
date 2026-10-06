@@ -89,6 +89,9 @@ fun NodoWebViewScreen(
                     mediaPlaybackRequiresUserGesture = false
                     cacheMode = WebSettings.LOAD_DEFAULT
                     mixedContentMode = WebSettings.MIXED_CONTENT_NEVER_ALLOW
+                    javaScriptCanOpenWindowsAutomatically = false
+                    setSupportMultipleWindows(false)
+                    setGeolocationEnabled(false)
                     useWideViewPort = true
                     loadWithOverviewMode = true
                     setSupportZoom(false)
