@@ -60,6 +60,9 @@ export function ChatView({
 
   const messagesEndRef = useRef<HTMLDivElement | null>(null)
   const textareaRef = useRef<HTMLTextAreaElement | null>(null)
+  // Identifica el envío vigente: si el usuario cambia de chat, el stream viejo
+  // guarda en DB pero ya no toca la vista.
+  const generationRef = useRef(0)
 
   // Cargar lista de chats
   const refreshChats = async (selectLatest = false) => {
@@ -112,6 +115,8 @@ export function ChatView({
   }
 
   const handleNewChat = () => {
+    generationRef.current += 1
+    llm.stop()
     setActiveChatId(null)
     setMessages([])
     setInput('')
@@ -144,6 +149,8 @@ export function ChatView({
   const handleSend = async (textToSend?: string) => {
     const content = (textToSend ?? input).trim()
     if (!content || llmState.status === 'generating') return
+    const gen = ++generationRef.current
+    const isCurrent = () => gen === generationRef.current
 
     let currentChatId = activeChatId
     if (currentChatId === null) {
@@ -171,6 +178,7 @@ export function ChatView({
         const agentResult = await runAgentLoop(
           content,
           (step) => {
+            if (!isCurrent()) return
             if (step.toolName) {
               setLiveToolCalls((prev) => {
                 const existingIdx = prev.findIndex(
@@ -199,7 +207,7 @@ export function ChatView({
             }
           },
           (partial) => {
-            setStreamingContent(partial)
+            if (isCurrent()) setStreamingContent(partial)
           }
         )
 
@@ -210,6 +218,7 @@ export function ChatView({
           [],
           agentResult.toolCalls
         )
+        if (!isCurrent()) return
         const finalMessages = await getMessages(currentChatId)
         setMessages(finalMessages)
       } catch (err) {
@@ -221,11 +230,14 @@ export function ChatView({
           [],
           liveToolCalls
         )
+        if (!isCurrent()) return
         const finalMessages = await getMessages(currentChatId)
         setMessages(finalMessages)
       } finally {
-        setStreamingContent(null)
-        setLiveToolCalls([])
+        if (isCurrent()) {
+          setStreamingContent(null)
+          setLiveToolCalls([])
+        }
       }
       return
     }
@@ -259,10 +271,11 @@ export function ChatView({
     setStreamingCitations(activeCitations)
     try {
       const fullResponse = await llm.generate(promptMessages, (partial) => {
-        setStreamingContent(partial)
+        if (isCurrent()) setStreamingContent(partial)
       })
       if (fullResponse) {
         await addMessage(currentChatId, 'assistant', fullResponse, activeCitations)
+        if (!isCurrent()) return
         const finalMessages = await getMessages(currentChatId)
         setMessages(finalMessages)
       }
@@ -274,11 +287,14 @@ export function ChatView({
         t('chat.error', { msg: errorMsg }),
         activeCitations,
       )
+      if (!isCurrent()) return
       const finalMessages = await getMessages(currentChatId)
       setMessages(finalMessages)
     } finally {
-      setStreamingContent(null)
-      setStreamingCitations([])
+      if (isCurrent()) {
+        setStreamingContent(null)
+        setStreamingCitations([])
+      }
     }
   }
 
@@ -413,11 +429,15 @@ export function ChatView({
                   role="button"
                   tabIndex={0}
                   onClick={() => {
+                    generationRef.current += 1
+                    llm.stop()
                     setActiveChatId(c.id)
                     setSidebarOpen(false)
                   }}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') {
+                      generationRef.current += 1
+                      llm.stop()
                       setActiveChatId(c.id)
                       setSidebarOpen(false)
                     }
