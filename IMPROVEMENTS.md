@@ -19,7 +19,10 @@
 - Estado: BUILD OK
 
 ## Ciclo 4 — robustez de arranque (agentes: code-reviewer, sre)
-- Pendiente de iniciar
+- Timeout de 20s en el boot de App.tsx — commit stability
+- Estado: BUILD OK
+
+## Ciclo 5 — pendiente (rotar a: ux-architect, performance-benchmarker, security-engineer re-auditoría)
 
 ## Ideas pendientes
 - QA en emulador/dispositivo (adb no disponible ahora — sin dispositivo conectado)
