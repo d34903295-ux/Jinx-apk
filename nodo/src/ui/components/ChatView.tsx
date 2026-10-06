@@ -314,7 +314,7 @@ export function ChatView({
               <Logo size={20} />
             </div>
             <div className="flex flex-col">
-              <span className="font-display font-bold tracking-tight text-lg text-white">NODO</span>
+              <span className="font-display font-bold tracking-tight text-lg text-ink-900 dark:text-white">NODO</span>
               <span className="font-mono text-[9px] text-signal-400 tracking-wider uppercase">OFFGRID // v1.0</span>
             </div>
           </div>
