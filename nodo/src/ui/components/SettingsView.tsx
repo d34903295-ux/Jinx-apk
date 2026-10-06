@@ -263,7 +263,7 @@ export function SettingsView({
                         type="button"
                         onClick={() => handleDeleteModel(modelId)}
                         className="text-xs text-ink-400 hover:text-danger-400 p-1 cursor-pointer"
-                        title="Liberar espacio borrando el modelo"
+                        aria-label="Liberar espacio borrando el modelo" title="Liberar espacio borrando el modelo"
                       >
                         <Icon name="trash" size={15} />
                       </button>

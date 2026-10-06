@@ -333,7 +333,7 @@ export function ChatView({
                   setSidebarOpen(false)
                 }}
                 className="icon-btn"
-                title="Configuración y Modelos"
+                aria-label="Configuración y Modelos" title="Configuración y Modelos"
               >
                 <Icon name="settings" size={18} />
               </button>
@@ -342,7 +342,7 @@ export function ChatView({
               type="button"
               onClick={onToggleTheme}
               className="icon-btn"
-              title={theme === 'dark' ? t('header.themeLight') : t('header.themeDark')}
+              aria-label={theme === 'dark' ? t('header.themeLight') : t('header.themeDark')} title={theme === 'dark' ? t('header.themeLight') : t('header.themeDark')}
             >
               <Icon name={theme === 'dark' ? 'sun' : 'moon'} size={18} />
             </button>
@@ -374,7 +374,7 @@ export function ChatView({
                 setSidebarOpen(false)
               }}
               className="btn-ghost py-2 text-xs gap-1.5 border border-ink-200/70 dark:border-white/10 hover:border-signal-500/40 text-ink-700 dark:text-ink-200 hover:text-signal-400 cursor-pointer justify-center"
-              title="Biblioteca de Documentos"
+              aria-label="Biblioteca de Documentos" title="Biblioteca de Documentos"
             >
               <Icon name="library" size={14} />
               <span>Docs</span>
@@ -386,7 +386,7 @@ export function ChatView({
                 setSidebarOpen(false)
               }}
               className="btn-ghost py-2 text-xs gap-1.5 border border-ink-200/70 dark:border-white/10 hover:border-signal-500/40 text-ink-700 dark:text-ink-200 hover:text-signal-400 cursor-pointer justify-center"
-              title="Notas Personales"
+              aria-label="Notas Personales" title="Notas Personales"
             >
               <Icon name="copy" size={14} />
               <span>Notas</span>
@@ -433,7 +433,7 @@ export function ChatView({
                     type="button"
                     onClick={(e) => handleDeleteChat(c.id, e)}
                     className="absolute right-2 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition p-1 hover:text-danger-500 rounded"
-                    title={t('chat.deleteChat')}
+                    aria-label={t('chat.deleteChat')} title={t('chat.deleteChat')}
                   >
                     <Icon name="trash" size={14} />
                   </button>
@@ -481,7 +481,7 @@ export function ChatView({
               type="button"
               onClick={() => setSidebarOpen(true)}
               className="icon-btn lg:hidden"
-              title={t('header.history')}
+              aria-label={t('header.history')} title={t('header.history')}
             >
               <Icon name="menu" size={20} />
             </button>
@@ -506,7 +506,7 @@ export function ChatView({
               type="button"
               onClick={onOpenLibrary}
               className="btn-ghost text-xs px-2.5 py-1.5 gap-1.5 border border-ink-200/60 dark:border-white/10 text-ink-700 dark:text-ink-200 hover:text-signal-400 cursor-pointer"
-              title="Abrir Biblioteca de Documentos"
+              aria-label="Abrir Biblioteca de Documentos" title="Abrir Biblioteca de Documentos"
             >
               <Icon name="library" size={14} />
               <span className="hidden sm:inline">Docs</span>
@@ -515,7 +515,7 @@ export function ChatView({
               type="button"
               onClick={onOpenNotes}
               className="btn-ghost text-xs px-2.5 py-1.5 gap-1.5 border border-ink-200/60 dark:border-white/10 text-ink-700 dark:text-ink-200 hover:text-signal-400 cursor-pointer"
-              title="Abrir Notas Personales"
+              aria-label="Abrir Notas Personales" title="Abrir Notas Personales"
             >
               <Icon name="copy" size={14} />
               <span className="hidden sm:inline">Notas</span>
@@ -525,7 +525,7 @@ export function ChatView({
                 type="button"
                 onClick={onOpenSettings}
                 className="icon-btn"
-                title="Configuración y Modelos"
+                aria-label="Configuración y Modelos" title="Configuración y Modelos"
               >
                 <Icon name="settings" size={17} />
               </button>
@@ -737,7 +737,7 @@ export function ChatView({
                   type="button"
                   onClick={() => llm.stop()}
                   className="rounded-xl bg-danger-500/20 text-danger-400 hover:bg-danger-500/30 p-2.5 transition shrink-0 cursor-pointer shadow-[0_0_12px_rgba(239,68,68,0.3)]"
-                  title={t('chat.stop')}
+                  aria-label={t('chat.stop')} title={t('chat.stop')}
                 >
                   <Icon name="stop" size={18} />
                 </button>
@@ -747,7 +747,7 @@ export function ChatView({
                   onClick={() => void handleSend()}
                   disabled={!input.trim() || isLoading}
                   className="btn-primary p-2.5 rounded-xl shrink-0 cursor-pointer"
-                  title={t('chat.send')}
+                  aria-label={t('chat.send')} title={t('chat.send')}
                 >
                   <Icon name="send" size={18} />
                 </button>
@@ -764,7 +764,7 @@ export function ChatView({
                     ? 'bg-signal-500/15 text-signal-400 border border-signal-500/40 shadow-[0_0_12px_-2px_rgba(0,245,160,0.3)]'
                     : 'bg-white/5 text-ink-400 border border-white/10 hover:text-ink-200'
                 }`}
-                title="Activar/desactivar el bucle de herramientas autónomo (Python, Calculadora, Notas, etc.)"
+                aria-label="Activar/desactivar el bucle de herramientas autónomo (Python, Calculadora, Notas, etc.)" title="Activar/desactivar el bucle de herramientas autónomo (Python, Calculadora, Notas, etc.)"
               >
                 <span className={`size-1.5 rounded-full ${agentMode ? 'bg-signal-400 shadow-[0_0_6px_#00f5a0]' : 'bg-ink-500'}`} />
                 <span>MODO AGENTE {agentMode ? 'ON' : 'OFF'}</span>

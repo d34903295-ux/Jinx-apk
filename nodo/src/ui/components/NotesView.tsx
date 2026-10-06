@@ -242,7 +242,7 @@ export function NotesView({ onBack, onSendToChat }: NotesViewProps) {
                         type="button"
                         onClick={() => onSendToChat(`Sobre mi nota "${activeNote.title}": ${activeNote.body}`)}
                         className="btn-ghost text-xs px-2.5 py-1 gap-1 text-signal-400 hover:text-signal-300 cursor-pointer"
-                        title="Preguntar a la IA sobre esta nota"
+                        aria-label="Preguntar a la IA sobre esta nota" title="Preguntar a la IA sobre esta nota"
                       >
                         <Icon name="message" size={13} />
                         Consultar IA
@@ -252,7 +252,7 @@ export function NotesView({ onBack, onSendToChat }: NotesViewProps) {
                       type="button"
                       onClick={() => handleCopy(activeNote)}
                       className="btn-ghost text-xs px-2 py-1 gap-1 cursor-pointer"
-                      title="Copiar nota"
+                      aria-label="Copiar nota" title="Copiar nota"
                     >
                       <Icon name={copiedId === activeNote.id ? 'check' : 'copy'} size={13} />
                       {copiedId === activeNote.id ? 'Copiado' : 'Copiar'}
@@ -268,7 +268,7 @@ export function NotesView({ onBack, onSendToChat }: NotesViewProps) {
                       type="button"
                       onClick={() => handleDelete(activeNote.id)}
                       className="p-1.5 rounded-lg text-ink-400 hover:text-danger-400 hover:bg-danger-500/10 cursor-pointer"
-                      title="Eliminar"
+                      aria-label="Eliminar" title="Eliminar"
                     >
                       <Icon name="trash" size={15} />
                     </button>

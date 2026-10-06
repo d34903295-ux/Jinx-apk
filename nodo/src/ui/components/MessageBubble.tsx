@@ -139,7 +139,7 @@ export function MessageBubble({
             type="button"
             onClick={copy}
             className="inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 font-mono text-[10px] text-ink-400 hover:text-ink-200 transition"
-            title="Copiar mensaje"
+            aria-label="Copiar mensaje" title="Copiar mensaje"
           >
             <Icon name={copied ? 'check' : 'copy'} size={12} className={copied ? 'text-signal-400' : ''} />
             <span>{copied ? 'Copiado' : 'Copiar'}</span>

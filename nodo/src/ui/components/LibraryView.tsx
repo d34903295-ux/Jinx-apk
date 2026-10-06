@@ -331,7 +331,7 @@ export function LibraryView({ onBack, onAskDoc }: LibraryViewProps) {
                         type="button"
                         onClick={() => onAskDoc(doc.name)}
                         className="btn-ghost text-xs px-3 py-1.5 gap-1.5 text-signal-400 hover:text-signal-300 hover:bg-signal-500/10 cursor-pointer rounded-lg border border-signal-500/30"
-                        title="Preguntar sobre este documento"
+                        aria-label="Preguntar sobre este documento" title="Preguntar sobre este documento"
                       >
                         <Icon name="message" size={14} />
                         Preguntar
@@ -341,7 +341,7 @@ export function LibraryView({ onBack, onAskDoc }: LibraryViewProps) {
                       type="button"
                       onClick={() => handleStartSummary(doc)}
                       className="btn-ghost text-xs px-3 py-1.5 gap-1.5 cursor-pointer rounded-lg border border-white/10 hover:border-white/20"
-                      title="Generar resumen completo Map-Reduce"
+                      aria-label="Generar resumen completo Map-Reduce" title="Generar resumen completo Map-Reduce"
                     >
                       <Icon name="sparkles" size={14} />
                       Resumir
@@ -350,7 +350,7 @@ export function LibraryView({ onBack, onAskDoc }: LibraryViewProps) {
                       type="button"
                       onClick={() => handleDelete(doc.id)}
                       className="p-2 rounded-xl text-ink-400 hover:text-danger-400 hover:bg-danger-500/10 transition cursor-pointer"
-                      title="Eliminar documento"
+                      aria-label="Eliminar documento" title="Eliminar documento"
                     >
                       <Icon name="trash" size={16} />
                     </button>
