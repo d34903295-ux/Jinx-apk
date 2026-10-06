@@ -10,6 +10,14 @@ import android.os.IBinder
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,6 +26,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -334,6 +343,30 @@ private fun StatusChip(state: DownloadState, model: NativeModel, filesDir: File)
 }
 
 @Composable
+private fun ThinkingDots() {
+    val t = rememberInfiniteTransition(label = "dots")
+    Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+        for (i in 0..2) {
+            val dy by t.animateFloat(
+                initialValue = 0f,
+                targetValue = -6f,
+                animationSpec = infiniteRepeatable(
+                    animation = tween(400, easing = FastOutSlowInEasing, delayMillis = i * 130),
+                    repeatMode = RepeatMode.Reverse,
+                ),
+                label = "dot$i",
+            )
+            Box(
+                modifier = Modifier
+                    .size(8.dp)
+                    .offset(y = dy.dp)
+                    .background(Signal, CircleShape),
+            )
+        }
+    }
+}
+
+@Composable
 private fun TestDialog(model: NativeModel, filesDir: File, onClose: () -> Unit) {
     var output by remember { mutableStateOf("Cargando modelo…") }
     var loading by remember { mutableStateOf(true) }
@@ -371,7 +404,7 @@ private fun TestDialog(model: NativeModel, filesDir: File, onClose: () -> Unit) 
         text = {
             Column {
                 if (loading && output == "Cargando modelo…") {
-                    CircularProgressIndicator(color = Signal)
+                    ThinkingDots()
                     Spacer(Modifier.height(8.dp))
                 }
                 Text(output.ifBlank { "…" }, color = Color(0xFFE2E8F0))

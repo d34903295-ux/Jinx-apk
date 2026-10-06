@@ -851,8 +851,9 @@ export function ChatView({
             <div className="flex-1 flex flex-col items-center justify-center text-center max-w-2xl mx-auto py-8 gap-5 animate-fade-up">
               {/* Núcleo Central Orbital */}
               <div className="relative flex items-center justify-center my-1 select-none">
-                <div className="absolute size-28 rounded-full border border-signal-400/25 animate-pulse" />
+                <div className="absolute size-28 rounded-full border border-dashed border-signal-400/30 animate-spin-slow" />
                 <div className="absolute size-36 rounded-full border border-white/[0.05]" />
+                <div className="absolute size-44 rounded-full border border-dotted border-white/[0.06] animate-spin-slower" />
                 <div className="size-20 rounded-3xl bg-linear-to-br from-signal-400 via-signal-500 to-signal-600 flex items-center justify-center text-ink-950 shadow-[0_0_35px_rgba(47,163,124,0.4)] animate-glow">
                   <Logo size={42} />
                 </div>
@@ -1051,8 +1052,27 @@ export function ChatView({
               </div>
             )}
             {dictNotice && (
-              <div className="rounded-xl border border-cyan-500/30 bg-cyan-500/10 px-3 py-2 text-xs text-cyan-700 dark:text-cyan-300 animate-fade-up">
-                {dictNotice}
+              <div className="rounded-xl border border-cyan-500/30 bg-cyan-500/10 px-3 py-2 text-xs text-cyan-700 dark:text-cyan-300 animate-fade-up flex items-center gap-2">
+                {dictating && (
+                  <span className="eq" aria-hidden="true">
+                    <i />
+                    <i />
+                    <i />
+                    <i />
+                  </span>
+                )}
+                <span>{dictNotice}</span>
+              </div>
+            )}
+            {dictating && !dictNotice && (
+              <div className="flex items-center gap-2 px-1">
+                <span className="eq" aria-label="Escuchando">
+                  <i />
+                  <i />
+                  <i />
+                  <i />
+                </span>
+                <span className="font-mono text-[11px] text-cyan-300">Escuchando… habla ahora</span>
               </div>
             )}
             <div className="command-bar rounded-2xl p-2.5 sm:p-3 flex items-end gap-2 transition">

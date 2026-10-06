@@ -76,9 +76,12 @@ export function App() {
 
   if (booting) {
     return (
-      <div className="h-dvh w-full flex flex-col items-center justify-center bg-ink-950 text-white gap-4 select-none app-backdrop safe-top safe-bottom safe-x">
-        <div className="size-16 rounded-2xl bg-linear-to-br from-signal-400 to-signal-600 flex items-center justify-center text-ink-950 shadow-2xl shadow-signal-500/25 animate-pulse">
-          <Logo size={36} />
+      <div className="h-dvh w-full flex flex-col items-center justify-center bg-ink-950 text-white gap-5 select-none app-backdrop safe-top safe-bottom safe-x">
+        <div className="relative flex items-center justify-center">
+          <div className="absolute size-24 rounded-full border border-dashed border-signal-400/30 animate-spin-slow" />
+          <div className="size-16 rounded-2xl bg-signal-600 flex items-center justify-center text-white shadow-xl animate-pulse">
+            <Logo size={36} />
+          </div>
         </div>
         <div className="flex items-center gap-2 text-sm text-ink-400 font-medium">
           <Icon name="refresh" size={16} className="animate-spin text-signal-400" />

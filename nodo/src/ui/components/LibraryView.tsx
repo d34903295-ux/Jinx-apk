@@ -407,16 +407,26 @@ export function LibraryView({ onBack, onAskDoc }: LibraryViewProps) {
 
             {/* Progreso mientras resume */}
             {!summaryResult && (
-              <div className="flex flex-col items-center justify-center py-10 gap-3 text-center">
-                <Icon name="refresh" size={28} className="animate-spin text-signal-400" />
-                <span className="text-sm font-medium text-ink-700 dark:text-ink-200">
-                  {summaryProgress?.text ?? 'Iniciando análisis Map-Reduce...'}
-                </span>
+              <div className="flex flex-col py-4 gap-3">
+                <div className="flex items-center gap-2.5">
+                  <span className="typing-dots" aria-hidden="true">
+                    <i />
+                    <i />
+                    <i />
+                  </span>
+                  <span className="text-sm font-medium text-ink-700 dark:text-ink-200">
+                    {summaryProgress?.text ?? 'Iniciando análisis…'}
+                  </span>
+                </div>
                 {summaryProgress?.totalBatches ? (
-                  <span className="text-xs text-ink-400">
+                  <span className="font-mono text-xs text-ink-400">
                     Lote {summaryProgress.currentBatch} de {summaryProgress.totalBatches}
                   </span>
                 ) : null}
+                <Skeleton className="h-3.5 w-full" />
+                <Skeleton className="h-3.5 w-11/12" />
+                <Skeleton className="h-3.5 w-4/5" />
+                <Skeleton className="h-3.5 w-3/5" />
               </div>
             )}
 

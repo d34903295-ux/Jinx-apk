@@ -78,6 +78,15 @@ export function MessageBubble({
       if (!isUser && !streaming) {
         return <Markdown text={content} copyCode={(code) => void copyText(code)} />
       }
+      if (!isUser && streaming && !content) {
+        return (
+          <span className="typing-dots" aria-label="La IA está escribiendo">
+            <i />
+            <i />
+            <i />
+          </span>
+        )
+      }
       return (
         <p className="break-words whitespace-pre-wrap">
           {content}
