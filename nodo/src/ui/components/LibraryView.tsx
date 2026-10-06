@@ -20,6 +20,7 @@ interface LibraryViewProps {
 export function LibraryView({ onBack, onAskDoc }: LibraryViewProps) {
   const [docs, setDocs] = useState<DocumentRecord[]>([])
   const [loadingDocs, setLoadingDocs] = useState(true)
+  const [docQuery, setDocQuery] = useState('')
   const [ingesting, setIngesting] = useState(false)
   const [ingestStatus, setIngestStatus] = useState<IngestProgress | null>(null)
   const [error, setError] = useState<string | null>(null)
@@ -36,6 +37,10 @@ export function LibraryView({ onBack, onAskDoc }: LibraryViewProps) {
   const [summaryCopied, setSummaryCopied] = useState(false)
 
   const fileInputRef = useRef<HTMLInputElement | null>(null)
+
+  const filteredDocs = docQuery.trim()
+    ? docs.filter((d) => d.name.toLowerCase().includes(docQuery.trim().toLowerCase()))
+    : docs
 
   const refresh = async () => {
     try {
@@ -283,11 +288,20 @@ export function LibraryView({ onBack, onAskDoc }: LibraryViewProps) {
         {/* Lista de Documentos */}
         {docs.length > 0 && (
           <div className="flex flex-col gap-3">
-            <span className="text-xs font-semibold uppercase tracking-wider text-ink-400">
-              Documentos Indexados ({docs.length})
-            </span>
+            <div className="flex items-center justify-between gap-3">
+              <span className="text-xs font-semibold uppercase tracking-wider text-ink-400">
+                Documentos Indexados ({docs.length})
+              </span>
+              <input
+                type="search"
+                value={docQuery}
+                onChange={(e) => setDocQuery(e.target.value)}
+                placeholder="Filtrar..."
+                className="rounded-lg border border-ink-200/70 dark:border-white/10 bg-white/40 dark:bg-white/[0.04] py-1.5 px-3 text-xs text-ink-900 dark:text-white focus:border-signal-500 focus:outline-none w-40"
+              />
+            </div>
             <div className="grid grid-cols-1 gap-3">
-              {docs.map((doc) => (
+              {filteredDocs.map((doc) => (
                 <div
                   key={doc.id}
                   className="glass-card rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition hover:border-signal-500/40"
@@ -344,6 +358,9 @@ export function LibraryView({ onBack, onAskDoc }: LibraryViewProps) {
                 </div>
               ))}
             </div>
+            {filteredDocs.length === 0 && (
+              <p className="text-xs text-ink-400 text-center py-4">Sin resultados para "{docQuery}"</p>
+            )}
           </div>
         )}
       </div>
