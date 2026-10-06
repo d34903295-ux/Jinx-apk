@@ -1,0 +1,154 @@
+{
+  "communities": {
+    "0": [
+      "activity",
+      "app_src_main_java_com_example_jinx_ui_theme_theme",
+      "app_src_main_java_com_example_jinx_ui_theme_theme_jinxtheme",
+      "app_src_main_java_com_example_jinx_ui_theme_theme_kt_composable",
+      "build",
+      "darkcolorscheme",
+      "dynamicdarkcolorscheme",
+      "dynamiclightcolorscheme",
+      "issystemindarktheme",
+      "lightcolorscheme",
+      "localcontext",
+      "materialtheme"
+    ],
+    "1": [
+      "app_src_main_java_com_example_jinx_mainactivity",
+      "app_src_main_java_com_example_jinx_mainactivity_greeting",
+      "app_src_main_java_com_example_jinx_mainactivity_greetingpreview",
+      "app_src_main_java_com_example_jinx_mainactivity_kt_composable",
+      "enableedgetoedge",
+      "fillmaxsize",
+      "modifier",
+      "padding",
+      "preview",
+      "scaffold",
+      "setcontent",
+      "text"
+    ],
+    "2": [
+      "androidjunit4",
+      "app_src_androidtest_java_com_example_jinx_exampleinstrumentedtest",
+      "app_src_androidtest_java_com_example_jinx_exampleinstrumentedtest_exampleinstrumentedtest",
+      "app_src_androidtest_java_com_example_jinx_exampleinstrumentedtest_exampleinstrumentedtest_useappcontext",
+      "app_src_androidtest_java_com_example_jinx_exampleinstrumentedtest_kt_test",
+      "instrumentationregistry",
+      "runwith"
+    ],
+    "3": [
+      "app_src_main_java_com_example_jinx_ui_theme_type",
+      "fontfamily",
+      "fontweight",
+      "sp",
+      "textstyle",
+      "typography"
+    ],
+    "4": [
+      "app_src_main_java_com_example_jinx_mainactivity_mainactivity",
+      "app_src_main_java_com_example_jinx_mainactivity_mainactivity_oncreate",
+      "bundle",
+      "componentactivity"
+    ],
+    "5": [
+      "app_src_test_java_com_example_jinx_exampleunittest",
+      "app_src_test_java_com_example_jinx_exampleunittest_exampleunittest",
+      "app_src_test_java_com_example_jinx_exampleunittest_exampleunittest_addition_iscorrect",
+      "app_src_test_java_com_example_jinx_exampleunittest_kt_test"
+    ],
+    "6": [
+      "gradlew",
+      "gradlew__entry",
+      "gradlew_die",
+      "gradlew_warn"
+    ],
+    "7": [
+      "app_build_gradle"
+    ],
+    "8": [
+      "app_src_main_java_com_example_jinx_ui_theme_color"
+    ],
+    "9": [
+      "build_gradle"
+    ],
+    "10": [
+      "settings_gradle"
+    ]
+  },
+  "cohesion": {
+    "0": 0.18181818181818182,
+    "1": 0.24242424242424243,
+    "2": 0.38095238095238093,
+    "3": 0.3333333333333333,
+    "4": 0.5,
+    "5": 0.6666666666666666,
+    "6": 0.8333333333333334,
+    "7": 1.0,
+    "8": 1.0,
+    "9": 1.0,
+    "10": 1.0
+  },
+  "gods": [
+    {
+      "id": "app_src_main_java_com_example_jinx_ui_theme_theme_jinxtheme",
+      "label": "JinxTheme()",
+      "degree": 5
+    },
+    {
+      "id": "app_src_main_java_com_example_jinx_mainactivity_greeting",
+      "label": "Greeting()",
+      "degree": 5
+    },
+    {
+      "id": "app_src_main_java_com_example_jinx_mainactivity_greetingpreview",
+      "label": "GreetingPreview()",
+      "degree": 5
+    },
+    {
+      "id": "app_src_androidtest_java_com_example_jinx_exampleinstrumentedtest_exampleinstrumentedtest",
+      "label": "ExampleInstrumentedTest",
+      "degree": 3
+    },
+    {
+      "id": "app_src_main_java_com_example_jinx_mainactivity_mainactivity",
+      "label": "MainActivity",
+      "degree": 3
+    },
+    {
+      "id": "app_src_test_java_com_example_jinx_exampleunittest_exampleunittest",
+      "label": "ExampleUnitTest",
+      "degree": 2
+    }
+  ],
+  "surprises": [
+    {
+      "source": "GreetingPreview()",
+      "target": "JinxTheme()",
+      "source_files": [
+        "app/src/main/java/com/example/jinx/MainActivity.kt",
+        "app/src/main/java/com/example/jinx/ui/theme/Theme.kt"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "bridges separate communities"
+    }
+  ],
+  "questions": [
+    {
+      "type": "bridge_node",
+      "question": "Why does `JinxTheme()` connect `Theme.kt` to `MainActivity.kt`, `.onCreate`?",
+      "why": "High betweenness centrality (0.135) - this node is a cross-community bridge."
+    },
+    {
+      "type": "bridge_node",
+      "question": "Why does `GreetingPreview()` connect `MainActivity.kt` to `Theme.kt`?",
+      "why": "High betweenness centrality (0.013) - this node is a cross-community bridge."
+    },
+    {
+      "type": "bridge_node",
+      "question": "Why does `Greeting()` connect `MainActivity.kt` to `.onCreate`?",
+      "why": "High betweenness centrality (0.004) - this node is a cross-community bridge."
+    }
+  ]
+}

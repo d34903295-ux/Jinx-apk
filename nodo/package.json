@@ -1,0 +1,42 @@
+{
+  "name": "nodo",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "build:android": "tsc -b && vite build && node -e \"require('fs').cpSync('dist', '../app/src/main/assets/www', {recursive: true})\"",
+    "lint": "oxlint",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@fontsource-variable/inter": "^5.3.0",
+    "@huggingface/transformers": "^4.3.0",
+    "@mlc-ai/web-llm": "^0.2.85",
+    "dexie": "^4.4.6",
+    "dexie-react-hooks": "^4.4.0",
+    "mammoth": "^1.13.0",
+    "pdfjs-dist": "^6.4.299",
+    "pyodide": "^314.0.7",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.3.3",
+    "@types/node": "^24.13.3",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.7",
+    "@vitejs/plugin-react": "^6.1.1",
+    "@webgpu/types": "^0.1.74",
+    "oxlint": "^1.81.0",
+    "tailwindcss": "^4.3.3",
+    "typescript": "~6.0.2",
+    "vite": "^8.3.0",
+    "vite-plugin-pwa": "^2.0.0",
+    "workbox-core": "^7.4.1",
+    "workbox-precaching": "^7.4.1",
+    "workbox-routing": "^7.4.1",
+    "workbox-strategies": "^7.4.1"
+  }
+}

@@ -1,0 +1,415 @@
+@import 'tailwindcss';
+@import '@fontsource-variable/inter';
+
+/* Modo oscuro por clase (.dark en <html>), controlado desde la app. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: 'Inter Variable', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'Space Grotesk', 'Inter Variable', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  /* Neutros profundos (Obsidiana / Grafito Off-Grid) */
+  --color-ink-50: #f8fafc;
+  --color-ink-100: #f1f5f9;
+  --color-ink-200: #e2e8f0;
+  --color-ink-300: #cbd5e1;
+  --color-ink-400: #94a3b8;
+  --color-ink-500: #64748b;
+  --color-ink-600: #475569;
+  --color-ink-700: #334155;
+  --color-ink-800: #1e293b;
+  --color-ink-850: #131826;
+  --color-ink-900: #0d111b;
+  --color-ink-950: #07090e;
+
+  /* Señal: Esmeralda Eléctrico / Neón Táctico */
+  --color-signal-300: #5eead4;
+  --color-signal-400: #00f5a0;
+  --color-signal-500: #00d26a;
+  --color-signal-600: #00a854;
+  --color-signal-700: #008744;
+
+  /* Ámbar / Oro Táctico (Alertas, Emergencias) */
+  --color-ember-300: #fde047;
+  --color-ember-400: #ffb800;
+  --color-ember-500: #ff9900;
+  --color-ember-600: #ea580c;
+
+  /* Cian / Holograma */
+  --color-cyan-300: #67e8f9;
+  --color-cyan-400: #00d2ff;
+  --color-cyan-500: #00b4d8;
+
+  /* Peligro */
+  --color-danger-400: #f87171;
+  --color-danger-500: #ef4444;
+
+  --animate-fade-up: fade-up 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-page-in: page-in 0.38s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-pop-in: pop-in 0.28s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  --animate-sheet-up: sheet-up 0.42s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-fade-in: fade-in 0.3s ease both;
+  --animate-pulse-ring: pulse-ring 2.2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --animate-radar-ping: radar-ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+  --animate-caret: caret 1s steps(2, start) infinite;
+  --animate-shimmer: shimmer 2s linear infinite;
+  --animate-glow: glow-pulse 3s ease-in-out infinite;
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes page-in {
+    from {
+      opacity: 0;
+      transform: translateY(14px) scale(0.985);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  @keyframes pop-in {
+    from {
+      opacity: 0;
+      transform: scale(0.92);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes sheet-up {
+    from {
+      opacity: 0;
+      transform: translateY(24px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes pulse-ring {
+    0%, 100% {
+      box-shadow: 0 0 0 0 rgba(0, 245, 160, 0.5);
+    }
+    50% {
+      box-shadow: 0 0 0 6px rgba(0, 245, 160, 0);
+    }
+  }
+
+  @keyframes radar-ping {
+    0% {
+      transform: scale(0.9);
+      opacity: 0.8;
+    }
+    70%, 100% {
+      transform: scale(2.4);
+      opacity: 0;
+    }
+  }
+
+  @keyframes glow-pulse {
+    0%, 100% {
+      opacity: 0.7;
+      filter: drop-shadow(0 0 12px rgba(0, 245, 160, 0.3));
+    }
+    50% {
+      opacity: 1;
+      filter: drop-shadow(0 0 24px rgba(0, 245, 160, 0.6));
+    }
+  }
+
+  @keyframes caret {
+    to {
+      visibility: hidden;
+    }
+  }
+
+  @keyframes shimmer {
+    from {
+      background-position: 200% 0;
+    }
+    to {
+      background-position: -200% 0;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@layer base {
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  body {
+    @apply bg-ink-50 text-ink-900 antialiased dark:bg-ink-950 dark:text-ink-100;
+    font-family: var(--font-sans);
+    -webkit-tap-highlight-color: transparent;
+    overscroll-behavior-y: none;
+    -webkit-font-smoothing: antialiased;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  /* Insets nativos de Android (status bar / gestos) en modo edge-to-edge */
+  .safe-top { padding-top: env(safe-area-inset-top, 0px); }
+  .safe-bottom { padding-bottom: env(safe-area-inset-bottom, 0px); }
+  .safe-x {
+    padding-left: env(safe-area-inset-left, 0px);
+    padding-right: env(safe-area-inset-right, 0px);
+  }
+
+  button:not(:disabled):active {
+    transition-duration: 0.06s;
+  }
+
+  h1, h2, h3, .font-display {
+    font-family: var(--font-display);
+  }
+
+  code, pre, .font-mono {
+    font-family: var(--font-mono);
+  }
+
+  ::selection {
+    background: rgba(0, 245, 160, 0.3);
+    color: #ffffff;
+  }
+
+  button {
+    cursor: pointer;
+  }
+
+  button:disabled {
+    cursor: not-allowed;
+  }
+}
+
+@layer components {
+  /* Fondo estilo Cyber-Grid táctico con auroras difusas */
+  .app-backdrop {
+    background-color: var(--color-ink-50);
+    background-image:
+      radial-gradient(55rem 30rem at 10% -5%, rgba(0, 210, 106, 0.08), transparent 60%),
+      radial-gradient(45rem 28rem at 90% 10%, rgba(255, 184, 0, 0.05), transparent 60%);
+  }
+
+  .dark .app-backdrop {
+    background-color: #07090e;
+    background-image:
+      radial-gradient(65rem 35rem at 5% -10%, rgba(0, 245, 160, 0.12), transparent 65%),
+      radial-gradient(50rem 30rem at 95% 5%, rgba(255, 184, 0, 0.07), transparent 60%),
+      radial-gradient(40rem 40rem at 50% 100%, rgba(0, 210, 255, 0.05), transparent 70%),
+      linear-gradient(rgba(255, 255, 255, 0.018) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.018) 1px, transparent 1px);
+    background-size: 100% 100%, 100% 100%, 100% 100%, 48px 48px, 48px 48px;
+  }
+
+  /* Paneles Glassmorphism ultra-pulidos */
+  .glass {
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+  }
+
+  .dark .glass {
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    background: rgba(13, 17, 27, 0.72);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.45), inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
+  }
+
+  /* Tarjetas Interactivas con brillo reactivo al hover */
+  .glass-card {
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    background: rgba(19, 24, 38, 0.55);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .glass-card:hover {
+    border-color: rgba(0, 245, 160, 0.35);
+    background: rgba(19, 24, 38, 0.75);
+    box-shadow: 0 12px 30px -10px rgba(0, 245, 160, 0.15), 0 0 20px -5px rgba(0, 245, 160, 0.1);
+    transform: translateY(-2px);
+  }
+
+  /* Botones Primarios de Alto Impacto */
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition active:scale-[0.98] disabled:opacity-40 disabled:pointer-events-none;
+    background: linear-gradient(135deg, #00f5a0 0%, #00d26a 50%, #00a854 100%);
+    color: #07090e;
+    box-shadow: 0 4px 20px -2px rgba(0, 245, 160, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  }
+
+  .btn-primary:hover:not(:disabled) {
+    filter: brightness(1.12);
+    box-shadow: 0 6px 28px 0 rgba(0, 245, 160, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+    transform: translateY(-1px);
+  }
+
+  /* Botón de Emergencia Táctico (Ámbar) */
+  .btn-amber {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition active:scale-[0.98] disabled:opacity-40;
+    background: linear-gradient(135deg, #ffb800 0%, #ff9900 100%);
+    color: #07090e;
+    box-shadow: 0 4px 20px -2px rgba(255, 184, 0, 0.35);
+  }
+
+  .btn-amber:hover {
+    filter: brightness(1.12);
+    box-shadow: 0 6px 28px 0 rgba(255, 184, 0, 0.5);
+  }
+
+  /* Botones Ghost sutiles */
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-3 py-2 text-sm font-medium transition;
+    color: var(--color-ink-600);
+  }
+
+  .btn-ghost:hover {
+    background: rgba(0, 0, 0, 0.05);
+    color: var(--color-ink-900);
+  }
+
+  .dark .btn-ghost {
+    color: var(--color-ink-300);
+  }
+
+  .dark .btn-ghost:hover {
+    background: rgba(255, 255, 255, 0.06);
+    color: #ffffff;
+  }
+
+  /* Botones Icono */
+  .icon-btn {
+    @apply inline-flex size-9 items-center justify-center rounded-xl transition;
+    color: var(--color-ink-500);
+  }
+
+  .icon-btn:hover {
+    background: rgba(0, 0, 0, 0.06);
+    color: var(--color-ink-900);
+  }
+
+  .dark .icon-btn {
+    color: var(--color-ink-400);
+  }
+
+  .dark .icon-btn:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: #ffffff;
+  }
+
+  /* Contenedor de la barra de comando / Input */
+  .command-bar {
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    background: rgba(13, 17, 27, 0.85);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .command-bar:focus-within {
+    border-color: rgba(0, 245, 160, 0.5);
+    box-shadow:
+      0 12px 45px -5px rgba(0, 0, 0, 0.6),
+      0 0 25px -4px rgba(0, 245, 160, 0.25),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  }
+
+  /* Barra de Shimmer / Carga */
+  .shimmer-bar {
+    background-image: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(0, 245, 160, 0.4) 50%,
+      transparent 100%
+    );
+    background-size: 200% 100%;
+  }
+
+  /* Scrollbar táctica delgada */
+  .scroll-thin {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(148, 163, 184, 0.25) transparent;
+  }
+
+  .scroll-thin::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  .scroll-thin::-webkit-scrollbar-thumb {
+    background: rgba(148, 163, 184, 0.2);
+    border-radius: 9999px;
+  }
+
+  .scroll-thin::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 245, 160, 0.4);
+  }
+
+  /* Text Gradients */
+  .text-gradient-emerald {
+    background: linear-gradient(135deg, #00f5a0 0%, #00d26a 50%, #00b4d8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .text-gradient-amber {
+    background: linear-gradient(135deg, #ffb800 0%, #ff8c00 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  /* Telemetry Monospace Badge */
+  .telemetry-chip {
+    font-family: var(--font-mono);
+    letter-spacing: 0.05em;
+  }
+}
+
+/* En pantallas táctiles (Android) el hover se "pega": desactivarlo */
+@media (hover: none) {
+  .glass-card:hover {
+    transform: none;
+    border-color: rgba(255, 255, 255, 0.07);
+    box-shadow: none;
+  }
+  .btn-primary:hover:not(:disabled),
+  .btn-amber:hover {
+    transform: none;
+    filter: none;
+    box-shadow: 0 4px 20px -2px rgba(0, 245, 160, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  }
+  .glass-card:active {
+    transform: scale(0.98);
+    border-color: rgba(0, 245, 160, 0.35);
+  }
+}
