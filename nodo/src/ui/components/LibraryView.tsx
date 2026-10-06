@@ -296,7 +296,7 @@ export function LibraryView({ onBack, onAskDoc }: LibraryViewProps) {
                 type="search"
                 value={docQuery}
                 onChange={(e) => setDocQuery(e.target.value)}
-                placeholder="Filtrar..."
+                aria-label="Filtrar documentos" placeholder="Filtrar..."
                 className="rounded-lg border border-ink-200/70 dark:border-white/10 bg-white/40 dark:bg-white/[0.04] py-1.5 px-3 text-xs text-ink-900 dark:text-white focus:border-signal-500 focus:outline-none w-40"
               />
             </div>

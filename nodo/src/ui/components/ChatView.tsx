@@ -727,7 +727,7 @@ export function ChatView({
                 autoCapitalize="sentences"
                 spellCheck
                 rows={1}
-                placeholder={isLoading ? t('chat.waitModel') : 'Pregunta algo, pide un script en Python o consulta tus documentos...'}
+                aria-label="Entrada de mensaje" placeholder={isLoading ? t('chat.waitModel') : 'Pregunta algo, pide un script en Python o consulta tus documentos...'}
                 disabled={isLoading}
                 className="flex-1 bg-transparent px-2 py-1 text-sm sm:text-base resize-none focus:outline-none placeholder:text-ink-400 max-h-44 scroll-thin text-ink-900 dark:text-white"
               />

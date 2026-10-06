@@ -141,7 +141,7 @@ export function NotesView({ onBack, onSendToChat }: NotesViewProps) {
                 type="text"
                 value={searchQuery}
                 onChange={handleSearchChange}
-                placeholder="Buscar en tus notas..."
+                aria-label="Buscar en notas" placeholder="Buscar en tus notas..."
                 className="w-full rounded-xl border border-white/10 bg-white/[0.04] py-2 pl-8 pr-3 text-xs sm:text-sm text-white focus:border-signal-500 focus:outline-none focus:shadow-[0_0_15px_rgba(0,245,160,0.2)] transition"
               />
               <span className="absolute left-2.5 top-2.5 text-ink-400">
@@ -218,14 +218,14 @@ export function NotesView({ onBack, onSendToChat }: NotesViewProps) {
                   type="text"
                   value={editTitle}
                   onChange={(e) => setEditTitle(e.target.value)}
-                  placeholder="Título de la nota..."
+                  aria-label="Título de la nota" placeholder="Título de la nota..."
                   className="w-full text-base sm:text-lg font-bold bg-transparent border-b border-ink-200/50 dark:border-white/5 py-2 focus:outline-none focus:border-signal-500"
                 />
 
                 <textarea
                   value={editBody}
                   onChange={(e) => setEditBody(e.target.value)}
-                  placeholder="Escribe el contenido de tu nota aquí..."
+                  aria-label="Contenido de la nota" placeholder="Escribe el contenido de tu nota aquí..."
                   className="flex-1 w-full bg-transparent resize-none py-2 text-sm sm:text-base leading-relaxed focus:outline-none scroll-thin"
                 />
               </div>
