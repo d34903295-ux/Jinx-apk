@@ -66,6 +66,29 @@ export function ChatView({
     }
   }, [nativeModel])
 
+  // Texto compartido desde otras apps (Compartir → NODO).
+  useEffect(() => {
+    const pull = () => {
+      try {
+        const t = window.NodoNative?.consumeSharedText()
+        if (t) setInput((prev) => (prev ? `${prev}\n${t}` : t))
+      } catch {
+        /* sin puente */
+      }
+    }
+    pull()
+    const onEvent = () => pull()
+    const onVisible = () => {
+      if (document.visibilityState === 'visible') pull()
+    }
+    window.addEventListener('nodo-shared-text', onEvent)
+    document.addEventListener('visibilitychange', onVisible)
+    return () => {
+      window.removeEventListener('nodo-shared-text', onEvent)
+      document.removeEventListener('visibilitychange', onVisible)
+    }
+  }, [])
+
   // Pantalla encendida mientras genera el motor nativo.
   useEffect(() => {
     if (!generating) return

@@ -317,6 +317,14 @@ class NodoBridge(
         }
     }
 
+    /** Texto compartido desde otra app (Compartir → NODO). Lo consume una vez. */
+    @JavascriptInterface
+    fun consumeSharedText(): String {
+        val t = com.example.jinx.MainActivity.pendingSharedText
+        com.example.jinx.MainActivity.pendingSharedText = null
+        return t ?: ""
+    }
+
     companion object {
         private const val TAG = "NODO_BRIDGE"
     }

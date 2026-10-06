@@ -28,10 +28,17 @@ class MainActivity : ComponentActivity() {
 
     private var webView: WebView? = null
 
+    companion object {
+        /** Texto compartido desde otras apps, pendiente de recoger por la UI. */
+        @Volatile
+        var pendingSharedText: String? = null
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         requestNotificationPermission()
+        handleShareIntent(intent)
 
         // Manejo del botón atrás en el historial de navegación web
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
@@ -49,6 +56,27 @@ class MainActivity : ComponentActivity() {
             NodoWebViewScreen(
                 onWebViewCreated = { webView = it }
             )
+        }
+    }
+
+    override fun onNewIntent(intent: android.content.Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        handleShareIntent(intent)
+        // Avisar a la UI si ya está cargada.
+        webView?.post {
+            webView?.evaluateJavascript(
+                "window.dispatchEvent(new Event('nodo-shared-text'))",
+                null,
+            )
+        }
+    }
+
+    private fun handleShareIntent(intent: android.content.Intent?) {
+        if (intent?.action == android.content.Intent.ACTION_SEND && intent.type == "text/plain") {
+            intent.getStringExtra(android.content.Intent.EXTRA_TEXT)?.takeIf { it.isNotBlank() }?.let {
+                pendingSharedText = it
+            }
         }
     }
 

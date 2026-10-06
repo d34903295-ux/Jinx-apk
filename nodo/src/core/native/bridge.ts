@@ -36,6 +36,7 @@ export interface NodoNative {
   hasLocationPermission(): boolean
   hasCameraPermission(): boolean
   openAppSettings(): string
+  consumeSharedText(): string
 }
 
 declare global {
