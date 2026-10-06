@@ -6,7 +6,14 @@
 - WebView: sin ventanas múltiples, sin geolocalización, cleartext=false — commit security
 - Estado: BUILD OK
 
-## Ciclo 2 — UI/UX (agentes: frontend-developer, ux-architect)
+## Ciclo 2 — UI/perf (agentes: frontend-developer, mobile-app-builder, code-reviewer)
+- build:android limpia www antes de copiar: -25MB de assets viejos, APK 37→35.3MB — commit perf
+- Iconos PWA generados (pwa-192/512, marca N esmeralda), eliminado icons.svg huérfano — commit fix
+- CSP: permitido cdn.jsdelivr.net tras detectar que Pyodide/pdf.js lo necesitan — commit fix
+- aria-label en inputs/textareas — commit a11y
+- Estado: BUILD OK
+
+## Ciclo 3 — auditoría lifecycle/batería (agentes: code-reviewer, mobile-app-builder)
 - Pendiente de iniciar
 
 ## Ideas pendientes
