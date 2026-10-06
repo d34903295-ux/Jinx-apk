@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { t } from '../../i18n'
-import type { ChatRecord, MessageRecord, Citation, ToolCall } from '../../types'
+import type { ChatRecord, MessageRecord, Citation } from '../../types'
 import {
   listChats,
   createChat,
@@ -9,22 +9,17 @@ import {
   addMessage,
   titleFrom,
 } from '../../core/db/repo'
-import { llm } from '../../core/llm/llmClient'
 import { buildChatMessages, buildRagMessages, type HistoryMessage } from '../../core/agent/prompts'
 import { searchChunks } from '../../core/rag/search'
-import { runAgentLoop } from '../../core/agent/loop'
-import { labelForModelId } from '../../core/llm/models'
-import { useLLM, useOnline, useOfflineStatus, useWakeLockWhileGenerating } from '../hooks/useNodo'
+import { hasNative, activeNativeModel, listNativeModels, nativeAction, nativeGenerate } from '../../core/native/bridge'
 import { Icon, Logo } from './Icon'
 import { MessageBubble } from './MessageBubble'
-import { OfflineBadge } from './OfflineBadge'
-import { ProgressBar } from './ProgressBar'
 
 interface ChatViewProps {
-  activeModelId: string | null
-  onChangeModel: () => void
+  onOpenDrawer: () => void
   onOpenLibrary: () => void
   onOpenNotes: () => void
+  onOpenModels: () => void
   onOpenSettings?: () => void
   theme: 'dark' | 'light'
   onToggleTheme: () => void
@@ -33,30 +28,58 @@ interface ChatViewProps {
 }
 
 export function ChatView({
-  activeModelId,
-  onChangeModel,
+  onOpenDrawer,
   onOpenLibrary,
   onOpenNotes,
+  onOpenModels,
   onOpenSettings,
   theme,
   onToggleTheme,
   initialPrompt,
   onClearInitialPrompt,
 }: ChatViewProps) {
-  const llmState = useLLM()
-  const online = useOnline()
-  const offlineStatus = useOfflineStatus(activeModelId)
-  useWakeLockWhileGenerating()
+  const [nativeModel, setNativeModel] = useState('')
 
   const [chats, setChats] = useState<ChatRecord[]>([])
   const [activeChatId, setActiveChatId] = useState<number | null>(null)
   const [messages, setMessages] = useState<MessageRecord[]>([])
   const [input, setInput] = useState('')
-  const [agentMode, setAgentMode] = useState(true)
+  const [generating, setGenerating] = useState(false)
   const [streamingContent, setStreamingContent] = useState<string | null>(null)
   const [streamingCitations, setStreamingCitations] = useState<Citation[]>([])
-  const [liveToolCalls, setLiveToolCalls] = useState<ToolCall[]>([])
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const stopRef = useRef<(() => void) | null>(null)
+
+  // Modelo nativo activo (puente JNI). Se relee al montar y cada 2s si no hay.
+  useEffect(() => {
+    const read = () => {
+      try {
+        setNativeModel(activeNativeModel())
+      } catch {
+        /* sin puente */
+      }
+    }
+    read()
+    if (!nativeModel) {
+      const id = setInterval(read, 2000)
+      return () => clearInterval(id)
+    }
+  }, [nativeModel])
+
+  // Pantalla encendida mientras genera el motor nativo.
+  useEffect(() => {
+    if (!generating) return
+    let lock: WakeLockSentinel | null = null
+    let alive = true
+    navigator.wakeLock?.request('screen').then((l) => {
+      if (alive) lock = l
+      else l.release()
+    }).catch(() => {})
+    return () => {
+      alive = false
+      lock?.release().catch(() => {})
+    }
+  }, [generating])
 
   const messagesEndRef = useRef<HTMLDivElement | null>(null)
   const textareaRef = useRef<HTMLTextAreaElement | null>(null)
@@ -116,7 +139,7 @@ export function ChatView({
 
   const handleNewChat = () => {
     generationRef.current += 1
-    llm.stop()
+    nativeAction((n) => n.stopGenerate())
     setActiveChatId(null)
     setMessages([])
     setInput('')
@@ -146,9 +169,33 @@ export function ChatView({
     }
   }, [initialPrompt, onClearInitialPrompt])
 
+  /** Convierte mensajes OpenAI a texto plano para el motor nativo. */
+  const messagesToText = (msgs: { role: string; content?: unknown }[]): string => {
+    const textOf = (c: unknown): string => {
+      if (typeof c === 'string') return c
+      if (Array.isArray(c)) {
+        return c
+          .map((p) => (typeof p === 'string' ? p : typeof p?.text === 'string' ? (p.text as string) : ''))
+          .join('')
+      }
+      return ''
+    }
+    const lines: string[] = []
+    for (const m of msgs) {
+      if (m.role === 'system') lines.push(`Instrucciones: ${textOf(m.content)}`)
+      else if (m.role === 'assistant') lines.push(`Asistente: ${textOf(m.content)}`)
+      else lines.push(`Usuario: ${textOf(m.content)}`)
+    }
+    return lines.join('\n\n')
+  }
+
   const handleSend = async (textToSend?: string) => {
     const content = (textToSend ?? input).trim()
-    if (!content || llmState.status === 'generating') return
+    if (!content || generating) return
+    if (!hasNative() || !nativeModel) {
+      onOpenModels()
+      return
+    }
     const gen = ++generationRef.current
     const isCurrent = () => gen === generationRef.current
 
@@ -168,88 +215,12 @@ export function ChatView({
       textareaRef.current.style.height = 'auto'
     }
 
-    // Rama 1: Modo Agente Autónomo (Herramientas, Python, Calculadora, Notas, etc.)
-    if (agentMode) {
-      setStreamingContent('Analizando y ejecutando con herramientas...')
-      setLiveToolCalls([])
-      setStreamingCitations([])
-
-      try {
-        const agentResult = await runAgentLoop(
-          content,
-          (step) => {
-            if (!isCurrent()) return
-            if (step.toolName) {
-              setLiveToolCalls((prev) => {
-                const existingIdx = prev.findIndex(
-                  (p) => p.name === step.toolName && !p.result && !p.error
-                )
-                if (existingIdx !== -1) {
-                  const updated = [...prev]
-                  updated[existingIdx] = {
-                    name: step.toolName!,
-                    args: step.toolArgs ?? {},
-                    result: step.toolResult,
-                    error: step.toolError,
-                  }
-                  return updated
-                }
-                return [
-                  ...prev,
-                  {
-                    name: step.toolName!,
-                    args: step.toolArgs ?? {},
-                    result: step.toolResult,
-                    error: step.toolError,
-                  },
-                ]
-              })
-            }
-          },
-          (partial) => {
-            if (isCurrent()) setStreamingContent(partial)
-          }
-        )
-
-        await addMessage(
-          currentChatId,
-          'assistant',
-          agentResult.finalContent,
-          [],
-          agentResult.toolCalls
-        )
-        if (!isCurrent()) return
-        const finalMessages = await getMessages(currentChatId)
-        setMessages(finalMessages)
-      } catch (err) {
-        const errorMsg = err instanceof Error ? err.message : String(err)
-        await addMessage(
-          currentChatId,
-          'assistant',
-          t('chat.error', { msg: errorMsg }),
-          [],
-          liveToolCalls
-        )
-        if (!isCurrent()) return
-        const finalMessages = await getMessages(currentChatId)
-        setMessages(finalMessages)
-      } finally {
-        if (isCurrent()) {
-          setStreamingContent(null)
-          setLiveToolCalls([])
-        }
-      }
-      return
-    }
-
-    // Rama 2: Modo Chat / RAG directo con citas
-    // Preparar historial previo para el modelo
+    // Historial + RAG local (embeddings en el dispositivo)
     const history: HistoryMessage[] = updatedMessages.map((m) => ({
       role: m.role === 'assistant' ? 'assistant' : 'user',
       content: m.content,
     }))
 
-    // Buscar si hay fragmentos de documentos relevantes en IndexedDB
     let promptMessages
     let activeCitations: Citation[] = []
 
@@ -266,37 +237,72 @@ export function ChatView({
       promptMessages = buildChatMessages(history)
     }
 
-    // Iniciar streaming
+    // Streaming desde el motor nativo (llama.cpp)
+    const promptText = messagesToText(promptMessages)
+    setGenerating(true)
     setStreamingContent('')
     setStreamingCitations(activeCitations)
-    try {
-      const fullResponse = await llm.generate(promptMessages, (partial) => {
-        if (isCurrent()) setStreamingContent(partial)
+    await new Promise<void>((resolve) => {
+      const stop = nativeGenerate(promptText, 512, (kind, text) => {
+        if (!isCurrent()) {
+          resolve()
+          return
+        }
+        if (kind === 'token') {
+          setStreamingContent(text)
+        } else if (kind === 'done') {
+          void (async () => {
+            if (text) {
+              await addMessage(currentChatId, 'assistant', text, activeCitations)
+              if (!isCurrent()) {
+                resolve()
+                return
+              }
+              const finalMessages = await getMessages(currentChatId)
+              setMessages(finalMessages)
+            }
+            if (isCurrent()) {
+              setStreamingContent(null)
+              setStreamingCitations([])
+              setGenerating(false)
+            }
+            resolve()
+          })()
+        } else if (kind === 'error') {
+          void (async () => {
+            await addMessage(currentChatId, 'assistant', t('chat.error', { msg: text }), activeCitations)
+            if (!isCurrent()) {
+              resolve()
+              return
+            }
+            const finalMessages = await getMessages(currentChatId)
+            setMessages(finalMessages)
+            setStreamingContent(null)
+            setStreamingCitations([])
+            setGenerating(false)
+            resolve()
+          })()
+        }
       })
-      if (fullResponse) {
-        await addMessage(currentChatId, 'assistant', fullResponse, activeCitations)
-        if (!isCurrent()) return
-        const finalMessages = await getMessages(currentChatId)
-        setMessages(finalMessages)
-      }
-    } catch (err) {
-      const errorMsg = err instanceof Error ? err.message : String(err)
-      await addMessage(
-        currentChatId,
-        'assistant',
-        t('chat.error', { msg: errorMsg }),
-        activeCitations,
-      )
-      if (!isCurrent()) return
-      const finalMessages = await getMessages(currentChatId)
-      setMessages(finalMessages)
-    } finally {
-      if (isCurrent()) {
-        setStreamingContent(null)
-        setStreamingCitations([])
-      }
-    }
+      stopRef.current = stop
+    })
+    stopRef.current = null
   }
+
+  const handleStop = () => {
+    generationRef.current += 1
+    try {
+      stopRef.current?.()
+    } catch {
+      /* noop */
+    }
+    stopRef.current = null
+    setStreamingContent(null)
+    setStreamingCitations([])
+    setGenerating(false)
+    void refreshChats()
+  }
+
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
@@ -305,8 +311,17 @@ export function ChatView({
     }
   }
 
-  const isGenerating = llmState.status === 'generating'
-  const isLoading = llmState.status === 'loading'
+  const isGenerating = generating
+
+  const nativeModelLabel = (): string => {
+    if (!nativeModel) return ''
+    try {
+      const found = listNativeModels().find((m) => m.id === nativeModel)
+      return found ? found.label : nativeModel
+    } catch {
+      return nativeModel
+    }
+  }
 
   return (
     <div className="flex h-screen w-full overflow-hidden bg-ink-50 dark:bg-ink-950 text-ink-900 dark:text-ink-100 select-none app-backdrop">
@@ -430,14 +445,14 @@ export function ChatView({
                   tabIndex={0}
                   onClick={() => {
                     generationRef.current += 1
-                    llm.stop()
+                    nativeAction((n) => n.stopGenerate())
                     setActiveChatId(c.id)
                     setSidebarOpen(false)
                   }}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') {
                       generationRef.current += 1
-                      llm.stop()
+                      nativeAction((n) => n.stopGenerate())
                       setActiveChatId(c.id)
                       setSidebarOpen(false)
                     }
@@ -468,11 +483,11 @@ export function ChatView({
           <button
             type="button"
             onClick={() => {
-              if (onOpenSettings) onOpenSettings()
-              else onChangeModel()
+              onOpenModels()
               setSidebarOpen(false)
             }}
             className="w-full rounded-xl border border-ink-200/70 dark:border-white/5 p-2.5 flex items-center justify-between text-left hover:border-signal-500/40 transition group cursor-pointer"
+            aria-label={t('header.changeModel')} title={t('header.changeModel')}
           >
             <div className="flex flex-col min-w-0 pr-2">
               <span className="text-[11px] text-ink-400 font-medium flex items-center gap-1">
@@ -480,7 +495,7 @@ export function ChatView({
                 {t('header.changeModel')}
               </span>
               <span className="text-xs font-semibold text-ink-800 dark:text-ink-100 truncate">
-                {activeModelId ? labelForModelId(activeModelId) : t('status.notReady')}
+                {nativeModel ? nativeModelLabel() : t('status.notReady')}
               </span>
             </div>
             <Icon
@@ -499,6 +514,14 @@ export function ChatView({
           <div className="flex items-center gap-3 min-w-0">
             <button
               type="button"
+              onClick={onOpenDrawer}
+              className="size-9 rounded-xl bg-linear-to-br from-signal-400 to-signal-600 flex items-center justify-center text-ink-950 shrink-0 cursor-pointer"
+              aria-label="Abrir menú" title="Abrir menú"
+            >
+              <Logo size={20} />
+            </button>
+            <button
+              type="button"
               onClick={() => setSidebarOpen(true)}
               className="icon-btn lg:hidden"
               aria-label={t('header.history')} title={t('header.history')}
@@ -513,10 +536,24 @@ export function ChatView({
                   ? chats.find((c) => c.id === activeChatId)?.title ?? t('chat.newChat')
                   : t('chat.newChat')}
               </h2>
-              {activeModelId && (
-                <span className="font-mono text-[10px] text-ink-400 truncate tracking-wide">
-                  MODEL: {labelForModelId(activeModelId)}
-                </span>
+              {nativeModel ? (
+                <button
+                  type="button"
+                  onClick={onOpenModels}
+                  className="font-mono text-[10px] text-ink-400 truncate tracking-wide hover:text-signal-400 transition cursor-pointer"
+                  aria-label={t('header.changeModel')} title={t('header.changeModel')}
+                >
+                  IA: {nativeModelLabel()}
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={onOpenModels}
+                  className="font-mono text-[10px] text-ember-400 truncate tracking-wide hover:text-ember-300 transition cursor-pointer"
+                  aria-label="Descargar IA" title="Descargar IA"
+                >
+                  SIN IA · TOCA PARA DESCARGAR
+                </button>
               )}
             </div>
           </div>
@@ -540,6 +577,15 @@ export function ChatView({
               <Icon name="copy" size={14} />
               <span className="hidden sm:inline">Notas</span>
             </button>
+            <button
+              type="button"
+              onClick={onOpenModels}
+              className="btn-ghost text-xs px-2.5 py-1.5 gap-1.5 border border-ink-200/60 dark:border-white/10 text-ink-700 dark:text-ink-200 hover:text-signal-400 cursor-pointer"
+              aria-label="Abrir Modelos de IA" title="Abrir Modelos de IA"
+            >
+              <Icon name="cpu" size={14} />
+              <span className="hidden sm:inline">IA</span>
+            </button>
             {onOpenSettings && (
               <button
                 type="button"
@@ -550,23 +596,8 @@ export function ChatView({
                 <Icon name="settings" size={17} />
               </button>
             )}
-            <OfflineBadge online={online} status={offlineStatus} llm={llmState} />
           </div>
         </header>
-
-        {/* Banner de Carga del Modelo si está cargando */}
-        {isLoading && (
-          <div className="px-4 py-2 bg-signal-500/10 border-b border-signal-500/20 text-xs text-signal-700 dark:text-signal-300 flex items-center gap-3">
-            <Icon name="refresh" size={14} className="animate-spin shrink-0" />
-            <div className="flex-1 flex flex-col gap-1">
-              <div className="flex justify-between font-mono">
-                <span>{llmState.progress?.text || t('boot.loading')}</span>
-                <span>{Math.round((llmState.progress?.progress ?? 0) * 100)}%</span>
-              </div>
-              <ProgressBar value={llmState.progress?.progress ?? 0} />
-            </div>
-          </div>
-        )}
 
         {/* Lista de Mensajes */}
         <div className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 flex flex-col gap-4 scroll-thin">
@@ -585,7 +616,7 @@ export function ChatView({
               {/* Tag de Telemetría */}
               <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-ink-300">
                 <span className="size-1.5 rounded-full bg-signal-400 shadow-[0_0_6px_#00f5a0]" />
-                <span>NODO OFFGRID // WEBGPU SOVEREIGN AGENT</span>
+                <span>NODO OFFGRID // MOTOR NATIVO</span>
               </div>
 
               <div className="flex flex-col gap-1.5">
@@ -593,9 +624,20 @@ export function ChatView({
                   Asistente Inteligente <span className="text-gradient-emerald">100% Desconectado</span>
                 </h3>
                 <p className="text-xs sm:text-sm text-ink-400 max-w-lg mx-auto">
-                  Inferencia local acelerada por WebGPU, RAG estilo NotebookLM y entorno Python sin conexión.
+                  Inferencia local en tu teléfono (llama.cpp), documentos con citas y notas privadas.
                 </p>
               </div>
+
+              {!nativeModel && (
+                <button
+                  type="button"
+                  onClick={onOpenModels}
+                  className="btn-primary px-6 py-3 text-sm cursor-pointer"
+                >
+                  <Icon name="download" size={16} />
+                  Descargar tu IA (una sola vez)
+                </button>
+              )}
 
               {/* 4 Tarjetas de Capacidad Táctica */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 w-full text-left my-1">
@@ -724,7 +766,6 @@ export function ChatView({
                   role="assistant"
                   content={streamingContent}
                   citations={streamingCitations}
-                  toolCalls={liveToolCalls}
                   streaming
                 />
               )}
@@ -747,15 +788,15 @@ export function ChatView({
                 autoCapitalize="sentences"
                 spellCheck
                 rows={1}
-                aria-label="Entrada de mensaje" placeholder={isLoading ? t('chat.waitModel') : 'Pregunta algo, pide un script en Python o consulta tus documentos...'}
-                disabled={isLoading}
+                aria-label="Entrada de mensaje" placeholder={nativeModel ? 'Pregunta algo o consulta tus documentos...' : 'Primero descarga tu IA en Modelos...'}
+                disabled={!nativeModel}
                 className="flex-1 bg-transparent px-2 py-1 text-sm sm:text-base resize-none focus:outline-none placeholder:text-ink-400 max-h-44 scroll-thin text-ink-900 dark:text-white"
               />
 
               {isGenerating ? (
                 <button
                   type="button"
-                  onClick={() => llm.stop()}
+                  onClick={handleStop}
                   className="rounded-xl bg-danger-500/20 text-danger-400 hover:bg-danger-500/30 p-2.5 transition shrink-0 cursor-pointer shadow-[0_0_12px_rgba(239,68,68,0.3)]"
                   aria-label={t('chat.stop')} title={t('chat.stop')}
                 >
@@ -765,7 +806,7 @@ export function ChatView({
                 <button
                   type="button"
                   onClick={() => void handleSend()}
-                  disabled={!input.trim() || isLoading}
+                  disabled={!input.trim() || !nativeModel}
                   className="btn-primary p-2.5 rounded-xl shrink-0 cursor-pointer"
                   aria-label={t('chat.send')} title={t('chat.send')}
                 >
@@ -774,26 +815,20 @@ export function ChatView({
               )}
             </div>
 
-            {/* Selector de Modo Agente vs Chat directo */}
+            {/* Estado del motor + ayuda de teclado */}
             <div className="flex items-center justify-between px-1">
               <button
                 type="button"
-                onClick={() => setAgentMode(!agentMode)}
-                className={`inline-flex items-center gap-2 px-3 py-1 rounded-full font-mono text-[11px] font-semibold tracking-wider uppercase transition cursor-pointer ${
-                  agentMode
-                    ? 'bg-signal-500/15 text-signal-400 border border-signal-500/40 shadow-[0_0_12px_-2px_rgba(0,245,160,0.3)]'
-                    : 'bg-white/5 text-ink-400 border border-white/10 hover:text-ink-200'
-                }`}
-                aria-label="Activar/desactivar el bucle de herramientas autónomo (Python, Calculadora, Notas, etc.)" title="Activar/desactivar el bucle de herramientas autónomo (Python, Calculadora, Notas, etc.)"
+                onClick={onOpenModels}
+                className="inline-flex items-center gap-2 px-3 py-1 rounded-full font-mono text-[11px] font-semibold tracking-wider uppercase transition cursor-pointer bg-signal-500/15 text-signal-400 border border-signal-500/40"
+                aria-label="Abrir Modelos de IA" title="Abrir Modelos de IA"
               >
-                <span className={`size-1.5 rounded-full ${agentMode ? 'bg-signal-400 shadow-[0_0_6px_#00f5a0]' : 'bg-ink-500'}`} />
-                <span>MODO AGENTE {agentMode ? 'ON' : 'OFF'}</span>
+                <span className="size-1.5 rounded-full bg-signal-400 shadow-[0_0_6px_#00f5a0]" />
+                <span>{nativeModel ? `IA NATIVA · ${nativeModelLabel()}` : 'SIN IA · DESCARGAR'}</span>
               </button>
 
               <span className="font-mono text-[10px] text-ink-400 hidden sm:block tracking-wide">
-                {agentMode
-                  ? 'PYODIDE · CALC · RAG · NOTAS · EMERGENCIAS'
-                  : '↵ Enviar · Shift + ↵ Salto de línea'}
+                ↵ Enviar · Shift + ↵ Salto de línea
               </span>
             </div>
           </div>

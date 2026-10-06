@@ -178,7 +178,12 @@ fun NodoWebViewScreen(
                     }
                 }
 
-                addJavascriptInterface(NodoBridge(context), "NodoNative")
+                addJavascriptInterface(
+                    NodoBridge(context) { js ->
+                        post { evaluateJavascript(js, null) }
+                    },
+                    "NodoNative",
+                )
 
                 loadUrl("https://appassets.androidplatform.net/index.html")
                 onWebViewCreated(this)
