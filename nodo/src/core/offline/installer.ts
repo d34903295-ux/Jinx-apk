@@ -10,7 +10,15 @@ export async function installModel(
 ): Promise<void> {
   // Pedir persistencia antes de descargar cientos de MB para que el navegador no los borre.
   await requestPersistence()
-  await llm.load(modelId, onProgress)
+  try {
+    await llm.load(modelId, onProgress)
+  } catch (err) {
+    const e = err as Error
+    if (e?.message?.includes('WebGPU')) {
+      throw new Error('Tu dispositivo no soporta WebGPU. Prueba un modelo más pequeño o actualiza Android.')
+    }
+    throw new Error(`No se pudo descargar el modelo: ${e?.message ?? 'error desconocido'}`)
+  }
   await setSetting('activeModel', modelId)
 }
 
@@ -26,9 +34,18 @@ export async function getOfflineStatus(): Promise<OfflineStatus> {
   const modelId = (await getSetting<string>('activeModel')) ?? null
   let appCached = false
   if ('serviceWorker' in navigator) {
-    const reg = await navigator.serviceWorker.getRegistration()
-    appCached = Boolean(reg?.active)
+    try {
+      const reg = await navigator.serviceWorker.getRegistration()
+      appCached = Boolean(reg?.active)
+    } catch {
+      appCached = false
+    }
   }
-  const modelCached = modelId ? await llm.isCached(modelId) : false
+  let modelCached = false
+  try {
+    modelCached = modelId ? await llm.isCached(modelId) : false
+  } catch {
+    modelCached = false
+  }
   return { appCached, modelCached, modelId }
 }
