@@ -18,6 +18,7 @@ export interface NativeModelInfo {
 
 export interface NodoNative {
   openModels(): void
+  openAgent(): void
   activeNativeModel(): string
   modelsJson(): string
   startDownload(id: string): string

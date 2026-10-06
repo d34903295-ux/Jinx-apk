@@ -9,6 +9,10 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:allowBackup="true"
@@ -36,6 +40,10 @@
         </activity>
         <activity
             android:name=".llama.ModelsActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Jinx" />
+        <activity
+            android:name=".agent.AgentActivity"
             android:exported="false"
             android:theme="@style/Theme.Jinx" />
         <service

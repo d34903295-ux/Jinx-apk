@@ -6,7 +6,7 @@ import { NotesView } from './ui/components/NotesView'
 import { SettingsView } from './ui/components/SettingsView'
 import { ModelsView } from './ui/components/ModelsView'
 import { Icon, Logo } from './ui/components/Icon'
-import { activeNativeModel } from './core/native/bridge'
+import { activeNativeModel, nativeAction } from './core/native/bridge'
 import { t } from './i18n'
 
 type View = 'chat' | 'library' | 'notes' | 'models' | 'settings'
@@ -128,6 +128,21 @@ export function App() {
               {tab.label}
             </button>
           ))}
+          <button
+            type="button"
+            onClick={() => {
+              setDrawerOpen(false)
+              nativeAction((n) => {
+                n.openAgent()
+                return 'ok'
+              })
+            }}
+            className="flex items-center gap-3 rounded-xl px-3.5 py-3 text-sm font-medium transition cursor-pointer text-ink-600 dark:text-ink-300 hover:bg-ink-100 dark:hover:bg-white/[0.04] border border-transparent"
+            aria-label="Abrir Agente" title="Abrir Agente"
+          >
+            <Icon name="sparkles" size={18} />
+            Agente
+          </button>
         </nav>
         <div className="p-3 border-t border-ink-200/60 dark:border-white/5">
           <button

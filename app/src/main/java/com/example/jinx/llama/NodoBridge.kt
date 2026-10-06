@@ -64,6 +64,15 @@ class NodoBridge(
         )
     }
 
+    @JavascriptInterface
+    fun openAgent() {
+        context.startActivity(
+            Intent(context, com.example.jinx.agent.AgentActivity::class.java).apply {
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            },
+        )
+    }
+
     // ---------- modelos ----------
 
     @JavascriptInterface
