@@ -114,6 +114,31 @@ fun NodoWebViewScreen(
                         )
                         return true
                     }
+
+                    override fun onJsAlert(
+                        view: WebView?, url: String?, message: String?,
+                        result: android.webkit.JsResult?
+                    ): Boolean {
+                        androidx.appcompat.app.AlertDialog.Builder(view?.context ?: return false)
+                            .setMessage(message)
+                            .setPositiveButton(android.R.string.ok) { _, _ -> result?.confirm() }
+                            .setOnCancelListener { result?.cancel() }
+                            .show()
+                        return true
+                    }
+
+                    override fun onJsConfirm(
+                        view: WebView?, url: String?, message: String?,
+                        result: android.webkit.JsResult?
+                    ): Boolean {
+                        androidx.appcompat.app.AlertDialog.Builder(view?.context ?: return false)
+                            .setMessage(message)
+                            .setPositiveButton(android.R.string.ok) { _, _ -> result?.confirm() }
+                            .setNegativeButton(android.R.string.cancel) { _, _ -> result?.cancel() }
+                            .setOnCancelListener { result?.cancel() }
+                            .show()
+                        return true
+                    }
                 }
 
                 loadUrl("https://appassets.androidplatform.net/index.html")

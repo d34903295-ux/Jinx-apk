@@ -116,6 +116,7 @@ export function ChatView({
 
   const handleDeleteChat = async (id: number, e: React.MouseEvent) => {
     e.stopPropagation()
+    if (!confirm(t('chat.confirmDelete'))) return
     await deleteChat(id)
     if (activeChatId === id) {
       const remaining = chats.filter((c) => c.id !== id)

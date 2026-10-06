@@ -22,6 +22,7 @@ export const es = {
   'chat.history': 'Conversaciones',
   'chat.noChats': 'Aún no hay conversaciones.',
   'chat.deleteChat': 'Borrar chat',
+  'chat.confirmDelete': '¿Eliminar esta conversación?',
   'chat.emptyTitle': '¿En qué te ayudo hoy?',
   'chat.emptySubtitle': 'Todo se procesa en tu dispositivo. Nada sale a internet.',
   'chat.stopped': '(respuesta detenida)',
