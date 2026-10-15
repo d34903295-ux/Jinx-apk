@@ -3,9 +3,9 @@
 export type IslandState =
   | { mode: 'hidden' }
   | { mode: 'downloading'; label: string; fraction: number; detail: string; onTap?: () => void }
-  | { mode: 'thinking'; label: string }
+  | { mode: 'thinking'; label: string; onCancel?: () => void }
   | { mode: 'listening'; label: string; onTap?: () => void }
-  | { mode: 'agent'; label: string; detail: string }
+  | { mode: 'agent'; label: string; detail: string; onCancel?: () => void }
   | { mode: 'done'; label: string }
 
 type Listener = (s: IslandState) => void

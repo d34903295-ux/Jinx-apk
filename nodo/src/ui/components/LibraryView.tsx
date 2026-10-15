@@ -26,6 +26,9 @@ export function LibraryView({ onBack, onAskDoc }: LibraryViewProps) {
   const [ingesting, setIngesting] = useState(false)
   const [ingestStatus, setIngestStatus] = useState<IngestProgress | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [failures, setFailures] = useState<{ file: File; message: string }[]>([])
+  const [notice, setNotice] = useState<string | null>(null)
+  const abortRef = useRef<AbortController | null>(null)
 
   // Paquete de emergencia
   const [emergencyInstalled, setEmergencyInstalled] = useState(false)
@@ -78,24 +81,54 @@ export function LibraryView({ onBack, onAskDoc }: LibraryViewProps) {
     }
   }
 
-  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files
-    if (!files || files.length === 0) return
+  const ingestFiles = async (files: File[]) => {
+    if (files.length === 0 || ingesting) return
     setError(null)
+    setNotice(null)
+    setFailures([])
     setIngesting(true)
+    const controller = new AbortController()
+    abortRef.current = controller
+    const failed: { file: File; message: string }[] = []
+    let ok = 0
 
-    try {
-      for (let i = 0; i < files.length; i++) {
-        const file = files[i]!
-        await ingestDocument(file, (p) => setIngestStatus(p))
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i]!
+      try {
+        await ingestDocument(
+          file,
+          (p) =>
+            setIngestStatus({
+              ...p,
+              text: files.length > 1 ? `(${i + 1}/${files.length}) ${p.text}` : p.text,
+            }),
+          controller.signal
+        )
+        ok++
+      } catch (err) {
+        if (err instanceof DOMException && err.name === 'AbortError') {
+          setNotice('Importación cancelada. No se guardó el documento en curso.')
+          break
+        }
+        failed.push({ file, message: err instanceof Error ? err.message : String(err) })
       }
-      await refresh()
-    } catch (err) {
-      setError(err instanceof Error ? err.message : String(err))
-    } finally {
-      setIngesting(false)
-      setIngestStatus(null)
-      if (fileInputRef.current) fileInputRef.current.value = ''
+    }
+
+    setFailures(failed)
+    if (ok > 0 && !controller.signal.aborted) {
+      setNotice(`${ok} ${ok === 1 ? 'documento indexado' : 'documentos indexados'} correctamente.`)
+    }
+    abortRef.current = null
+    setIngesting(false)
+    setIngestStatus(null)
+    if (fileInputRef.current) fileInputRef.current.value = ''
+    await refresh()
+  }
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files ?? [])
+    if (files.length > 0) {
+      void ingestFiles(files)
     }
   }
 
@@ -162,15 +195,18 @@ export function LibraryView({ onBack, onAskDoc }: LibraryViewProps) {
               ref={fileInputRef}
               type="file"
               multiple
-              accept=".pdf,.docx,.txt,.md"
+              accept=".pdf,.docx,.txt,.md,.markdown,.json,.csv,.tsv,.py,.js,.ts,.tsx,.jsx,.html,.css,.xml,.yaml,.yml,.log,*/*"
               onChange={handleFileSelect}
               className="hidden"
             />
             <button
               type="button"
               disabled={ingesting}
-              onClick={() => fileInputRef.current?.click()}
-              className="btn-primary w-full sm:w-auto px-5 py-2.5 text-sm gap-2 cursor-pointer disabled:opacity-50"
+              onClick={() => {
+                if (fileInputRef.current) fileInputRef.current.value = ''
+                fileInputRef.current?.click()
+              }}
+              className="btn-primary rounded-full w-full sm:w-auto min-h-11 px-5 py-2.5 text-xs sm:text-sm gap-2 cursor-pointer disabled:opacity-50 active:scale-95 transition shadow-sm"
             >
               <Icon name="upload" size={16} />
               {ingesting ? 'Indexando...' : 'Subir Documento'}
@@ -179,26 +215,26 @@ export function LibraryView({ onBack, onAskDoc }: LibraryViewProps) {
         </div>
 
         {/* Banner / Tarjeta de Paquete de Emergencia */}
-        <div className="glass-card rounded-2xl border-ember-500/30 p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-linear-to-r from-ember-500/10 via-white/[0.02] to-transparent shadow-[0_0_25px_-5px_rgba(201,150,60,0.15)]">
+        <div className="order-last rounded-3xl border border-black/10 dark:border-white/10 bg-white/70 dark:bg-white/[0.03] backdrop-blur-xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3.5 shadow-sm">
           <div className="flex items-center gap-3.5">
-            <div className="size-11 rounded-xl bg-ember-500/15 border border-ember-500/30 text-ember-400 flex items-center justify-center shrink-0 shadow-[0_0_12px_rgba(201,150,60,0.25)]">
-              <Icon name="shield" size={22} />
+            <div className="size-11 rounded-full bg-black/5 dark:bg-white/10 border border-black/10 dark:border-white/20 text-black dark:text-white flex items-center justify-center shrink-0 shadow-[0_0_15px_rgba(255,255,255,0.08)]">
+              <Icon name="shield" size={20} />
             </div>
             <div>
-              <div className="flex items-center gap-2">
-                <h4 className="font-bold text-sm sm:text-base text-white flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2">
+                <h4 className="font-bold text-sm sm:text-base text-ink-950 dark:text-white flex items-center gap-2">
                   <span>Paquete de Supervivencia y Emergencias</span>
-                  <span className="font-mono text-[9px] text-ember-400 border border-ember-500/30 bg-ember-500/10 px-1.5 py-0.5 rounded uppercase">
+                  <span className="font-mono text-[9px] text-ink-600 dark:text-white/60 border border-black/10 dark:border-white/20 bg-black/5 dark:bg-white/10 px-2 py-0.5 rounded-full uppercase font-semibold">
                     OFFGRID PACK
                   </span>
                 </h4>
                 {emergencyInstalled && (
-                  <span className="font-mono text-[10px] font-bold bg-signal-500/20 text-signal-400 border border-signal-500/30 px-2 py-0.5 rounded-full">
+                  <span className="font-mono text-[10px] font-bold bg-black/10 dark:bg-white/15 text-black dark:text-white border border-black/15 dark:border-white/25 px-2.5 py-0.5 rounded-full">
                     INSTALADO
                   </span>
                 )}
               </div>
-              <p className="text-xs text-ink-300 mt-0.5">
+              <p className="text-xs text-ink-500 dark:text-white/50 mt-0.5">
                 Guías médicas offline: primeros auxilios (RCP/PAS), purificación de agua y protocolos de rescate.
               </p>
             </div>
@@ -206,8 +242,8 @@ export function LibraryView({ onBack, onAskDoc }: LibraryViewProps) {
 
           <div className="shrink-0">
             {emergencyInstalled ? (
-              <span className="font-mono text-xs text-signal-400 flex items-center gap-1.5 font-semibold">
-                <span className="size-2 rounded-full bg-signal-400 shadow-[0_0_6px_#2fa37c]" />
+              <span className="font-mono text-xs text-black dark:text-white flex items-center gap-1.5 font-semibold">
+                <span className="size-2 rounded-full bg-black dark:bg-white shadow-[0_0_6px_rgba(255,255,255,0.8)]" />
                 DISPONIBLE EN BASE LOCAL
               </span>
             ) : (
@@ -215,7 +251,7 @@ export function LibraryView({ onBack, onAskDoc }: LibraryViewProps) {
                 type="button"
                 disabled={installingEmergency}
                 onClick={handleInstallEmergency}
-                className="btn-amber text-xs px-4 py-2.5 gap-1.5 cursor-pointer disabled:opacity-50"
+                className="btn-primary rounded-full text-xs px-4 py-2 gap-1.5 cursor-pointer disabled:opacity-50 active:scale-95"
               >
                 <Icon
                   name={installingEmergency ? 'refresh' : 'download'}
@@ -230,7 +266,7 @@ export function LibraryView({ onBack, onAskDoc }: LibraryViewProps) {
 
         {/* Progreso instalación de emergencia */}
         {installingEmergency && emergencyProgressText && (
-          <div className="text-xs text-signal-400 flex items-center gap-2 animate-pulse px-2">
+          <div className="order-last text-xs text-signal-400 flex items-center gap-2 animate-pulse px-2">
             <Icon name="refresh" size={13} className="animate-spin" />
             <span>{emergencyProgressText}</span>
           </div>
@@ -238,7 +274,7 @@ export function LibraryView({ onBack, onAskDoc }: LibraryViewProps) {
 
         {/* Notificación de Error */}
         {error && (
-          <div className="glass rounded-2xl border-ember-500/30 bg-ember-500/10 p-4 text-ember-600 dark:text-ember-300 flex items-start gap-3 animate-fade-up">
+          <div role="alert" className="rounded-2xl border border-danger-500/40 bg-danger-500/10 p-4 text-danger-400 flex items-start gap-3 animate-fade-up">
             <Icon name="alert" size={20} className="shrink-0 mt-0.5" />
             <div className="text-sm">
               <strong className="font-semibold block">Ocurrió un problema</strong>
@@ -247,19 +283,52 @@ export function LibraryView({ onBack, onAskDoc }: LibraryViewProps) {
           </div>
         )}
 
+        {notice && !ingesting && (
+          <div role="status" className="rounded-2xl border border-signal-500/30 bg-signal-500/10 px-4 py-3 text-sm text-signal-300 flex items-center gap-2">
+            <Icon name="check" size={16} className="shrink-0" />
+            <span>{notice}</span>
+          </div>
+        )}
+
+        {failures.length > 0 && !ingesting && (
+          <ul role="alert" className="flex flex-col gap-2">
+            {failures.map((f, i) => (
+              <li key={`${f.file.name}-${i}`} className="rounded-2xl border border-danger-500/40 bg-danger-500/10 p-3 text-sm text-danger-400 flex items-start gap-3">
+                <Icon name="alert" size={18} className="shrink-0 mt-0.5" />
+                <span className="flex-1 min-w-0 break-words">{f.message}</span>
+                <button
+                  type="button"
+                  onClick={() => void ingestFiles([f.file])}
+                  className="btn-ghost min-h-12 px-3 text-xs gap-1.5 cursor-pointer shrink-0"
+                >
+                  <Icon name="refresh" size={14} />
+                  Reintentar
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
+
         {/* Progreso de Ingesta */}
         {ingesting && ingestStatus && (
-          <div className="glass rounded-2xl border-signal-500/30 p-5 flex flex-col gap-3 shadow-xl animate-fade-up">
-            <div className="flex items-center justify-between text-xs sm:text-sm font-medium">
-              <span className="flex items-center gap-2 text-signal-400">
-                <Icon name="refresh" size={16} className="animate-spin" />
-                {ingestStatus.text}
+          <div role="status" aria-live="polite" className="rounded-2xl border border-signal-500/30 bg-white/[0.03] p-4 flex flex-col gap-3 animate-fade-up">
+            <div className="flex items-center justify-between gap-3 text-xs sm:text-sm font-medium">
+              <span className="flex items-center gap-2 text-signal-400 min-w-0">
+                <Icon name="refresh" size={16} className="animate-spin motion-reduce:animate-none shrink-0" />
+                <span className="truncate">{ingestStatus.text}</span>
               </span>
               {ingestStatus.total ? (
-                <span className="text-ink-400">
+                <span className="text-ink-400 shrink-0">
                   {Math.round(((ingestStatus.current ?? 0) / ingestStatus.total) * 100)}%
                 </span>
               ) : null}
+              <button
+                type="button"
+                onClick={() => abortRef.current?.abort()}
+                className="btn-ghost min-h-12 px-3 text-xs cursor-pointer shrink-0"
+              >
+                Cancelar
+              </button>
             </div>
             {ingestStatus.total ? (
               <ProgressBar
@@ -272,11 +341,14 @@ export function LibraryView({ onBack, onAskDoc }: LibraryViewProps) {
         {/* Zona de Arrastrar si no hay documentos */}
         {docs.length === 0 && !loadingDocs && !ingesting && (
           <div
-            onClick={() => fileInputRef.current?.click()}
-            className="border-2 border-dashed border-ink-300/60 dark:border-white/10 rounded-3xl p-10 flex flex-col items-center justify-center text-center gap-3 cursor-pointer hover:border-signal-500/50 hover:bg-signal-500/[0.02] transition"
+            onClick={() => {
+              if (fileInputRef.current) fileInputRef.current.value = ''
+              fileInputRef.current?.click()
+            }}
+            className="border-2 border-dashed border-ink-300/60 dark:border-white/10 rounded-2xl p-6 flex flex-col items-center justify-center text-center gap-2 cursor-pointer hover:border-signal-500/50 hover:bg-signal-500/[0.02] transition"
           >
-            <div className="size-16 rounded-2xl bg-ink-200/50 dark:bg-white/5 flex items-center justify-center text-ink-400 animate-breathe">
-              <Icon name="fileText" size={32} />
+            <div className="size-11 rounded-xl bg-ink-200/50 dark:bg-white/5 flex items-center justify-center text-ink-400">
+              <Icon name="fileText" size={22} />
             </div>
             <h3 className="font-semibold text-base text-ink-800 dark:text-ink-100">
               No tienes documentos indexados todavía
@@ -306,26 +378,27 @@ export function LibraryView({ onBack, onAskDoc }: LibraryViewProps) {
                 type="search"
                 value={docQuery}
                 onChange={(e) => setDocQuery(e.target.value)}
-                aria-label="Filtrar documentos" placeholder="Filtrar..."
-                className="rounded-lg border border-ink-200/70 dark:border-white/10 bg-white/40 dark:bg-white/[0.04] py-1.5 px-3 text-xs text-ink-900 dark:text-white focus:border-signal-500 focus:outline-none w-40"
+                aria-label="Filtrar documentos"
+                placeholder="Filtrar documentos..."
+                className="rounded-full border border-black/10 dark:border-white/15 bg-white/60 dark:bg-white/[0.04] py-1.5 px-3.5 text-xs text-ink-950 dark:text-white placeholder:text-ink-400 focus:border-black/30 dark:focus:border-white/40 focus:outline-none w-44 transition"
               />
             </div>
             <div className="grid grid-cols-1 gap-3">
               {filteredDocs.map((doc) => (
                 <div
                   key={doc.id}
-                  className="glass-card rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition hover:border-signal-500/40"
+                  className="glass-card rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition hover:border-black/25 dark:hover:border-white/25 active:scale-[0.99] border border-black/10 dark:border-white/10"
                 >
                   <div className="flex items-center gap-3.5 min-w-0">
-                    <div className="size-10 rounded-xl bg-signal-500/15 border border-signal-500/30 text-signal-400 flex items-center justify-center shrink-0 shadow-[0_0_10px_-2px_rgba(47,163,124,0.25)]">
+                    <div className="size-10 rounded-xl bg-black/5 dark:bg-white/10 border border-black/10 dark:border-white/15 text-black dark:text-white flex items-center justify-center shrink-0 shadow-[0_0_10px_rgba(255,255,255,0.08)]">
                       <Icon name="fileText" size={20} />
                     </div>
                     <div className="min-w-0">
-                      <h4 className="font-semibold text-sm sm:text-base text-white truncate">
+                      <h4 className="font-semibold text-sm sm:text-base text-ink-950 dark:text-white truncate">
                         {doc.name}
                       </h4>
-                      <div className="flex items-center gap-2.5 font-mono text-[11px] text-ink-400 mt-0.5">
-                        <span className="text-signal-400">{doc.pages} {doc.pages === 1 ? 'pág' : 'págs'}</span>
+                      <div className="flex items-center gap-2.5 font-mono text-[11px] text-ink-500 dark:text-white/50 mt-0.5">
+                        <span className="text-black dark:text-white font-semibold">{doc.pages} {doc.pages === 1 ? 'pág' : 'págs'}</span>
                         <span>•</span>
                         <span>{formatBytes(doc.size)}</span>
                         <span>•</span>
@@ -340,8 +413,9 @@ export function LibraryView({ onBack, onAskDoc }: LibraryViewProps) {
                       <button
                         type="button"
                         onClick={() => onAskDoc(doc.name)}
-                        className="btn-ghost text-xs px-3 py-1.5 gap-1.5 text-signal-400 hover:text-signal-300 hover:bg-signal-500/10 cursor-pointer rounded-lg border border-signal-500/30"
-                        aria-label="Preguntar sobre este documento" title="Preguntar sobre este documento"
+                        className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium border border-black/15 dark:border-white/20 bg-black/5 dark:bg-white/10 text-ink-950 dark:text-white hover:bg-black/10 dark:hover:bg-white/20 active:scale-95 transition cursor-pointer"
+                        aria-label="Preguntar sobre este documento"
+                        title="Preguntar sobre este documento"
                       >
                         <Icon name="message" size={14} />
                         Preguntar
@@ -350,8 +424,9 @@ export function LibraryView({ onBack, onAskDoc }: LibraryViewProps) {
                     <button
                       type="button"
                       onClick={() => handleStartSummary(doc)}
-                      className="btn-ghost text-xs px-3 py-1.5 gap-1.5 cursor-pointer rounded-lg border border-white/10 hover:border-white/20"
-                      aria-label="Generar resumen completo Map-Reduce" title="Generar resumen completo Map-Reduce"
+                      className="btn-ghost rounded-full text-xs px-3.5 py-1.5 gap-1.5 cursor-pointer border border-black/10 dark:border-white/15 active:scale-95"
+                      aria-label="Generar resumen completo Map-Reduce"
+                      title="Generar resumen completo Map-Reduce"
                     >
                       <Icon name="sparkles" size={14} />
                       Resumir
@@ -359,8 +434,9 @@ export function LibraryView({ onBack, onAskDoc }: LibraryViewProps) {
                     <button
                       type="button"
                       onClick={() => handleDelete(doc.id)}
-                      className="p-2 rounded-xl text-ink-400 hover:text-danger-400 hover:bg-danger-500/10 transition cursor-pointer"
-                      aria-label="Eliminar documento" title="Eliminar documento"
+                      className="p-2 rounded-full text-ink-400 hover:text-danger-400 hover:bg-danger-500/10 active:scale-95 transition cursor-pointer"
+                      aria-label="Eliminar documento"
+                      title="Eliminar documento"
                     >
                       <Icon name="trash" size={16} />
                     </button>

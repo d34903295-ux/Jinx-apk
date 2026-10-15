@@ -26,6 +26,7 @@ class NodoBridge(
 ) {
     init {
         LlamaEngine.attach(context)
+        activeInstance = this
     }
     private val exec = Executors.newCachedThreadPool()
     private var service: DownloadService? = null
@@ -76,10 +77,45 @@ class NodoBridge(
         )
     }
 
+    @JavascriptInterface
+    fun openCode(code: String, lang: String, title: String): String {
+        val payload = org.json.JSONObject().apply {
+            put("code", code)
+            put("lang", lang)
+            put("title", title)
+        }.toString()
+        emitJs("window.dispatchEvent(new CustomEvent('nodo-open-code', { detail: $payload }))")
+        return "ok"
+    }
+
     // ---------- modelos ----------
 
     @JavascriptInterface
-    fun activeNativeModel(): String = prefs().getString("active_native_model", "") ?: ""
+    fun activeNativeModel(): String {
+        val id = prefs().getString("active_native_model", "") ?: ""
+        if (id.isEmpty()) return ""
+        val m = NATIVE_MODELS.firstOrNull { it.id == id } ?: return ""
+        return if (LlamaEngine.isDownloaded(context.filesDir, m)) id else ""
+    }
+
+    @JavascriptInterface
+    fun setActiveNativeModel(id: String): String = setActiveModel(id)
+
+    @JavascriptInterface
+    fun getDeviceSpecs(): String {
+        val totalRam = totalRamMB()
+        val bigCores = LlamaEngine.detectBigCores()
+        val totalCores = Runtime.getRuntime().availableProcessors()
+        val recCtx = if (totalRam >= 6144) 4096 else 2048
+        val obj = JSONObject()
+        obj.put("totalRamMB", totalRam)
+        obj.put("freeSpaceMB", freeSpaceMB())
+        obj.put("bigCores", bigCores)
+        obj.put("totalCores", totalCores)
+        obj.put("recommendedCtx", recCtx)
+        obj.put("recommendedThreads", bigCores)
+        return obj.toString()
+    }
 
     @JavascriptInterface
     fun modelsJson(): String {
@@ -94,35 +130,55 @@ class NodoBridge(
             o.put("sizeMB", m.expectedBytes / 1048576)
             o.put("ramMB", m.ramNeededMB)
             o.put("recommended", m.recommended)
-            val st = service?.stateOf(context.filesDir, m) ?: localStateOf(m)
-            when (st) {
-                is DownloadState.Done -> {
-                    o.put("state", if (activeNativeModel() == m.id) "active" else "ready")
-                    o.put("downloadedMB", m.expectedBytes / 1048576)
-                }
-                is DownloadState.Running -> {
-                    o.put("state", "downloading")
-                    o.put("downloadedMB", st.progress.downloadedBytes / 1048576)
-                    o.put("speedMBs", st.progress.bytesPerSecond / 1048576.0)
-                    o.put("etaSec", st.progress.etaSeconds)
-                }
-                is DownloadState.Paused -> {
-                    o.put("state", "paused")
-                    o.put("downloadedMB", st.downloadedBytes / 1048576)
-                }
-                is DownloadState.Verifying -> {
-                    o.put("state", "downloading")
-                    o.put("downloadedMB", st.downloadedBytes / 1048576)
-                    o.put("verifying", true)
-                }
-                is DownloadState.Error -> {
+            o.put("format", m.format)
+            o.put("backend", m.backend)
+            val importProg = ModelImporter.currentProgress
+            if (importProg != null && importProg.modelId == m.id) {
+                if (importProg.error != null) {
                     o.put("state", "error")
-                    o.put("error", st.message)
-                    o.put("downloadedMB", downloadedSoFar(m) / 1048576)
+                    o.put("error", importProg.error)
+                    o.put("downloadedMB", 0)
+                } else {
+                    o.put("state", "downloading")
+                    o.put("downloadedMB", importProg.copiedBytes / 1048576)
+                    val tot = if (importProg.totalBytes > 0) importProg.totalBytes else m.expectedBytes
+                    o.put("totalMB", tot / 1048576)
+                    o.put("speedMBs", importProg.bytesPerSecond / 1048576.0)
+                    o.put("etaSec", importProg.etaSeconds)
+                    o.put("verifying", importProg.isVerifying)
+                    o.put("isImporting", true)
                 }
-                is DownloadState.Idle -> {
-                    o.put("state", if (downloadedSoFar(m) > 0) "paused" else "none")
-                    o.put("downloadedMB", downloadedSoFar(m) / 1048576)
+            } else {
+                val st = service?.stateOf(context.filesDir, m) ?: localStateOf(m)
+                when (st) {
+                    is DownloadState.Done -> {
+                        o.put("state", if (activeNativeModel() == m.id) "active" else "ready")
+                        o.put("downloadedMB", m.expectedBytes / 1048576)
+                    }
+                    is DownloadState.Running -> {
+                        o.put("state", "downloading")
+                        o.put("downloadedMB", st.progress.downloadedBytes / 1048576)
+                        o.put("speedMBs", st.progress.bytesPerSecond / 1048576.0)
+                        o.put("etaSec", st.progress.etaSeconds)
+                    }
+                    is DownloadState.Paused -> {
+                        o.put("state", "paused")
+                        o.put("downloadedMB", st.downloadedBytes / 1048576)
+                    }
+                    is DownloadState.Verifying -> {
+                        o.put("state", "downloading")
+                        o.put("downloadedMB", st.downloadedBytes / 1048576)
+                        o.put("verifying", true)
+                    }
+                    is DownloadState.Error -> {
+                        o.put("state", "error")
+                        o.put("error", st.message)
+                        o.put("downloadedMB", downloadedSoFar(m) / 1048576)
+                    }
+                    is DownloadState.Idle -> {
+                        o.put("state", if (downloadedSoFar(m) > 0) "paused" else "none")
+                        o.put("downloadedMB", downloadedSoFar(m) / 1048576)
+                    }
                 }
             }
             o.put("totalMB", m.expectedBytes / 1048576)
@@ -180,6 +236,21 @@ class NodoBridge(
     }
 
     @JavascriptInterface
+    fun importModelFile(id: String): String {
+        val activity = context as? com.example.jinx.MainActivity ?: return "no-activity"
+        activity.runOnUiThread {
+            activity.openModelFilePicker(id)
+        }
+        return "ok"
+    }
+
+    @JavascriptInterface
+    fun cancelImport(): String {
+        ModelImporter.cancelImport()
+        return "ok"
+    }
+
+    @JavascriptInterface
     fun deleteModel(id: String): String {
         val m = NATIVE_MODELS.firstOrNull { it.id == id } ?: return "unknown"
         if (service?.currentModel()?.id == id) {
@@ -226,6 +297,12 @@ class NodoBridge(
             try {
                 emitCb(cbId, "start", "")
                 val ready = LlamaEngine.state.value
+                if (ready is EngineState.Generating) {
+                    LlamaEngine.stop()
+                    try {
+                        Thread.sleep(60)
+                    } catch (_: InterruptedException) {}
+                }
                 if (ready !is EngineState.Ready || LlamaEngine.activeModelId != id) {
                     val latch = java.util.concurrent.CountDownLatch(1)
                     var ok = false
@@ -244,6 +321,17 @@ class NodoBridge(
                     maxTokens,
                     onToken = { full -> emitCb(cbId, "token", full) },
                     onDone = { full -> emitCb(cbId, "done", full) },
+                    onError = { msg -> emitCb(cbId, "error", msg) },
+                    onStats = { stats ->
+                        val obj = JSONObject()
+                        obj.put("promptTokens", stats.promptTokens)
+                        obj.put("generatedTokens", stats.generatedTokens)
+                        obj.put("ttftMs", stats.timeToFirstTokenMs)
+                        obj.put("totalTimeMs", stats.totalTimeMs)
+                        obj.put("tokensPerSecond", stats.tokensPerSecond)
+                        obj.put("backend", stats.backend)
+                        emitCb(cbId, "stats", obj.toString())
+                    },
                 )
             } catch (e: Exception) {
                 Log.e(TAG, "generate failed", e)
@@ -440,13 +528,22 @@ class NodoBridge(
         emitJs(js)
     }
 
+    private fun findMainActivity(): com.example.jinx.MainActivity? {
+        var ctx = context
+        while (ctx is android.content.ContextWrapper) {
+            if (ctx is com.example.jinx.MainActivity) return ctx
+            ctx = ctx.baseContext
+        }
+        return ctx as? com.example.jinx.MainActivity
+    }
+
     /**
      * Inicia el dictado. Pide el permiso de micrófono si falta.
      * Eventos: partial | final | error.
      */
     @JavascriptInterface
     fun startDictation(cbId: String): String {
-        val activity = context as? com.example.jinx.MainActivity
+        val activity = findMainActivity()
         if (activity == null) {
             emitDict(cbId, "error", "Sin actividad")
             return "error"
@@ -455,17 +552,22 @@ class NodoBridge(
             emitDict(cbId, "need-model", "")
             return "need-model"
         }
-        activity.requestMic {
-            com.example.jinx.speech.VoskManager.start(
-                context.filesDir,
-                object : com.example.jinx.speech.VoskManager.Listener {
-                    override fun onPartial(text: String) = emitDict(cbId, "partial", text)
-                    override fun onFinal(text: String) = emitDict(cbId, "final", text)
-                    override fun onError(message: String) = emitDict(cbId, "error", message)
-                },
-            )
-            emitDict(cbId, "start", "")
-        }
+        activity.requestMic(
+            onGranted = {
+                com.example.jinx.speech.VoskManager.start(
+                    context.filesDir,
+                    object : com.example.jinx.speech.VoskManager.Listener {
+                        override fun onPartial(text: String) = emitDict(cbId, "partial", text)
+                        override fun onFinal(text: String) = emitDict(cbId, "final", text)
+                        override fun onError(message: String) = emitDict(cbId, "error", message)
+                    },
+                )
+                emitDict(cbId, "start", "")
+            },
+            onDenied = {
+                emitDict(cbId, "error", "Permiso de micrófono denegado en el sistema")
+            }
+        )
         return "ok"
     }
 
@@ -491,5 +593,12 @@ class NodoBridge(
 
     companion object {
         private const val TAG = "NODO_BRIDGE"
+
+        @Volatile
+        var activeInstance: NodoBridge? = null
+
+        fun openCodeTab(code: String, lang: String, title: String) {
+            activeInstance?.openCode(code, lang, title)
+        }
     }
 }

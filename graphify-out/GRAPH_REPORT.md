@@ -1,36 +1,36 @@
-# Graph Report - Jinx  (2026-10-06)
+# Graph Report - Jinx  (2026-10-14)
 
 ## Corpus Check
-- 340 files · ~301,151 words
+- 477 files · ~939,164 words
 - Verdict: corpus is large enough that graph structure adds value.
-- Unclassified: 31 file(s) not represented in the graph (top: .xml 10, .woff2 7, (none) 3)
+- Unclassified: 85 file(s) not represented in the graph (top: .woff2 28, .woff 24, .xml 9)
 
 ## Summary
-- 13455 nodes · 26727 edges · 458 communities (410 shown, 48 thin omitted)
-- Extraction: 94% EXTRACTED · 6% INFERRED · 0% AMBIGUOUS · INFERRED: 1654 edges (avg confidence: 0.85)
+- 17051 nodes · 31872 edges · 621 communities (518 shown, 103 thin omitted)
+- Extraction: 90% EXTRACTED · 10% INFERRED · 0% AMBIGUOUS · INFERRED: 3273 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `62a0ca46`
+- Built from commit: `0187dedd`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
-- Theme.kt
-- package.json
+- ModelsActivity.kt
+- nodo/package.json
 - ExampleInstrumentedTest.kt
 - Type.kt
-- index-D1jQENGW.js
+- pdf.worker.min-CjEcRF4W.mjs
 - ExampleUnitTest.kt
 - gradlew
 - MainActivity.kt
 - nodo_src_assets_hero
-- repo.ts
+- _createPyodideModule
 - compilerOptions
-- llmClient.ts
+- ConfigNamespace
 - compilerOptions
-- devDependencies
-- SettingsView.tsx
+- StringObject
+- _createPyodideModule
 - CRITICAL: Mandatory Token Conservation Policy (Graphify)
 - nodo_src_assets_react
 - .oxlintrc.json
@@ -40,72 +40,73 @@
 - nodo_src_assets_vite
 - tsconfig.json
 - workflows/graphify.md
-- global.d.ts
-- lib-FbOxj-PF.js
-- llm.worker-BrQfiY_G.js
-- ConfigNamespace
-- nl
-- sw.js
-- StringObject
-- qe
-- tt
-- me
-- add
-- B
-- OptionObject
-- it
-- constructor
-- Dict
-- t
-- Ge
-- Nt
-- p
-- restore
-- I
-- startDrawing
-- FormatError
-- Annotation
-- .success
-- ChatView.tsx
-- p
-- render
-- LocaleSetNamespace
+- Liquid Glass Widgets — AI Agent Guide
 - getStringOption
-- pdf.worker.min-CjEcRF4W.mjs
-- XFAObject
+- i
+- LocaleSetNamespace
+- NodoNative
+- sw.js
+- app_src_main_assets_www_assets_coderunner_b4_d_upv_n
+- vl
+- ChatView.tsx
+- ref_react
+- lib-CE-Ivkxm.js
+- Dict
+- IntegerObject
 - gs
-- .push
-- onmessage
-- has
+- I
+- ExclGroup
+- The Fixes
+- Ge
+- pyodide_js_init
+- constructor
+- NodoBridge
+- DownloadState
+- from_pretrained
+- MessageBubble.tsx
+- landing/LandingPage.tsx
+- ChunkedStream
+- NativeModel
+- setupDoc
+- native-lib.cpp
+- index-CEEjsfRL.js
+- .checkAndRepair
+- OptionObject
+- XFAObject
+- Design Engineering
+- LibraryView.tsx
+- VoskManager.kt
+- e
 - 供应链采购策略师
 - :arrows_counterclockwise: 工作流程
 - 土木工程师智能体
-- embed.worker-BeDNRRQ6.js
-- LibraryView.tsx
-- padding
+- embed.worker-Cl7GpGda.js
+- Working With Sonner
+- Apple Design
 - scaffold
-- text
+- Prototyping Variants
 - EmbedClient
-- uri
+- repeat
+- AgentTools.kt
 - 🌱 ESG 与可持续发展官
 - 核心使命
-- e
-- .createDocumentHandler
-- IntegerObject
+- Design Audit
+- landing-page/package.json
+- P
 - 如未启用 HPA 则开启
-- .add
+- XmlObject
 - AgentsOrchestrator 智能体人格
 - Godot 游戏脚本开发者
 - marketing-aeo-foundations.md
-- shadow
+- Value
 - 图像提示词工程师
-- Stream
-- _call
-- get
-- ContentObject
-- ExclGroup
+- kf
+- Glossary
+- opacity
+- CMap
+- XhtmlNamespace
 - Persona 走查专家
-- JpegImage
+- ModelImporter.kt
 - PsWasmCompiler
 - 香港股市合规审查专家
 - 🤝 M&A 整合经理
@@ -114,41 +115,41 @@
 - Unreal 系统工程师
 - 💼 首席财务官
 - 关键规则
-- slice
+- XhtmlObject
 - 威胁检测工程师
 - marketing-search-growth-orchestrator.md
 - ⚙️ 运营经理
-- push
+- ContentObject
 - 身份信任架构师
 - UX 架构师
 - Filament 优化专家
 - Offer 与 Lead Gen 策略师
-- python.worker-BAqkQJVF.js
+- Animation Audit Playbook
 - 服装工厂规划工程师
 - Unity 架构师
 - 身份图谱操作员
 - 轮播图增长引擎
-- repeat
+- Building Animations in Expo
 - 中国市场本地化策略师
-- ChunkedStream
+- SimpleDOMNode
 - 标准工作流程
 - ZK 管家智能体
 - 技术交付物
-- XMLParserBase
-- ._bindElement
+- d
+- warn
 - 关键规则
 - Solidity 智能合约工程师
-- warn
+- CalRGBCS
 - 语音 AI 集成工程师
 - 销售教练
-- PDFImage
-- find
+- Builder
+- Finding Animation Opportunities
 - 核心使命
-- .checkAndRepair
+- .add
 - 或
 - Godot 多人游戏工程师
 - 核心使命
-- NullOptimizer
+- app_src_main_assets_www_assets_summarize_bks_9hqk_n
 - 核心使命
 - 邮件营销策略师
 - Jira工作流管家
@@ -159,21 +160,21 @@
 - 数据工程师
 - 技术交付物
 - 游戏音频工程师
-- from_pretrained
+- AgentLoop.kt
 - 医疗客服专家
 - 关卡设计师
-- st
+- Expo Animation Recipes
 - LSP 索引工程师
 - macOS Metal 空间工程师
-- pythonRunner
+- Animation Recipes
 - 叙事设计师
 - Roblox 虚拟形象创作者
 - Unreal 多人游戏架构师
-- t
+- Animation Standards Reference
 - Unreal 技术美术
 - Unreal 世界构建师
 - 核心使命
-- ⏱️ Duración Recomendada: 3 Minutos
+- SettingsView-CMQRV0GL.js
 - Arquitectura de NODO (100% Offline AI Agent)
 - 品牌守护者 Agent 人格
 - Guía de Primeros Auxilios en Emergencias Offline
@@ -185,11 +186,11 @@
 - Guía de Refugio, Aislamiento Térmico y Señales de Socorro
 - 趣味注入师
 - DevOps 自动化师智能体人设
-- Icon
-- XhtmlObject
+- nodo/src/App.tsx
+- Feeling Native On Mobile
 - 快速原型师 Agent 人格
 - 安全工程师 Agent
-- me
+- Write Swift
 - NODO — 100% Offline AI Agent (Hack47 OFFGRID)
 - 高级开发者
 - Godot Shader 开发者
@@ -202,8 +203,8 @@
 - 核心使命
 - 📣 PR 与传播经理
 - 核心使命
-- ke
-- AnnotationBorderStyle
+- TextMeasure
+- pyodide_js_init
 - 房地产经纪助手
 - Roblox 体验设计师
 - 赢单策略师
@@ -266,7 +267,7 @@
 - 工具评估师
 - 工作流优化师
 - 自动化治理架构师
-- .constructor
+- NullOptimizer
 - AI 数据修复工程师智能体
 - 代码库入职引导工程师
 - 上位机工程师
@@ -285,7 +286,7 @@
 - AI 治理政策专家
 - 集成 Agent 人格
 - 多平台发布编排官
-- .getTextContent
+- render
 - FPGA/ASIC 数字设计工程师
 - 嵌入式 Linux 驱动工程师
 - Prompt 工程师
@@ -295,18 +296,18 @@
 - 绩效管理专家
 - 百度 SEO 专家
 - 电商运营师
-- pr
+- serialize
 - 微信公众号管理
 - X/Twitter 情报分析师
 - 小红书专家
 - 广告创意策略师
-- constructor
+- XFAAttribute
 - 搜索词分析师
 - Roblox 系统脚本工程师
 - 会议效率专家
 - 技术翻译专家
-- ColorSpace
-- Value
+- #i
+- .push
 - 学习规划师
 - 后端架构师智能体人格
 - 嵌入式固件工程师
@@ -343,7 +344,7 @@
 - XR 座舱交互专家
 - XR 沉浸式开发者
 - XR 界面架构师
-- LabCS
+- FormatError
 - 内容创作者
 - 视频优化专家
 - specialized-korean-business-navigator.md
@@ -358,11 +359,11 @@
 - Outbound 策略师
 - MCP 构建器
 - 证据收集者
-- SimpleDOMNode
+- LiteRtLmEngine.kt
 - 养殖档案核对员
-- XmlObject
-- calculateSHA512
-- CMap
+- dependencies
+- generate
+- FontSelector
 - 人类学家智能体人格
 - 地理学家智能体人格
 - 历史学家智能体人格
@@ -372,11 +373,11 @@
 - 报告分发师
 - specialized-french-consulting-market.md
 - specialized-salesforce-architect.md
-- cachePut
+- SingleIntersector
 - 数据整合师
-- OrgScript 工程师
+- calculateSHA512
 - 销售数据提取师
-- Builder
+- compilerOptions
 - 📣 首席营销官
 - 高级项目经理
 - 文化智能策略师
@@ -387,34 +388,34 @@
 - 🎬 视频提示词工程师
 - 图书联合作者
 - 策略对决推演师
-- AESBaseCipher
-- AlternateCS
+- TextState
+- a
 - 自主优化架构师
-- Datasets
-- XFAAttribute
-- ._hash
-- Pu
-- TextMeasure
-- CalRGBCS
-- XhtmlNamespace
+- app_src_main_assets_www_assets_summarize_bvhuyktn_n
+- push
+- www/pyodide/pyodide.js
+- .getUint16
+- PDFDocument
+- asyncGenerate
+- .success
 - marketing-ai-citation-strategist.md
 - 1. 不再把所有结果都叫“Citation”
 - 会议纪要专家
-- calculateSHA256
-- Script
-- IMPROVEMENTS LOG — Jinx
+- The list
+- public/pyodide/pyodide.js
+- Gesture and Drag Interactions
 - GEO 可控杠杆
 - 标准工作流程
-- postMessage
 - Br
-- MetadataParser
-- SingleIntersector
-- TextState
+- abort
+- router.ts
+- abort
+- addEventListener
 - 架构评审清单
 - Recruitment Specialist Agent
 - 招聘运营专家
+- SettingsView.tsx
 - xdp_Xdp
-- _awaitComplete
 - 🔍 鉴定评估师
 - 🗄️ 数据库优化师
 - 🕸️ 多智能体系统架构师
@@ -423,15 +424,15 @@
 - China Labor Law Compliance
 - 中国劳动法合规
 - 🧳 旅行规划师
-- aria-inputs.js
+- ref_fs
+- F
 - Root
-- .#Ee
-- signature_Signature
-- Stylesheet
-- Ui
+- Overflow
+- app_src_main_assets_www_assets_summarize_bzdscutg_i
+- createWasm
 - Human-in-the-Loop（HITL）门控设计
 - 故障模式工程
-- 🔄 你的工作流程
+- signature_Signature
 - Onboarding Management
 - Interview Process Design
 - Campus Recruiting
@@ -442,9 +443,9 @@
 - 校园招聘
 - 工作流程
 - 面试流程设计
-- Body
-- Html
-- ImageEdit
+- Stylesheet
+- W
+- Performance Rules
 - 评测框架
 - 信任与权限划分
 - 成本与延迟治理
@@ -460,51 +461,211 @@
 - 雇主品牌建设
 - 核心使命
 - 猎头管理
-- B
-- NullCipher
-- Span
-- Sub
+- fix-imports.js
+- ENGINE.md — Decisión de motor de IA local
+- app_src_main_assets_www_assets_summarize_bzdscutg_n
+- pdf-K0DICxDV.js
 - 交付模板
 - Prompt Provenance & Prompt Universe
 - Recruitment Data Analytics
 - 招聘数据分析
+- app_src_main_assets_www_assets_summarize_bzdscutg_r
+- Building Animations
+- move-css.js
+- app_src_main_assets_www_assets_summarize_bzdscutg_t
+- createWasm
+- destroy
+- app_src_main_assets_www_assets_summarize_bks_9hqk_r
+- cut-old-send.js
+- finish-gen.js
+- DESIGN-RESOURCES.md — Tabla de recursos de diseño (MISIÓN premium)
+- deneon.js
+- deneon2.js
+- rebrand.js
+- app_src_main_assets_www_assets_summarize_bks_9hqk_t
+- ls-gguf.js
+- ls-q05.js
+- dvh.js
+- fix-compose.js
+- island-timer.js
+- app_src_main_assets_www_assets_summarize_bvhuyktn_r
+- Worst-Case Catalog
+- app_src_main_assets_www_assets_summarize_bvhuyktn_t
+- destroy
+- XMLParserBase
+- app_src_main_assets_www_assets_summarize_dkiurkow_i
+- app_src_main_assets_www_assets_summarize_dkiurkow_n
+- app_src_main_assets_www_assets_summarize_dkiurkow_r
+- unreachable
+- app_src_main_assets_www_assets_summarize_dkiurkow_t
+- highlightSelection
+- LLMClient
+- Datasets
+- registry.ts
+- Improving Animations
+- _call
+- .compile
+- jr
+- app_src_main_assets_www_assets_summarize_c_wxvdrl_i
+- app_src_main_assets_www_assets_summarize_c_wxvdrl_n
+- app_src_main_assets_www_assets_summarize_c_wxvdrl_r
+- app_src_main_assets_www_assets_summarize_c_wxvdrl_t
+- ke
+- IMPROVEMENTS LOG — Jinx
+- getTypeTag
+- onmessage
+- Ui
+- app_src_main_assets_www_assets_summarize_bykqcv6p_i
+- schema-CPvCPVj5.js
+- app_src_main_assets_www_assets_summarize_bykqcv6p_n
+- app_src_main_assets_www_assets_summarize_bykqcv6p_r
+- o
+- app_src_main_assets_www_assets_summarize_bykqcv6p_t
+- #g
+- lib-FbOxj-PF.js
+- assert
+- getTypeTag
+- .getTextContent
+- qrGenerator.ts
+- t
+- MetadataParser
+- llm.worker-BrQfiY_G.js
+- embedding
+- doRun
+- _Mix_LoadMUS
+- doRun
+- _Mix_LoadMUS
+- Component Building Principles
+- loop-C5jk66NB.js
+- _pumpOperatorList
+- Spring Animations
+- T
+- bufferAsUint8Array
+- t
+- app_src_main_assets_www_assets_summarize_bvhuyktn_i
+- normalizeReservedWords
+- cleanup
+- bufferAsUint8Array
+- me
+- add
+- normalizeReservedWords
+- B
+- cleanup
+- commit
+- startDrawing
+- PageSet
+- setGState
+- getFullscreenElement
+- loadModule
+- getFullscreenElement
+- tt
+- getTextContent
+- me
+- DownloadService
+- it
+- python.worker-BAqkQJVF.js
+- loadModule
+- Nt
+- qe
+- enterTask
+- ffi_prep_closure_loc_js
+- _strptime
+- enterTask
+- f
+- ffi_prep_closure_loc_js
+- _strptime
+- app_src_main_assets_www_assets_summarize_bks_9hqk_i
+- _emscripten_request_animation_frame_loop
+- getLEB
+- getWasmTrampolineModule
+- p
+- _SDL_ConvertSurface
+- _emscripten_request_animation_frame_loop
+- getLEB
+- getWasmTrampolineModule
+- .getOperatorList
+- _SDL_ConvertSurface
+- devDependencies
+- _boxRGBA
+- convertReturnValue
+- processDrawnLines
+- st
+- The Sonner Principles (Building Loved Components)
+- fe
+- Pr
+- doCallback
+- _emscripten_asm_const_double_sync_on_main_thread
+- Script
+- The Animation Decision Framework
+- _emscripten_promise_destroy
+- emscripten_set_up_async_input_device_js
+- _emscripten_set_window_title
+- _getaddrinfo
+- isPromise
+- _Mix_FadeInMusicPos
+- onPersistComplete
+- _rotozoomSurface
+- _SDL_GetAudioDriver
+- _SDL_SetColors
+- _TTF_RenderText_Shaded
+- _boxRGBA
+- convertReturnValue
+- doCallback
+- _emscripten_asm_const_double_sync_on_main_thread
+- _emscripten_promise_destroy
+- emscripten_set_up_async_input_device_js
+- _emscripten_set_window_title
+- _getaddrinfo
+- isPromise
+- _Mix_FadeInMusicPos
+- onPersistComplete
+- _rotozoomSurface
+- _SDL_GetAudioDriver
+- _SDL_SetColors
+- _TTF_RenderText_Shaded
+- app_src_main_assets_www_assets_coderunner_b4_d_upv_o
+- app_src_main_assets_www_assets_coderunner_b4_d_upv_t
+- app_src_main_assets_www_assets_summarize_b_v_orsf_i
+- app_src_main_assets_www_assets_summarize_b_v_orsf_n
+- app_src_main_assets_www_assets_summarize_b_v_orsf_r
+- app_src_main_assets_www_assets_summarize_b_v_orsf_t
 
 ## God Nodes (most connected - your core abstractions)
-1. `XFAObject` - 206 edges
-2. `warn()` - 175 edges
-3. `Ge()` - 168 edges
-4. `t()` - 159 edges
-5. `n()` - 155 edges
-6. `i()` - 154 edges
-7. `ConfigNamespace` - 141 edges
-8. `pe()` - 134 edges
-9. `r()` - 126 edges
-10. `a()` - 115 edges
+1. `_createPyodideModule()` - 779 edges
+2. `_createPyodideModule()` - 779 edges
+3. `XFAObject` - 206 edges
+4. `warn()` - 175 edges
+5. `Ge()` - 169 edges
+6. `ConfigNamespace` - 141 edges
+7. `pe()` - 136 edges
+8. `TemplateNamespace` - 115 edges
+9. `pyodide_js_init()` - 111 edges
+10. `pyodide_js_init()` - 111 edges
 
 ## Surprising Connections (you probably didn't know these)
+- `15. Typography — optical sizing, tracking, leading` --references--> `em()`  [INFERRED]
+  .agents/skills/apple-design/SKILL.md → app/src/main/assets/www/assets/index-CEEjsfRL.js
+- `Code Quality` --references--> `em()`  [INFERRED]
+  .agents/skills/redesign-existing-projects/SKILL.md → app/src/main/assets/www/assets/index-CEEjsfRL.js
+- `11. Right in Chrome, wrong on phone` --references--> `vh()`  [INFERRED]
+  .agents/skills/mobile-native/SKILL.md → app/src/main/assets/www/assets/index-CEEjsfRL.js
+- `3. Layout has the wrong height` --references--> `vh()`  [INFERRED]
+  .agents/skills/mobile-native/SKILL.md → app/src/main/assets/www/assets/index-CEEjsfRL.js
 - `规则 3：执行前必须验证 Lambda` --references--> `exec()`  [INFERRED]
-  .opencode/agents/engineering-ai-data-remediation-engineer.md → app/src/main/assets/www/assets/index-D1jQENGW.js
-- `变更与安全` --references--> `commit()`  [INFERRED]
-  .opencode/agents/engineering-network-engineer-china.md → app/src/main/assets/www/assets/index-D1jQENGW.js
-- `工程纪律` --references--> `end()`  [INFERRED]
-  .opencode/agents/xr-immersive-developer.md → app/src/main/assets/www/assets/index-D1jQENGW.js
-- `6. 隔离测试` --references--> `assert()`  [INFERRED]
-  .opencode/agents/godot-gameplay-scripter.md → app/src/main/assets/www/assets/pdf.worker.min-CjEcRF4W.mjs
-- `Excel 解析口径` --references--> `No()`  [INFERRED]
-  .opencode/agents/livestock-archive-auditor.md → app/src/main/assets/www/assets/embed.worker-BeDNRRQ6.js
+  .opencode/agents/engineering-ai-data-remediation-engineer.md → app/src/main/assets/www/assets/pdf-K0DICxDV.js
 
 ## Import Cycles
 - None detected.
 
-## Communities (458 total, 48 thin omitted)
+## Communities (621 total, 103 thin omitted)
 
-### Community 0 - "Theme.kt"
-Cohesion: 0.18
-Nodes (11): activity, JinxTheme(), Composable, build, darkcolorscheme, dynamicdarkcolorscheme, dynamiclightcolorscheme, issystemindarktheme (+3 more)
-
-### Community 1 - "package.json"
+### Community 0 - "ModelsActivity.kt"
 Cohesion: 0.05
-Nodes (41): dependencies, dexie, dexie-react-hooks, @fontsource-variable/inter, @huggingface/transformers, mammoth, @mlc-ai/web-llm, pdfjs-dist (+33 more)
+Nodes (57): activity, animatefloat, AgentActivity, ComponentActivity, JinxTheme(), Composable, arrangement, background (+49 more)
+
+### Community 1 - "nodo/package.json"
+Cohesion: 0.05
+Nodes (41): framer-motion, lucide-react, react, react-dom, tailwindcss, @tailwindcss/vite, @types/react, @types/react-dom (+33 more)
 
 ### Community 2 - "ExampleInstrumentedTest.kt"
 Cohesion: 0.38
@@ -514,41 +675,33 @@ Nodes (5): androidjunit4, ExampleInstrumentedTest, Test, instrumentationregistry
 Cohesion: 0.33
 Nodes (5): fontfamily, fontweight, sp, textstyle, typography
 
-### Community 4 - "index-D1jQENGW.js"
-Cohesion: 0.00
-Nodes (202): Aa(), addChangedExistingAnnotation(), addCommentButton(), addCommentButtonInToolbar(), addDeletedAnnotationElement(), addEditListeners(), addEditToolbar(), addFakeAnnotation() (+194 more)
+### Community 4 - "pdf.worker.min-CjEcRF4W.mjs"
+Cohesion: 0.01
+Nodes (226): a, af, Ai, al, an, Ao, applyStandardFontGlyphMap(), ar (+218 more)
 
 ### Community 6 - "gradlew"
 Cohesion: 0.83
 Nodes (3): gradlew script, die(), warn()
 
 ### Community 8 - "MainActivity.kt"
-Cohesion: 0.09
-Nodes (24): android, androidview, Composable, MainActivity, OnBackPressedCallback, NodoWebViewScreen(), WebChromeClient, WebViewClient (+16 more)
-
-### Community 12 - "repo.ts"
-Cohesion: 0.13
-Nodes (24): CHAT_SYSTEM_PROMPT, HistoryMessage, RAG_SYSTEM_PROMPT, ToolDefinition, createNote(), deleteNote(), listNotes(), searchNotes() (+16 more)
+Cohesion: 0.07
+Nodes (27): activityresultcontracts, androidview, android, Bundle, ComponentActivity, Composable, Volatile, MainActivity (+19 more)
 
 ### Community 13 - "compilerOptions"
 Cohesion: 0.09
 Nodes (21): compilerOptions, allowArbitraryExtensions, allowImportingTsExtensions, erasableSyntaxOnly, jsx, lib, module, moduleDetection (+13 more)
 
-### Community 14 - "llmClient.ts"
-Cohesion: 0.10
-Nodes (13): AgentRunResult, AgentStep, extractJson(), runAgentLoop(), getToolsSystemPromptDescription(), TOOLS, handler, Listener (+5 more)
+### Community 14 - "ConfigNamespace"
+Cohesion: 0.01
+Nodes (60): Acrobat, Acrobat7, AddSilentPrint, AddViewerPreferences, Agent, BatchOutput, Change, Common (+52 more)
 
 ### Community 15 - "compilerOptions"
 Cohesion: 0.12
 Nodes (16): compilerOptions, allowImportingTsExtensions, erasableSyntaxOnly, lib, module, moduleDetection, noEmit, noFallthroughCasesInSwitch (+8 more)
 
-### Community 16 - "devDependencies"
-Cohesion: 0.12
-Nodes (16): devDependencies, oxlint, tailwindcss, @tailwindcss/vite, @types/node, @types/react, @types/react-dom, typescript (+8 more)
-
-### Community 17 - "SettingsView.tsx"
-Cohesion: 0.20
-Nodes (26): App(), boot(), getSetting(), setSetting(), llm, LoadProgress, detectHardware(), HardwareInfo (+18 more)
+### Community 16 - "StringObject"
+Cohesion: 0.02
+Nodes (42): Amd, AppearanceFilter, Base, Certificate, config_Picture, connection_set_Uri, ConnectionSet, ConnectionSetNamespace (+34 more)
 
 ### Community 18 - "CRITICAL: Mandatory Token Conservation Policy (Graphify)"
 Cohesion: 0.29
@@ -562,153 +715,149 @@ Nodes (5): plugins, rules, react/only-export-components, react/rules-of-hooks, $
 Cohesion: 0.10
 Nodes (19): 1. Clonar e Instalar Dependencias, 🧠 1. Inferencia Local con WebLLM & WebGPU, 2. Ejecutar en Modo Desarrollo, 📚 2. RAG Local Estilo NotebookLM con Citaciones Clicables, 3. Compilar para Producción / PWA, 🤖 3. Loop Autónomo de Agente y Herramientas (Tool Calling), 4. Compilar APK Android, 🆘 4. Pack de Supervivencia y Emergencias Pre-cargado (+11 more)
 
-### Community 27 - "global.d.ts"
-Cohesion: 0.33
-Nodes (5): ExtractRawTextOptions, mammoth, Navigator, Result, *?url
-
-### Community 28 - "lib-FbOxj-PF.js"
-Cohesion: 0.07
-Nodes (67): acquire(), asyncGenerate(), calculateCropShape(), calculateResizeShape(), chatCompletion(), completion(), computeImageEmbedSize(), constructor() (+59 more)
-
-### Community 29 - "llm.worker-BrQfiY_G.js"
-Cohesion: 0.06
-Nodes (77): acquire(), appendEmptyThinkingReplyHeader(), appendMessage(), appendReplyHeader(), asyncGenerate(), calculateCropShape(), calculateResizeShape(), chatCompletion() (+69 more)
-
-### Community 30 - "ConfigNamespace"
-Cohesion: 0.01
-Nodes (61): Acrobat7, AddSilentPrint, AddViewerPreferences, Agent, BatchOutput, Change, Common, Compress (+53 more)
-
-### Community 31 - "nl"
-Cohesion: 0.03
-Nodes (124): Ac(), am(), an(), at(), be(), bi(), bo(), bs() (+116 more)
-
-### Community 32 - "sw.js"
+### Community 27 - "Liquid Glass Widgets — AI Agent Guide"
 Cohesion: 0.09
-Nodes (27): activate(), addCacheListener(), addFetchListener(), addToCacheList(), b(), cacheWillUpdate(), constructor(), createHandlerBoundToURL() (+19 more)
+Nodes (21): 1. Golden Architectural Rules (Mandatory), 2. App Lifecycle & Initialization, 3. Screen Architecture: `GlassScaffold`, 4. Component Dictionary & Substitution Table, 5. Overlays: Modal Sheets, Dialogs & Transitions, 6. Advanced Navigation: Gel Morph with `GlassNavigationShell`, 7. Common Agent Pitfalls (Checklist before outputting code), GlassDialog (+13 more)
 
-### Community 33 - "StringObject"
-Cohesion: 0.02
-Nodes (42): Amd, AppearanceFilter, Base, Certificate, config_Picture, connection_set_Uri, ConnectionSet, ConnectionSetNamespace (+34 more)
-
-### Community 34 - "qe"
-Cohesion: 0.08
-Nodes (25): Mt(), At(), Ft(), I(), It, jt(), kt(), mt (+17 more)
-
-### Community 35 - "tt"
-Cohesion: 0.05
-Nodes (77): Be(), c(), d(), f(), l(), o(), s(), u() (+69 more)
-
-### Community 36 - "me"
+### Community 28 - "getStringOption"
 Cohesion: 0.06
-Nodes (37): asyncLoadWebGPUPipelines(), bt, ct(), G(), getEmbeddingStates(), getModelStates(), Ot(), de() (+29 more)
+Nodes (10): Arc, getFloat(), getInteger(), getKeyword(), getMeasurement(), getRatio(), getRelevant(), getStringOption() (+2 more)
 
-### Community 37 - "add"
-Cohesion: 0.03
-Nodes (114): add(), addContainer(), _addDrawingListeners(), addEditor(), addHCMFilter(), addKnockoutFilter(), addLayer(), addNewEditorFromKeyboard() (+106 more)
-
-### Community 38 - "B"
-Cohesion: 0.08
-Nodes (23): B(), de(), fe(), ce(), de(), le(), Ne(), ue() (+15 more)
-
-### Community 39 - "OptionObject"
-Cohesion: 0.02
-Nodes (36): ADBE_JSConsole, ADBE_JSDebugger, Attributes, AutoSave, config_Validate, Conformance, Destination, DigestMethod (+28 more)
-
-### Community 40 - "it"
+### Community 29 - "i"
 Cohesion: 0.06
-Nodes (29): appendMessage(), g(), bt(), k(), Se(), Ft(), it(), Ft() (+21 more)
+Nodes (99): ae(), al(), am(), an(), Ar(), n(), b(), bm() (+91 more)
 
-### Community 41 - "constructor"
-Cohesion: 0.03
-Nodes (82): abort(), _abortOperatorList(), _abortRequest(), addNativeFontFace(), beginImageData(), beginInlineImage(), box(), _callOnProgress() (+74 more)
-
-### Community 42 - "Dict"
-Cohesion: 0.04
-Nodes (32): ChoiceWidgetAnnotation, codePointIter(), computeIDs(), createImage(), createImageDict(), createPNGLikeImage(), createRawImage(), DefaultAppearanceEvaluator (+24 more)
-
-### Community 43 - "t"
-Cohesion: 0.08
-Nodes (58): a(), Ee(), r(), i(), n(), c(), i(), o() (+50 more)
-
-### Community 44 - "Ge"
-Cohesion: 0.03
-Nodes (137): br(), _build_trie(), byteLength(), ci(), constructor(), di(), ensureTensor(), Ge() (+129 more)
-
-### Community 45 - "Nt"
-Cohesion: 0.10
-Nodes (25): K(), Nt(), ai(), bi(), ci(), di(), fi(), gi() (+17 more)
-
-### Community 46 - "p"
-Cohesion: 0.12
-Nodes (15): a(), c(), d(), f(), h(), m(), p(), f() (+7 more)
-
-### Community 47 - "restore"
-Cohesion: 0.05
-Nodes (99): _applySMaskOOBAlpha(), applyToCanvas(), applyToColor(), applyToImageData(), applyTransferMapsToBitmap(), applyTransferMapsToCanvas(), areConic(), beginAnnotation() (+91 more)
-
-### Community 48 - "I"
-Cohesion: 0.11
-Nodes (37): asyncLoadWebGPUPipelines(), ne(), Bt(), decode(), decodeStep(), dispose(), dt(), forwardTokensAndSample() (+29 more)
-
-### Community 49 - "startDrawing"
-Cohesion: 0.03
-Nodes (93): addCommands(), addMissingCanvas(), _addOutlines(), addPoints(), addSignature(), build(), buildFocusOutline(), cleanUndoStack() (+85 more)
-
-### Community 50 - "FormatError"
-Cohesion: 0.05
-Nodes (29): adjustWidths(), Cmd, EvaluatorPreprocessor, expectInt(), expectString(), extendCMap(), FormatError, info() (+21 more)
-
-### Community 51 - "Annotation"
-Cohesion: 0.04
-Nodes (22): Annotation, CaretAnnotation, CircleAnnotation, FileAttachmentAnnotation, getPdfColorArray(), getQuadPoints(), getRgbColor(), HighlightAnnotation (+14 more)
-
-### Community 52 - ".success"
-Cohesion: 0.04
-Nodes (40): applyAssist(), ariaLabel(), BreakAfter, CheckButton, checkDimensions(), ChoiceList, computeBbox(), Corner (+32 more)
-
-### Community 53 - "ChatView.tsx"
-Cohesion: 0.14
-Nodes (24): buildChatMessages(), buildRagMessages(), addMessage(), createChat(), deleteChat(), getMessages(), listChats(), titleFrom() (+16 more)
-
-### Community 54 - "p"
-Cohesion: 0.15
-Nodes (15): a(), c(), d(), f(), h(), m(), p(), f() (+7 more)
-
-### Community 55 - "render"
-Cohesion: 0.04
-Nodes (63): addAltText(), addButton(), addButtonBefore(), addColorPicker(), addComment(), addDeleteButton(), addEditSignatureButton(), addEventListener() (+55 more)
-
-### Community 56 - "LocaleSetNamespace"
+### Community 30 - "LocaleSetNamespace"
 Cohesion: 0.03
 Nodes (24): CalendarSymbols, CurrencySymbol, CurrencySymbols, DatePattern, DatePatterns, Day, DayNames, Era (+16 more)
 
-### Community 57 - "getStringOption"
+### Community 31 - "NodoNative"
 Cohesion: 0.06
-Nodes (10): Data, getFloat(), getInteger(), getKeyword(), getMeasurement(), getRatio(), getRelevant(), getStringOption() (+2 more)
+Nodes (23): NodoNative, current, getIsland(), IslandState, Listener, listeners, setIsland(), subscribeIsland() (+15 more)
 
-### Community 58 - "pdf.worker.min-CjEcRF4W.mjs"
-Cohesion: 0.01
-Nodes (231): a, addChildren(), af, Ai, al, amendFallbackToUnicode(), an, Ao (+223 more)
+### Community 32 - "sw.js"
+Cohesion: 0.06
+Nodes (58): _emscripten_async_wget2_data(), onerrorjs(), __emscripten_dlopen_js(), errorCallback(), successCallback(), activate(), addCacheListener(), addFetchListener() (+50 more)
+
+### Community 34 - "vl"
+Cohesion: 0.22
+Nodes (20): bl(), da(), dl(), dp(), ep(), fa(), Io(), je() (+12 more)
+
+### Community 35 - "ChatView.tsx"
+Cohesion: 0.07
+Nodes (41): buildChatMessages(), buildRagMessages(), CHAT_SYSTEM_PROMPT, HistoryMessage, RAG_SYSTEM_PROMPT, extractCodeBlock(), addMessage(), createChat() (+33 more)
+
+### Community 36 - "ref_react"
+Cohesion: 0.10
+Nodes (39): LandingPage(), LandingPageProps, AboutSection(), AnimatedText(), AnimatedTextProps, CharSpan(), ContactButton(), ContactButtonProps (+31 more)
+
+### Community 37 - "lib-CE-Ivkxm.js"
+Cohesion: 0.05
+Nodes (77): ai(), an(), Ba(), Bi(), Bt(), ca(), Cn(), Ct() (+69 more)
+
+### Community 38 - "Dict"
+Cohesion: 0.05
+Nodes (19): ButtonWidgetAnnotation, ChoiceWidgetAnnotation, codePointIter(), Dict, ErrorFont, escapeString(), FakeUnicodeFont, getModificationDate() (+11 more)
+
+### Community 39 - "IntegerObject"
+Cohesion: 0.05
+Nodes (13): AdjustData, AdobeExtensionLevel, CompressObjectStream, Copies, CurrentPage, IntegerObject, Level, MsgId (+5 more)
+
+### Community 40 - "gs"
+Cohesion: 0.11
+Nodes (56): s(), dr(), fromGpuBuffer(), fromImage(), de(), di(), es(), fe() (+48 more)
+
+### Community 41 - "I"
+Cohesion: 0.11
+Nodes (37): asyncLoadWebGPUPipelines(), ne(), Bt(), decode(), decodeStep(), dispose(), dt(), forwardTokensAndSample() (+29 more)
+
+### Community 42 - "ExclGroup"
+Cohesion: 0.06
+Nodes (9): addHTML(), Area, createLine(), ExclGroup, flushHTML(), getAvailableSpace(), getContainedChildren(), Subform (+1 more)
+
+### Community 43 - "The Fixes"
+Cohesion: 0.12
+Nodes (13): 10. Status bar color doesn't match, 11. Right in Chrome, wrong on phone, 1. Hover state stuck after tap, 2. Gray/blue flash on tap, 3. Layout has the wrong height, 4. Page zooms into the input, 6. Pull-to-refresh hijacks scroll, 7. Content stops at the notch (+5 more)
+
+### Community 44 - "Ge"
+Cohesion: 0.03
+Nodes (132): br(), byteLength(), ci(), di(), ensureTensor(), Ge(), Ae(), Ai() (+124 more)
+
+### Community 45 - "pyodide_js_init"
+Cohesion: 0.03
+Nodes (64): capture_stderr(), pyodide_js_init(), ae(), ao(), At(), bn(), bo(), Cr() (+56 more)
+
+### Community 46 - "constructor"
+Cohesion: 0.05
+Nodes (58): argmax(), batch_decode(), _build_trie(), cf(), combineTokensIntoWords(), constructor(), convert_tokens_to_string(), decode() (+50 more)
+
+### Community 47 - "NodoBridge"
+Cohesion: 0.09
+Nodes (6): com, Volatile, NodoBridge, Listener, JavascriptInterface, Listener
+
+### Community 48 - "DownloadState"
+Cohesion: 0.09
+Nodes (19): Done, DownloadProgress, DownloadState, Error, Idle, Volatile, ModelDownloader, Paused (+11 more)
+
+### Community 49 - "from_pretrained"
+Cohesion: 0.07
+Nodes (47): Ah(), al(), bg(), $c(), Cg(), choices(), cl(), delete() (+39 more)
+
+### Community 50 - "MessageBubble.tsx"
+Cohesion: 0.14
+Nodes (17): ⏱️ Duración Recomendada: 3 Minutos, Escena 1: El Problema y Desconexión Total (0:00 - 0:30), Escena 2: Asistente y Conversación Base (0:30 - 1:00), Escena 3: Document RAG con Citaciones Interactivas (1:00 - 1:45), Escena 4: Agente Autónomo y Ejecución de Código Python (1:45 - 2:20), Escena 5: Pack de Supervivencia y Ajustes (2:20 - 2:45), Escena 6: Conclusión y Cierre (2:45 - 3:00), Guion de Demostración — NODO (Hack47 OFFGRID) (+9 more)
+
+### Community 51 - "landing/LandingPage.tsx"
+Cohesion: 0.09
+Nodes (33): AboutSection(), AnimatedText(), AnimatedTextProps, CharSpan(), ContactButton(), ContactButtonProps, DigitalWaveFieldHero(), DigitalWaveFieldHeroProps (+25 more)
+
+### Community 52 - "ChunkedStream"
+Cohesion: 0.10
+Nodes (4): arrayBuffersToBytes(), ChunkedStream, ChunkedStreamManager, MissingDataException
+
+### Community 53 - "NativeModel"
+Cohesion: 0.10
+Nodes (23): generateSync(), EngineState, Error, Generating, Idle, android, com, Volatile (+15 more)
+
+### Community 54 - "setupDoc"
+Cohesion: 0.04
+Nodes (23): AbortException, ARCFourCipher, BasePDFStream, calculateMD5(), CipherTransformFactory, MessageHandler, NetworkPdfManager, PasswordException (+15 more)
+
+### Community 55 - "native-lib.cpp"
+Cohesion: 0.09
+Nodes (40): algorithm, asHandle(), detect_big_cores(), EngineHandle, ctx, default_sampler, model, prev_tokens (+32 more)
+
+### Community 56 - "index-CEEjsfRL.js"
+Cohesion: 0.03
+Nodes (186): People and names, _a(), ac(), ah(), ap(), as(), Au(), ba() (+178 more)
+
+### Community 57 - ".checkAndRepair"
+Cohesion: 0.02
+Nodes (49): adjustMapping(), adjustWidths(), amendFallbackToUnicode(), Ascii85Stream, AsciiHexStream, BrotliStream, bytesToString(), CFFFont (+41 more)
+
+### Community 58 - "OptionObject"
+Cohesion: 0.02
+Nodes (37): 6. Concurrency in SwiftUI, ADBE_JSConsole, ADBE_JSDebugger, Attributes, AutoSave, config_Validate, Conformance, Destination (+29 more)
 
 ### Community 59 - "XFAObject"
 Cohesion: 0.01
-Nodes (70): Acrobat, Arc, Assist, Barcode, Bind, BindItems, Bookend, Border (+62 more)
+Nodes (69): Assist, Barcode, Bind, BindItems, Bookend, Break, BreakBefore, Button (+61 more)
 
-### Community 60 - "gs"
-Cohesion: 0.11
-Nodes (57): s(), dr(), forward(), fromImage(), de(), di(), es(), fe() (+49 more)
+### Community 60 - "Design Engineering"
+Cohesion: 0.07
+Nodes (27): 3D transforms for depth, Accessibility, Beauty is leverage, clip-path for Animation, Comparison sliders, Core Philosophy, CSS Transform Mastery, Debugging Animations (+19 more)
 
-### Community 61 - ".push"
-Cohesion: 0.03
-Nodes (46): ButtonWidgetAnnotation, addPageDict(), appendIfJavaScriptDict(), parseNestedOrder(), parseOnOff(), parseOrder(), _collectAction(), collectActions() (+38 more)
+### Community 61 - "LibraryView.tsx"
+Cohesion: 0.08
+Nodes (40): db, processChatAttachment(), chunkPages(), TextChunk, embedder, EmbedProgress, EMERGENCY_FILES, installEmergencyPack() (+32 more)
 
-### Community 62 - "onmessage"
-Cohesion: 0.53
-Nodes (6): handleTask(), ge(), onmessage(), postMessage(), reloadIfUnmatched(), Xt()
+### Community 62 - "VoskManager.kt"
+Cohesion: 0.13
+Nodes (9): Listener, VoskManager, RecognitionListener, bufferedinputstream, context, model, recognizer, SpeechService (+1 more)
 
-### Community 63 - "has"
-Cohesion: 0.06
-Nodes (55): af(), ao(), ba(), bc(), beginDrawing(), Bf(), cf(), componentDidCatch() (+47 more)
+### Community 63 - "e"
+Cohesion: 0.09
+Nodes (40): ai(), argmin(), center_crop(), convert(), crop(), crop_margin(), default(), dl() (+32 more)
 
 ### Community 64 - "供应链采购策略师"
 Cohesion: 0.04
@@ -722,13 +871,29 @@ Nodes (43): :arrows_counterclockwise: 学习与记忆, :arrows_counterclockwise:
 Cohesion: 0.05
 Nodes (41): BIM 协调检查清单, 中东与海湾地区, 亚洲, 你的身份与记忆, 全球标准覆盖, 关键规则, 北美, 可持续性与韧性 (+33 more)
 
-### Community 67 - "embed.worker-BeDNRRQ6.js"
+### Community 67 - "embed.worker-Cl7GpGda.js"
 Cohesion: 0.02
-Nodes (123): add(), af(), apply_chat_template(), _apply_dither(), arrayBuffer(), blob(), canReuseTensor(), cr() (+115 more)
+Nodes (137): add_node(), af(), apply_chat_template(), _apply_dither(), arrayBuffer(), blob(), bpe(), bs() (+129 more)
 
-### Community 68 - "LibraryView.tsx"
-Cohesion: 0.12
-Nodes (26): chunkPages(), TextChunk, embedder, EmbedProgress, EMERGENCY_FILES, installEmergencyPack(), isEmergencyPackInstalled(), ensurePdfWorker() (+18 more)
+### Community 68 - "Working With Sonner"
+Cohesion: 0.15
+Nodes (11): Functions, Sonner API Reference, `toast()` options, `<Toaster />`, Initial Response, Picking the right call, Recipes, Setup (+3 more)
+
+### Community 70 - "Apple Design"
+Cohesion: 0.09
+Nodes (21): 10. Gesture design details (the "feel" checklist), 11. Frame-level smoothness, 12. Materials & depth — translucency conveys hierarchy, 13. Multimodal feedback — motion + sound + haptics, 14. Reduced motion & accessibility, 15. Typography — optical sizing, tracking, leading, 16. Design foundations — the eight principles, 17. Process (+13 more)
+
+### Community 72 - "Prototyping Variants"
+Cohesion: 0.10
+Nodes (19): Behavior contract, Markup, Reference wiring, Rules, Styles, The Picker, Hard Rules, Initial Response (+11 more)
+
+### Community 74 - "repeat"
+Cohesion: 0.20
+Nodes (23): ac(), cc(), dc(), fc(), gc(), hc(), ic(), Im() (+15 more)
+
+### Community 75 - "AgentTools.kt"
+Cohesion: 0.06
+Nodes (35): alarmclock, alarmmanager, hasPermission(), Context, Haptics, Context, audiomanager, batterymanager (+27 more)
 
 ### Community 76 - "🌱 ESG 与可持续发展官"
 Cohesion: 0.05
@@ -738,25 +903,25 @@ Nodes (39): CDP 应答结构, Double Materiality（双重重要性）框架（�
 Cohesion: 0.05
 Nodes (39): 10. 业务影响与沟通, 1. 文档与治理审查, 2. 数据重建与质量, 3. 目标变量/标签分析, 4. 分群与队列评估, 5. 特征分析与工程, 6. 模型复现与构建, 7. 校准测试 (+31 more)
 
-### Community 78 - "e"
-Cohesion: 0.09
-Nodes (39): ai(), argmin(), center_crop(), clone(), convert(), crop(), crop_margin(), default() (+31 more)
+### Community 78 - "Design Audit"
+Cohesion: 0.10
+Nodes (19): Code Quality, Color and Surfaces, Component Patterns, Content, Design Audit, Fix Priority, How This Works, Iconography (+11 more)
 
-### Community 79 - ".createDocumentHandler"
-Cohesion: 0.02
-Nodes (29): AbortException, BasePdfManager, BasePDFStream, BasePDFStreamRangeReader, BasePDFStreamReader, BaseStream, fetchSync(), IdentityCMap (+21 more)
+### Community 79 - "landing-page/package.json"
+Cohesion: 0.06
+Nodes (32): dependencies, framer-motion, lucide-react, react, react-dom, devDependencies, tailwindcss, @tailwindcss/vite (+24 more)
 
-### Community 80 - "IntegerObject"
-Cohesion: 0.05
-Nodes (13): AdjustData, AdobeExtensionLevel, CompressObjectStream, Copies, CurrentPage, IntegerObject, Level, MsgId (+5 more)
+### Community 80 - "P"
+Cohesion: 0.15
+Nodes (27): Ae(), Be(), a(), ee(), F(), I(), ie(), j() (+19 more)
 
 ### Community 81 - "如未启用 HPA 则开启"
 Cohesion: 0.05
 Nodes (38): On-Call 轮值配置, On-Call 项目健康度, SLO/SLI 定义框架, 严重等级分类矩阵, 事后复盘文档模板, 你的身份与记忆, 关键规则, 回滚到上一版本 (+30 more)
 
-### Community 82 - ".add"
-Cohesion: 0.03
-Nodes (33): CFF, CFFCharset, CFFCompiler, CFFDict, CFFEncoding, CFFFDSelect, CFFHeader, CFFIndex (+25 more)
+### Community 82 - "XmlObject"
+Cohesion: 0.08
+Nodes (9): Binder, createDataNode(), createText(), DataHandler, Items, makeMap(), parseExpression(), searchNode() (+1 more)
 
 ### Community 83 - "AgentsOrchestrator 智能体人格"
 Cohesion: 0.05
@@ -770,41 +935,41 @@ Nodes (37): 1. 场景架构设计, 2. 信号架构, 3. 组件拆分, 4. 静态�
 Cohesion: 0.05
 Nodes (37): 1. Access Policy — 访问策略, 2. Retrieval Eligibility — 检索资格, 3. Renderability & Parseability — 渲染与解析, 4. Information Clarity — 信息清晰度, 5. Structured Data — 结构化数据, 6. Logs & Observability — 日志与可观测性, AEO Foundation Audit, AEO 基础架构师 (+29 more)
 
-### Community 86 - "shadow"
-Cohesion: 0.03
-Nodes (16): AnnotationFactory, AppearanceStreamEvaluator, Catalog, CmykICCBasedCS, FeatureTest, fetchDest(), InfoUtils, Intersector (+8 more)
+### Community 86 - "Value"
+Cohesion: 0.11
+Nodes (5): Draw, Field, Image, _setValue(), Value
 
 ### Community 87 - "图像提示词工程师"
 Cohesion: 0.05
 Nodes (36): 不同类型的提示词模板, 主体描述层, 产品摄影, 人像摄影, 你的身份与记忆, 光线设定层, 关键规则, 图像提示词工程师 (+28 more)
 
-### Community 88 - "Stream"
-Cohesion: 0.02
-Nodes (38): addHex(), Ascii85Stream, AsciiHexStream, BinaryCMapReader, BinaryCMapStream, BrotliStream, buildHuffmanTable(), bytesToString() (+30 more)
+### Community 88 - "kf"
+Cohesion: 0.09
+Nodes (42): af(), Bd(), br(), cf(), ct(), df(), ef(), Fd() (+34 more)
 
-### Community 89 - "_call"
-Cohesion: 0.04
-Nodes (68): add_input_labels(), argmax(), batch_decode(), _build_translation_inputs(), CA(), calc_num_image_tokens_from_image_size(), _call(), _call_moonshine() (+60 more)
+### Community 89 - "Glossary"
+Cohesion: 0.11
+Nodes (18): Animation Vocabulary, Easing — how speed changes over an animation, Entrances & Exits — how elements appear and disappear, Examples, Feedback & Interaction — responding to the user's actions, Glossary, Initial Response, Instructions (+10 more)
 
-### Community 90 - "get"
-Cohesion: 0.10
-Nodes (36): Ad(), ah(), ai(), _bindJSAction(), bl(), bu(), ch(), computeTelemetryFinalData() (+28 more)
+### Community 90 - "opacity"
+Cohesion: 0.16
+Nodes (17): 4. Pick the properties, Never Ship, 4. Pick the properties, Never Ship, 5. Performance, Aggressive Escalation Triggers, Guidelines, Initial Response (+9 more)
 
-### Community 91 - "ContentObject"
-Cohesion: 0.02
-Nodes (24): AlwaysEmbed, BehaviorOverride, BooleanElement, ContentObject, DateElement, DateTime, DateTimeSymbols, Decimal (+16 more)
-
-### Community 92 - "ExclGroup"
-Cohesion: 0.06
-Nodes (9): addHTML(), Area, createLine(), ExclGroup, flushHTML(), getAvailableSpace(), getContainedChildren(), Subform (+1 more)
+### Community 92 - "XhtmlNamespace"
+Cohesion: 0.15
+Nodes (4): Li, Sub, Sup, XhtmlNamespace
 
 ### Community 93 - "Persona 走查专家"
 Cohesion: 0.06
 Nodes (35): Cialdini 的 7 条原则, Fogg 行为模型, LIFT 模型（Chris Goward）, Persona 画像模板, Persona 真实性, Persona 走查专家, Phase 0 — 抵达前（无截图）, Phase 1 — 五秒测试（首屏截图） (+27 more)
 
+### Community 94 - "ModelImporter.kt"
+Cohesion: 0.24
+Nodes (8): ImportProgress, Context, Volatile, ModelImporter, atomicboolean, fileoutputstream, ioexception, openablecolumns
+
 ### Community 95 - "PsWasmCompiler"
-Cohesion: 0.06
-Nodes (24): ast_Parser, buildPostScriptWasmFunction(), encodeASCIIString(), lexer_Lexer, _nodesEqual(), parsePostScriptFunction(), PsBinaryNode, PsBlock (+16 more)
+Cohesion: 0.07
+Nodes (17): ast_Parser, _nodesEqual(), PsArgNode, PsBinaryNode, PsBlock, PsConstNode, PsIf, PsIfElse (+9 more)
 
 ### Community 96 - "香港股市合规审查专家"
 Cohesion: 0.06
@@ -834,9 +999,9 @@ Nodes (33): CFO 沟通模板, Non-GAAP 调节标准, SaaS / 经常性收入指�
 Cohesion: 0.06
 Nodes (33): 10. 目的优先于忙碌, 11. 影响力定位——产出放在它们起作用的地方, 1. 过滤器——什么能到老板面前, 2. 流程所有权——一致性就是交付物, 3. 级联更新——文档依赖图, 4. 产出路由——正确的位置，随时可用, 5. 绝不取代老板的位置, 6. 记住。绝不重复。 (+25 more)
 
-### Community 103 - "slice"
-Cohesion: 0.04
-Nodes (102): AA(), _apply_and_filter_by_delay_pattern_mask(), _call_cohere_asr(), _call_whisper(), clamp_(), CO(), collateWordTimestamps(), combineTokensIntoWords() (+94 more)
+### Community 103 - "XhtmlObject"
+Cohesion: 0.15
+Nodes (5): I, ol, P, ul, XhtmlObject
 
 ### Community 104 - "威胁检测工程师"
 Cohesion: 0.06
@@ -850,9 +1015,9 @@ Nodes (33): AEO + GEO, AEO + SEO, AEO + SEO + GEO, AEO 基础架构师, AI 搜�
 Cohesion: 0.06
 Nodes (33): Analyze（分析）, BCP 框架 — 关键组成, Control（控制）, Define（定义）, DMAIC 解决问题框架, Improve（改进）, Kaizen 活动结构（3–5 天快速改进）, KPI 框架设计 (+25 more)
 
-### Community 107 - "push"
-Cohesion: 0.05
-Nodes (87): add_node(), applyFilter(), As(), bindMacroArguments(), bl(), __bool__(), bpe(), bs() (+79 more)
+### Community 107 - "ContentObject"
+Cohesion: 0.02
+Nodes (24): AlwaysEmbed, BehaviorOverride, BooleanElement, ContentObject, DateElement, DateTime, DateTimeSymbols, Decimal (+16 more)
 
 ### Community 108 - "身份信任架构师"
 Cohesion: 0.06
@@ -870,9 +1035,9 @@ Nodes (32): Filament 优化专家, Table 列优化, 优化卓越性（次要）,
 Cohesion: 0.06
 Nodes (32): 100 法则（The Rule of 100）, Lead Getter：放大触达, Lead Magnet：三种类型, Lead Magnet 工程, Lead Magnet 规格表, Offer Stack 设计, Offer 与 Lead Gen 策略师, Offer 与 Magnet 原则 (+24 more)
 
-### Community 112 - "python.worker-BAqkQJVF.js"
-Cohesion: 0.09
-Nodes (31): location(), be(), ce(), D(), de(), _e(), G(), ge() (+23 more)
+### Community 112 - "Animation Audit Playbook"
+Cohesion: 0.12
+Nodes (14): 5. Timing or spring, Hold to confirm, 5. Easing and duration — or a spring, 1. Purpose & frequency, 2. Easing & duration, 3. Physicality & origin, 4. Interruptibility, 6. Accessibility (+6 more)
 
 ### Community 113 - "服装工厂规划工程师"
 Cohesion: 0.06
@@ -890,17 +1055,17 @@ Nodes (31): 与其他智能体的集成, 你的身份与记忆, 共享智能体�
 Cohesion: 0.06
 Nodes (31): Gemini视觉一致性系统, 你的身份与记忆, 关键规则, 内容标准, 分析与学习输出（`learnings.json`）, 发布与分析 — Upload-Post API, 发布输出（`post-info.json`）, 图片生成 — Gemini API (+23 more)
 
-### Community 117 - "repeat"
-Cohesion: 0.23
-Nodes (21): ac(), cc(), dc(), fc(), gc(), hc(), ic(), Im() (+13 more)
+### Community 117 - "Building Animations in Expo"
+Cohesion: 0.12
+Nodes (17): 120fps, 1. Should this animate at all?, 2. What is the purpose?, 3. Pick the tool — cheapest that works, 6. Keep it off the JS thread, 7. Press, not hover, 8. Haptics, 9. Reduced motion and accessibility (+9 more)
 
 ### Community 118 - "中国市场本地化策略师"
 Cohesion: 0.06
 Nodes (31): 1. 实时趋势情报与信号捕捉, 2. 市场机会提取（趋势 → 行动）, 3. 跨平台本地化策略, 4. GTM 执行与生命周期管理, GTM 阶段门控清单, 一人公司优化, 中国与全球桥接策略, 中国市场本地化策略师 (+23 more)
 
-### Community 119 - "ChunkedStream"
-Cohesion: 0.10
-Nodes (4): arrayBuffersToBytes(), ChunkedStream, ChunkedStreamManager, MissingDataException
+### Community 119 - "SimpleDOMNode"
+Cohesion: 0.15
+Nodes (3): DatasetXMLParser, SimpleDOMNode, SimpleXMLParser
 
 ### Community 120 - "标准工作流程"
 Cohesion: 0.06
@@ -914,9 +1079,13 @@ Nodes (31): Luhmann 四原则（验证关卡）, ZK 管家智能体, 交付物�
 Cohesion: 0.06
 Nodes (30): CMS 开发者, Drupal, Drupal：module info.yml, Drupal：Preprocess Hook（主题层）, Drupal：主题 .libraries.yml, Drupal：实现 Hook, Drupal：带无障碍标记的 Twig 模板, Drupal：自定义 Block Plugin (+22 more)
 
-### Community 124 - "._bindElement"
-Cohesion: 0.05
-Nodes (21): Binder, clearGlobalCaches(), createDataNode(), createText(), DataHandler, en(), receiveInstance(), JBig2CCITTFaxImage (+13 more)
+### Community 123 - "d"
+Cohesion: 0.13
+Nodes (36): A(), c(), d(), h(), l(), m(), u(), Cr() (+28 more)
+
+### Community 124 - "warn"
+Cohesion: 0.02
+Nodes (29): AnnotationBorderStyle, AppearanceStreamEvaluator, Catalog, addPageError(), CCITTFaxStream, clearGlobalCaches(), CmykICCBasedCS, EquateRange (+21 more)
 
 ### Community 125 - "关键规则"
 Cohesion: 0.06
@@ -926,9 +1095,9 @@ Nodes (30): BOM 与图纸交付清单, DFMA 评审检查清单, DFMA（面向制
 Cohesion: 0.06
 Nodes (30): DeFi 协议工程, Foundry 测试套件, Gas 优化, Gas 优化模式, Gas 纪律, Hardhat 部署脚本, Solidity 智能合约工程师, UUPS 可升级 Vault 模式 (+22 more)
 
-### Community 127 - "warn"
-Cohesion: 0.03
-Nodes (43): Ht(), addCachedImageOps(), assert(), BaseShading, addPageError(), CheckedOperatorList, ColorSpaceUtils, DummyShading (+35 more)
+### Community 127 - "CalRGBCS"
+Cohesion: 0.11
+Nodes (4): CalGrayCS, CalRGBCS, DeviceCmykCS, LabCS
 
 ### Community 128 - "语音 AI 集成工程师"
 Cohesion: 0.06
@@ -938,21 +1107,21 @@ Nodes (30): Whisper 模型优化与部署, 🚨 关键规则, 后处理流水线
 Cohesion: 0.06
 Nodes (30): Forecast 准确度与承诺纪律, Pipeline Review 作为辅导载体, Pipeline Review 框架, Pipeline Review 的诚信, 你的身份与记忆, 关键规则, 单子策略与准备, 学习与记忆 (+22 more)
 
-### Community 130 - "PDFImage"
-Cohesion: 0.13
-Nodes (4): convertBlackAndWhiteToRGBA(), convertToRGBA(), ImageResizer, PDFImage
+### Community 130 - "Builder"
+Cohesion: 0.20
+Nodes (3): Builder, Empty, UnknownNamespace
 
-### Community 131 - "find"
-Cohesion: 0.08
-Nodes (11): find(), FontFinder, FontInfo, FontSelector, makeObj(), PageSet, selectFont(), serializeFontFamily() (+3 more)
+### Community 131 - "Finding Animation Opportunities"
+Cohesion: 0.12
+Nodes (16): 1. Frequency — how often will a user see this?, 2. Purpose — why does this animate?, 3. Speed — can it stay inside budget?, 4. Function — does motion help or hinder here?, Finding Animation Opportunities, Hard Rules, Initial Response, Operating Posture (+8 more)
 
 ### Community 132 - "核心使命"
 Cohesion: 0.07
 Nodes (29): Stream 模式机器人, Token 管理与请求封装, 你的身份与记忆, 关键规则, 回调签名验证, 宜搭低代码平台集成, 审批流与 OA 自动化, 审批流集成 (+21 more)
 
-### Community 133 - ".checkAndRepair"
-Cohesion: 0.04
-Nodes (30): adjustMapping(), CFFFont, CompositeGlyph, Contour, createCmapTable(), createNameTable(), createOS2Table(), createPostscriptName() (+22 more)
+### Community 133 - ".add"
+Cohesion: 0.02
+Nodes (37): CFF, CFFCharset, CFFCompiler, CFFDict, CFFEncoding, CFFFDSelect, CFFHeader, CFFIndex (+29 more)
 
 ### Community 134 - "或"
 Cohesion: 0.07
@@ -1006,9 +1175,9 @@ Nodes (28): SSO 单点登录与身份认证, SSO 扫码登录, Token 管理与 A
 Cohesion: 0.07
 Nodes (28): 1. 音频设计文档, 2. FMOD/Wwise 工程搭建, 3. 音效实现, 4. 音乐集成, 5. 性能分析, Ambisonics 与空间音频渲染, FMOD 事件命名规范, 主机与平台认证 (+20 more)
 
-### Community 148 - "from_pretrained"
-Cohesion: 0.06
-Nodes (52): Ah(), al(), au(), bg(), bu(), $c(), Cg(), choices() (+44 more)
+### Community 148 - "AgentLoop.kt"
+Cohesion: 0.11
+Nodes (26): AgentScreen(), Bundle, Composable, AgentStep, extractFinalAnswer(), extractJsonObjects(), extractToolCall(), Kind (+18 more)
 
 ### Community 149 - "医疗客服专家"
 Cohesion: 0.07
@@ -1018,9 +1187,9 @@ Nodes (28): HIPAA 与合规, 你的身份与记忆, 保险与事前授权支持,
 Cohesion: 0.07
 Nodes (28): 1. 意图定义, 2. 纸面布局, 3. 灰盒（白盒）, 4. 遭遇战调优, 5. 美术交接, 6. 打磨阶段, 你的身份与记忆, 关卡设计师 (+20 more)
 
-### Community 151 - "st"
-Cohesion: 0.40
-Nodes (6): st(), ct(), i(), ot(), st(), st()
+### Community 151 - "Expo Animation Recipes"
+Cohesion: 0.13
+Nodes (13): Bottom sheet you can drag to dismiss, Collapsing header on scroll, Expo Animation Recipes, Firing something once at a threshold, Keyboard-synced UI, List entrances, Press feedback, Screen transitions (Expo Router) (+5 more)
 
 ### Community 152 - "LSP 索引工程师"
 Cohesion: 0.07
@@ -1029,6 +1198,10 @@ Nodes (28): graphd 核心架构, LSP 协议合规, LSP 协议精通, LSP 客户�
 ### Community 153 - "macOS Metal 空间工程师"
 Cohesion: 0.07
 Nodes (28): macOS Metal 空间工程师, Metal 性能优化, Metal 性能精通, Metal 性能要求, Metal 渲染管线, Vision Pro Compositor 集成, Vision Pro 集成规范, 你的身份与记忆 (+20 more)
+
+### Community 154 - "Animation Recipes"
+Cohesion: 0.12
+Nodes (14): Accordion / collapse, Animation Recipes, Button press, Drag to dismiss, Drawer / sheet, Dropdown, popover, menu, select, Masking a crossfade that won't settle, Modal (+6 more)
 
 ### Community 155 - "叙事设计师"
 Cohesion: 0.07
@@ -1042,9 +1215,9 @@ Nodes (28): 1. 物品概念与规格, 2. 建模与 UV, 3. 绑定与笼（分层�
 Cohesion: 0.07
 Nodes (28): 1. 网络架构设计, 2. 核心复制实现, 3. GAS 网络集成, 4. 网络性能分析, 5. 反作弊加固, GameMode / GameState 架构, GAS 复制设置, GAS 多人深入 (+20 more)
 
-### Community 158 - "t"
-Cohesion: 0.04
-Nodes (263): Dh(), Eh(), A(), a(), c(), i(), n(), ae() (+255 more)
+### Community 158 - "Animation Standards Reference"
+Cohesion: 0.12
+Nodes (14): Accessibility, Animation Standards Reference, Asymmetric timing, Cohesion, Debugging (recommend in reviews when feel is uncertain), Duration, Gestures & drag, Interruptibility (+6 more)
 
 ### Community 159 - "Unreal 技术美术"
 Cohesion: 0.07
@@ -1058,9 +1231,9 @@ Nodes (28): 1. 世界规模与网格规划, 2. Landscape 基础, 3. 环境填充
 Cohesion: 0.07
 Nodes (27): 以业务结果为导向, 企业培训课程设计师, 企业学习平台, 你的身份与记忆, 关键规则, 内容开发, 内容质量标准, 合规与伦理 (+19 more)
 
-### Community 162 - "⏱️ Duración Recomendada: 3 Minutos"
-Cohesion: 0.22
-Nodes (8): ⏱️ Duración Recomendada: 3 Minutos, Escena 1: El Problema y Desconexión Total (0:00 - 0:30), Escena 2: Asistente y Conversación Base (0:30 - 1:00), Escena 3: Document RAG con Citaciones Interactivas (1:00 - 1:45), Escena 4: Agente Autónomo y Ejecución de Código Python (1:45 - 2:20), Escena 5: Pack de Supervivencia y Ajustes (2:20 - 2:45), Escena 6: Conclusión y Cierre (2:45 - 3:00), Guion de Demostración — NODO (Hack47 OFFGRID)
+### Community 162 - "SettingsView-CMQRV0GL.js"
+Cohesion: 0.10
+Nodes (45): c(), f(), g(), ge(), he(), hi(), l(), n() (+37 more)
 
 ### Community 163 - "Arquitectura de NODO (100% Offline AI Agent)"
 Cohesion: 0.25
@@ -1106,13 +1279,13 @@ Nodes (27): 你的身份与记忆, 关键规则, 创造记忆点, 品牌个性�
 Cohesion: 0.07
 Nodes (27): CI/CD 卓越能力, CI/CD 流水线架构, DevOps 自动化师智能体人设, 交付物模板, 优化运维与成本, 你的身份与记忆, 保障系统可靠性与可扩展性, 可观测性专业能力 (+19 more)
 
-### Community 174 - "Icon"
-Cohesion: 0.14
-Nodes (16): nodo_src_index, Citation, ToolCall, ErrorBoundary, Props, State, Icon(), IconName (+8 more)
+### Community 174 - "nodo/src/App.tsx"
+Cohesion: 0.06
+Nodes (42): App(), CodeView, LibraryView, ModelsView, NotesView, SettingsView, TABS, View (+34 more)
 
-### Community 175 - "XhtmlObject"
-Cohesion: 0.14
-Nodes (5): I, ol, P, ul, XhtmlObject
+### Community 175 - "Feeling Native On Mobile"
+Cohesion: 0.15
+Nodes (9): Baseline, Feeling Native On Mobile, Hard Rules, Initial Response, Operating Posture, Output, The Symptom Table, Tone (+1 more)
 
 ### Community 176 - "快速原型师 Agent 人格"
 Cohesion: 0.07
@@ -1122,9 +1295,9 @@ Nodes (27): 以极速构建功能原型, 优化学习和迭代, 你的交付物�
 Cohesion: 0.07
 Nodes (27): AI/LLM 应用安全, CI/CD 安全管道, 事件响应, 云与基础设施安全, 你必须遵守的关键规则, 你的工作流程, 你的技术交付物, 你的核心使命 (+19 more)
 
-### Community 178 - "me"
+### Community 178 - "Write Swift"
 Cohesion: 0.09
-Nodes (30): _e(), me(), d(), d(), _e(), n(), ke(), L() (+22 more)
+Nodes (22): 10. ARC and object lifetime, 11. Testing — Swift Testing by default, 12. Macros, 14. Unsafe code and interop, 15. Modern syntax you should be using, 16. Migrating an existing codebase to Swift 6, 1. Model data with value types, 2. Errors and optionals — make the failure paths visible (+14 more)
 
 ### Community 179 - "NODO — 100% Offline AI Agent (Hack47 OFFGRID)"
 Cohesion: 0.40
@@ -1174,9 +1347,13 @@ Nodes (27): Crisis Communications 框架, Executive Thought Leadership 框架, M
 Cohesion: 0.07
 Nodes (27): 你的身份与记忆, 关键规则, 内容策略, 合规红线, 工作流程, 平台思维, 微博广告投放, 微博电商 (+19 more)
 
-### Community 191 - "ke"
+### Community 191 - "TextMeasure"
 Cohesion: 0.29
-Nodes (8): appendEmptyThinkingReplyHeader(), appendReplyHeader(), finishReply(), getPromptArray(), getPromptArrayInternal(), getPromptArrayLastRound(), ke(), r()
+Nodes (3): layoutText(), stripQuotes(), TextMeasure
+
+### Community 192 - "pyodide_js_init"
+Cohesion: 0.03
+Nodes (56): capture_stderr(), pyodide_js_init(), ae(), ao(), At(), bn(), bo(), Cr() (+48 more)
 
 ### Community 193 - "房地产经纪助手"
 Cohesion: 0.07
@@ -1426,10 +1603,6 @@ Nodes (24): 交付物模板, 以人为本的设计, 你的身份与记忆, 全�
 Cohesion: 0.08
 Nodes (23): 1. 流程概述, 2. 审计评估, 3. 裁决, 4. 理由, 5. 推荐架构, 6. 实施标准, 7. 前提条件和风险, n8n 工作流标准 (+15 more)
 
-### Community 255 - ".constructor"
-Cohesion: 0.20
-Nodes (4): ARCFourCipher, calculateMD5(), CipherTransformFactory, PasswordException
-
 ### Community 256 - "AI 数据修复工程师智能体"
 Cohesion: 0.08
 Nodes (23): AI 修复层, AI 数据修复工程师智能体, 📋 你的专业技术栈, 🔄 你的工作流程, 🎯 你的成功指标, 🎯 你的核心使命, 💭 你的沟通风格, 🧠 你的身份与记忆 (+15 more)
@@ -1499,12 +1672,12 @@ Cohesion: 0.08
 Nodes (23): 你的"自动失败"触发条件, 你的强制性流程, 你的成功指标, 你的核心使命, 你的沟通风格, 你的身份与记忆, 你的集成报告模板, 你的集成测试方法论 (+15 more)
 
 ### Community 273 - "多平台发布编排官"
-Cohesion: 0.09
-Nodes (20): fonts_Glyph, 🚨 你必须遵守的关键规则, 🔄 你的工作流程, 🎯 你的成功指标, 📋 你的技术交付物, 🎯 你的核心使命, 💭 你的沟通风格, 🧠 你的身份与记忆 (+12 more)
+Cohesion: 0.11
+Nodes (18): 🚨 你必须遵守的关键规则, 🔄 你的工作流程, 🎯 你的成功指标, 📋 你的技术交付物, 🎯 你的核心使命, 💭 你的沟通风格, 🧠 你的身份与记忆, 多平台发布编排官 (+10 more)
 
-### Community 274 - ".getTextContent"
-Cohesion: 0.09
-Nodes (21): BaseLocalCache, GlobalColorSpaceCache, LocalGStateCache, LocalImageCache, LocalTilingPatternCache, addFakeSpaces(), appendEOL(), applyInverseRotation() (+13 more)
+### Community 274 - "render"
+Cohesion: 0.06
+Nodes (49): Nr(), addEditor(), addLinkAnnotations(), applyToColor(), _bindJSAction(), _bindLink(), _bindNamedAction(), _bindResetFormAction() (+41 more)
 
 ### Community 275 - "FPGA/ASIC 数字设计工程师"
 Cohesion: 0.09
@@ -1542,9 +1715,9 @@ Nodes (22): 你的身份与记忆, 关键规则, 关键词研究模板, 内容�
 Cohesion: 0.09
 Nodes (22): 你的身份与记忆, 关键规则, 利润管控, 各平台核心规则, 合规要求, 商品上架优化清单, 多平台差异化运营, 大促作战地图 (+14 more)
 
-### Community 284 - "pr"
-Cohesion: 0.40
-Nodes (4): fromGpuBuffer(), pr(), wr(), PsArgNode
+### Community 284 - "serialize"
+Cohesion: 0.08
+Nodes (27): addCommentButton(), addCommentButtonInToolbar(), addEditToolbar(), addStandaloneCommentButton(), comment(), commentButtonColor(), convert(), copy() (+19 more)
 
 ### Community 285 - "微信公众号管理"
 Cohesion: 0.09
@@ -1562,10 +1735,6 @@ Nodes (22): 你的身份与记忆, 关键规则, 内容标准, 内容策略文�
 Cohesion: 0.09
 Nodes (22): Meta 创意策略, Performance Max 素材, RSA 创意方案, RSA 架构设计, 专项技能, 你的身份与记忆, 关键规则, 创意测试 (+14 more)
 
-### Community 289 - "constructor"
-Cohesion: 0.08
-Nodes (40): constructor(), et(), getInputData(), getRequiredVMFunctionByName(), getVMFunctionAvailability(), He(), loadVMFunctionRegistry(), lt() (+32 more)
-
 ### Community 290 - "搜索词分析师"
 Cohesion: 0.09
 Nodes (22): 专项技能, 你的身份与记忆, 关键规则, 匹配类型优化, 否定关键词架构, 工作流程, 意图分类, 成功指标 (+14 more)
@@ -1582,13 +1751,13 @@ Nodes (22): 专业能力与交付物, 产出导向, 会议分类与标准化设�
 Cohesion: 0.09
 Nodes (22): 1. 文档分析, 2. 准备术语, 3. 执行翻译, 4. 技术校对, 5. 质量审查, 专业翻译示例, 代码相关, 你的身份与记忆 (+14 more)
 
-### Community 294 - "ColorSpace"
-Cohesion: 0.07
-Nodes (8): buildMeshVertexData(), ColorSpace, DeviceGrayCS, DeviceRgbCS, getB(), MeshShading, MeshStreamReader, PatternCS
+### Community 294 - "#i"
+Cohesion: 0.05
+Nodes (58): Styling — the escalation ladder, 5. Tap feels laggy, A(), abort(), _abortOperatorList(), _abortRequest(), addCommands(), addNativeFontFace() (+50 more)
 
-### Community 295 - "Value"
-Cohesion: 0.09
-Nodes (6): Caption, Draw, Field, Image, _setValue(), Value
+### Community 295 - ".push"
+Cohesion: 0.03
+Nodes (62): addChildren(), AnnotationFactory, addPageDict(), appendIfJavaScriptDict(), parseNestedOrder(), parseOnOff(), parseOrder(), _collectAction() (+54 more)
 
 ### Community 296 - "学习规划师"
 Cohesion: 0.09
@@ -1730,9 +1899,9 @@ Nodes (19): A-Frame 组件化 XR 场景, WebXR 会话初始化与手部追踪, X
 Cohesion: 0.10
 Nodes (19): XR 界面架构师, 为 XR 平台设计空间直觉化的用户体验, 你的身份与记忆, 关键规则, 原型验证纪律, 多模态输入状态机, 工作流程, 成功指标 (+11 more)
 
-### Community 332 - "LabCS"
-Cohesion: 0.14
-Nodes (3): CalGrayCS, DeviceCmykCS, LabCS
+### Community 332 - "FormatError"
+Cohesion: 0.04
+Nodes (34): addHex(), BinaryCMapReader, BinaryCMapStream, Cmd, createBuiltInCMap(), EvaluatorPreprocessor, expectInt(), expectString() (+26 more)
 
 ### Community 333 - "内容创作者"
 Cohesion: 0.11
@@ -1790,17 +1959,25 @@ Nodes (17): MCP 工具测试框架, MCP 构建器, Python MCP 服务器, 关键�
 Cohesion: 0.11
 Nodes (17): Bug 报告模板, 你的身份与记忆, 关键规则, 复现与验证, 工作流程, 成功指标, 技术交付物, 核心使命 (+9 more)
 
-### Community 347 - "SimpleDOMNode"
-Cohesion: 0.15
-Nodes (3): DatasetXMLParser, SimpleDOMNode, SimpleXMLParser
+### Community 347 - "LiteRtLmEngine.kt"
+Cohesion: 0.05
+Nodes (33): GenerationStats, InferenceEngine, InferenceManager, Context, Context, LiteRtLmEngine, Context, LlamaCppEngine (+25 more)
 
 ### Community 348 - "养殖档案核对员"
 Cohesion: 0.12
 Nodes (16): 中文表述模板, 你的身份与记忆, 关键规则, 养殖档案核对员, 子表独立核对, 工作流程, 成功指标, 批号先进先出 (+8 more)
 
-### Community 350 - "calculateSHA512"
-Cohesion: 0.32
-Nodes (8): calculateSHA512(), ch(), littleSigma(), littleSigmaPrime(), maj(), sigma(), sigmaPrime(), Word64
+### Community 349 - "dependencies"
+Cohesion: 0.11
+Nodes (18): dependencies, dexie, dexie-react-hooks, @fontsource/jetbrains-mono, @fontsource/space-grotesk, @fontsource-variable/inter, framer-motion, @huggingface/transformers (+10 more)
+
+### Community 350 - "generate"
+Cohesion: 0.07
+Nodes (60): add(), bu(), CO(), Cu(), Dg(), Dh(), dispose(), Eg() (+52 more)
+
+### Community 351 - "FontSelector"
+Cohesion: 0.22
+Nodes (3): FontInfo, FontSelector, selectFont()
 
 ### Community 352 - "人类学家智能体人格"
 Cohesion: 0.12
@@ -1838,25 +2015,21 @@ Nodes (15): ESN 利润架构, ESN 层级分类, 💬 你的沟通风格, 🧠 �
 Cohesion: 0.12
 Nodes (15): Agentforce 架构, Governor Limit 预算, 何时使用 Platform Events vs. Change Data Capture, 🚨 你必须遵守的关键规则, 🔄 你的工作流程, 🎯 你的成功指标, 📋 你的技术交付物, 🎯 你的核心使命 (+7 more)
 
-### Community 361 - "cachePut"
-Cohesion: 0.22
-Nodes (15): c(), cacheMatch(), cachePut(), _ensureResponseSafeToCache(), f(), fetch(), getCacheKey(), handle() (+7 more)
-
 ### Community 362 - "数据整合师"
 Cohesion: 0.13
 Nodes (14): 仪表盘 JSON 输出格式, 仪表盘数据整合引擎, 关键规则, 工作流程, 成功指标, 技术交付物, 数据整合师, 核心使命 (+6 more)
 
-### Community 363 - "OrgScript 工程师"
-Cohesion: 0.13
-Nodes (14): OrgScript 工具链开发, OrgScript 工程师, OrgScript 流程示例, 业务逻辑建模, 严格的语言语义, 🚨 你必须遵守的关键规则, 🎯 你的成功指标, 📋 你的技术交付物 (+6 more)
+### Community 363 - "calculateSHA512"
+Cohesion: 0.05
+Nodes (35): AES128Cipher, AES256Cipher, AESBaseCipher, calculateSHA384(), calculateSHA512(), ch(), littleSigma(), littleSigmaPrime() (+27 more)
 
 ### Community 364 - "销售数据提取师"
 Cohesion: 0.13
 Nodes (14): 代码示例：列名模糊匹配, 代码示例：幂等导入, 关键规则, 工作流程, 常见陷阱与防御, 成功指标, 技术交付物, 指标提取 (+6 more)
 
-### Community 365 - "Builder"
-Cohesion: 0.20
-Nodes (3): Builder, Empty, UnknownNamespace
+### Community 365 - "compilerOptions"
+Cohesion: 0.11
+Nodes (17): compilerOptions, allowImportingTsExtensions, isolatedModules, jsx, lib, module, moduleResolution, noEmit (+9 more)
 
 ### Community 366 - "📣 首席营销官"
 Cohesion: 0.14
@@ -1898,29 +2071,37 @@ Nodes (12): 1. 检验简报, 2. 定义章节意图, 3. 以第一人称撰写, 4.
 Cohesion: 0.15
 Nodes (12): 🚨 你必须遵守的关键规则, 🔄 你的工作流程, 🎯 你的成功指标, 📋 你的技术交付物, 🎯 你的核心使命, 💭 你的沟通风格, 🧠 你的身份与记忆, 内部模拟（伪代码） (+4 more)
 
-### Community 376 - "AESBaseCipher"
-Cohesion: 0.21
-Nodes (3): AES128Cipher, AES256Cipher, AESBaseCipher
+### Community 377 - "a"
+Cohesion: 0.16
+Nodes (42): be(), Bi(), co(), Cr(), Dr(), eh(), eo(), fh() (+34 more)
 
 ### Community 378 - "自主优化架构师"
 Cohesion: 0.17
 Nodes (11): 与现有角色的区别, 你的身份与记忆, 关键规则, 学习与记忆, 工作流程, 成功指标, 技术交付物, 核心使命 (+3 more)
 
-### Community 379 - "Datasets"
-Cohesion: 0.20
-Nodes (4): hf(), Datasets, datasets_Data, DatasetsNamespace
+### Community 380 - "push"
+Cohesion: 0.05
+Nodes (86): AA(), _apply_and_filter_by_delay_pattern_mask(), applyFilter(), As(), au(), bindMacroArguments(), bl(), __bool__() (+78 more)
 
-### Community 381 - "._hash"
-Cohesion: 0.35
-Nodes (4): calculateSHA384(), PDF17, PDF20, PDFBase
+### Community 381 - "www/pyodide/pyodide.js"
+Cohesion: 0.11
+Nodes (19): Ae(), Wr(), B(), De(), $e(), ge(), ke(), Me() (+11 more)
 
-### Community 382 - "Pu"
-Cohesion: 0.33
-Nodes (10): du(), fl(), Fu(), ju(), lf(), Nu(), Pu(), sf() (+2 more)
+### Community 382 - ".getUint16"
+Cohesion: 0.04
+Nodes (33): buildComponentData(), parseOperand(), CompositeGlyph, Contour, decodeScan(), decodeBlock(), decodeHuffman(), decodeMcu() (+25 more)
 
-### Community 385 - "XhtmlNamespace"
-Cohesion: 0.20
-Nodes (3): Li, Sup, XhtmlNamespace
+### Community 383 - "PDFDocument"
+Cohesion: 0.05
+Nodes (5): FontFinder, LocalPdfManager, makeObj(), PDFDocument, XFAFactory
+
+### Community 384 - "asyncGenerate"
+Cohesion: 0.16
+Nodes (28): acquire(), asyncGenerate(), chatCompletion(), completion(), ct(), decode(), _generate(), getCurRoundDecodingTotalTime() (+20 more)
+
+### Community 385 - ".success"
+Cohesion: 0.05
+Nodes (42): applyAssist(), ariaLabel(), Border, BreakAfter, Caption, CheckButton, checkDimensions(), ChoiceList (+34 more)
 
 ### Community 386 - "marketing-ai-citation-strategist.md"
 Cohesion: 0.20
@@ -1934,17 +2115,17 @@ Nodes (10): 1. 不再把所有结果都叫“Citation”, AI Referral, Brand Men
 Cohesion: 0.20
 Nodes (9): 会议纪要专家, 你必须遵守的关键规则, 你的工作流程, 你的核心使命, 学习与记忆, 成功指标, 技术交付物, 沟通风格 (+1 more)
 
-### Community 389 - "calculateSHA256"
-Cohesion: 0.31
-Nodes (8): calculate_sha256_ch(), calculate_sha256_littleSigma(), calculate_sha256_littleSigmaPrime(), calculate_sha256_maj(), calculate_sha256_sigma(), calculate_sha256_sigmaPrime(), calculateSHA256(), rotr()
+### Community 389 - "The list"
+Cohesion: 0.18
+Nodes (10): Charts, Common mismatches to catch, How to use this, Initial Response, Interaction & performance, Motion & visuals, Picking The Right Library, State & styling (+2 more)
 
-### Community 390 - "Script"
-Cohesion: 0.29
-Nodes (6): Script, DataStore 标准, RemoteEvent / RemoteFunction 规则, 关键规则, 客户端-服务端安全模型, 模块架构
+### Community 390 - "public/pyodide/pyodide.js"
+Cohesion: 0.11
+Nodes (19): Ae(), Wr(), B(), De(), $e(), ge(), ke(), Me() (+11 more)
 
-### Community 391 - "IMPROVEMENTS LOG — Jinx"
-Cohesion: 0.25
-Nodes (7): Ciclo 1 (2026-10-06) — seguridad + accesibilidad (agentes: security-engineer, accessibility-auditor), Ciclo 2 — UI/perf (agentes: frontend-developer, mobile-app-builder, code-reviewer), Ciclo 3 — auditoría lifecycle/batería + bug de concurrencia (agentes: code-reviewer, mobile-app-builder), Ciclo 4 — robustez de arranque (agentes: code-reviewer, sre), Ciclo 5 — pendiente (rotar a: ux-architect, performance-benchmarker, security-engineer re-auditoría), Ideas pendientes, IMPROVEMENTS LOG — Jinx
+### Community 391 - "Gesture and Drag Interactions"
+Cohesion: 0.33
+Nodes (6): Damping at boundaries, Friction instead of hard stops, Gesture and Drag Interactions, Momentum-based dismissal, Multi-touch protection, Pointer capture for drag
 
 ### Community 392 - "GEO 可控杠杆"
 Cohesion: 0.25
@@ -1954,9 +2135,21 @@ Nodes (8): 1. Retrieval Eligibility, 2. Entity Clarity, 3. Answerability, 4. Evi
 Cohesion: 0.25
 Nodes (8): Phase 0 — Discovery, Phase 1 — Technical AI Discoverability, Phase 2 — Prompt Baseline, Phase 3 — Competitor & Source Analysis, Phase 4 — Fix Pack, Phase 5 — Recheck, Phase 6 — Business Attribution, 标准工作流程
 
-### Community 394 - "postMessage"
-Cohesion: 0.52
-Nodes (7): embed(), embedBatch(), getWorker(), init(), postMessage(), resetWorker(), run()
+### Community 395 - "abort"
+Cohesion: 0.08
+Nodes (26): abort(), assert(), ___assert_fail(), _emscripten_get_compiler_setting(), _emscripten_glVertexPointer(), _emscripten_promise_await(), getValue(), _Mix_FadeInChannelTimed() (+18 more)
+
+### Community 396 - "router.ts"
+Cohesion: 0.14
+Nodes (19): detectLanguage(), ExtractedCodeResult, isCodeGenQuery(), SupportedLanguage, CODEGEN_SYSTEM_PROMPT, COMPLEX_CANDIDATES, FAST_CANDIDATES, isCodeOrTechnical() (+11 more)
+
+### Community 397 - "abort"
+Cohesion: 0.08
+Nodes (26): abort(), assert(), ___assert_fail(), _emscripten_get_compiler_setting(), _emscripten_glVertexPointer(), _emscripten_promise_await(), getValue(), _Mix_FadeInChannelTimed() (+18 more)
+
+### Community 398 - "addEventListener"
+Cohesion: 0.11
+Nodes (23): addEventListener(), ae(), combinedSignal(), _commonActions(), dblclick(), de(), enterInEditMode(), finalizeDraw() (+15 more)
 
 ### Community 399 - "架构评审清单"
 Cohesion: 0.29
@@ -1970,9 +2163,9 @@ Nodes (6): Communication Style, Learning & Accumulation, Pattern Recognition, Re
 Cohesion: 0.29
 Nodes (6): 你的身份与记忆, 学习与积累, 成功指标, 招聘运营专家, 模式识别, 沟通风格
 
-### Community 403 - "_awaitComplete"
-Cohesion: 0.40
-Nodes (6): _awaitComplete(), destroy(), doneWaiting(), _getResponse(), handleAll(), runCallbacks()
+### Community 402 - "SettingsView.tsx"
+Cohesion: 0.09
+Nodes (39): fe(), setSetting(), Listener, llm, LLMState, LLMStatus, LoadProgress, detectHardware() (+31 more)
 
 ### Community 404 - "🔍 鉴定评估师"
 Cohesion: 0.33
@@ -2006,9 +2199,21 @@ Nodes (6): 中国劳动法合规, 劳动合同法核心要点, 社保公积金�
 Cohesion: 0.33
 Nodes (5): 🚨 你必须遵守的关键规则, 💭 你的沟通风格, 🧠 你的身份与记忆, 🧳 旅行规划师, 核心能力
 
-### Community 412 - "aria-inputs.js"
-Cohesion: 0.33
-Nodes (4): ref_fs, fs, map, fs
+### Community 412 - "ref_fs"
+Cohesion: 0.22
+Nodes (6): ref_fs, fs, map, fs, fs, s
+
+### Community 413 - "F"
+Cohesion: 0.16
+Nodes (19): asyncLoadWebGPUPipelines(), At(), F(), getGPUVendor(), getMaxStorageBufferBindingSize(), interruptGenerate(), jt(), kt() (+11 more)
+
+### Community 415 - "Overflow"
+Cohesion: 0.25
+Nodes (5): Troubleshooting, Failure signatures, Phase 4 — Break it, Truncate, wrap, or clamp, Overflow
+
+### Community 417 - "createWasm"
+Cohesion: 0.12
+Nodes (17): applySignatureConversions(), assignWasmExports(), createWasm(), receiveInstance(), receiveInstantiationResult(), _emscripten_notify_memory_growth(), findWasmBinary(), getBinarySync() (+9 more)
 
 ### Community 418 - "Human-in-the-Loop（HITL）门控设计"
 Cohesion: 0.40
@@ -2017,10 +2222,6 @@ Nodes (5): HITL 界面要求, HITL 门控放置框架, Human-in-the-Loop（HITL�
 ### Community 419 - "故障模式工程"
 Cohesion: 0.40
 Nodes (5): 兜底链设计（Fallback Chain）, 回滚与恢复（Rollback & Recovery）, 故障分类, 故障模式工程, 熔断器模式（Circuit Breaker）
-
-### Community 420 - "🔄 你的工作流程"
-Cohesion: 0.40
-Nodes (5): 🔄 你的工作流程, 第一步：流程分析与语法检查, 第三步：校验与规范化格式, 第二步：实现与代码生成, 第四步：导出生成
 
 ### Community 421 - "Onboarding Management"
 Cohesion: 0.40
@@ -2061,6 +2262,14 @@ Nodes (5): 工作流程, 第一步：需求确认与岗位分析, 第三步：�
 ### Community 430 - "面试流程设计"
 Cohesion: 0.40
 Nodes (5): 技术面试, 结构化面试, 群面/无领导小组讨论, 行为面试（STAR法）, 面试流程设计
+
+### Community 432 - "W"
+Cohesion: 0.10
+Nodes (33): location(), z(), A(), __emscripten_system(), qn(), _r(), G(), K() (+25 more)
+
+### Community 433 - "Performance Rules"
+Cohesion: 0.33
+Nodes (6): CSS animations beat JS under load, CSS variables are inheritable, Framer Motion hardware acceleration caveat, Only animate transform and opacity, Performance Rules, Use WAAPI for programmatic CSS animations
 
 ### Community 434 - "评测框架"
 Cohesion: 0.50
@@ -2122,6 +2331,18 @@ Nodes (4): 招聘渠道运营, 核心使命, 简历筛选与人才评估, 职位
 Cohesion: 0.50
 Nodes (4): 猎头渠道选择, 猎头管理, 费率谈判, 高端岗位定向猎聘
 
+### Community 449 - "fix-imports.js"
+Cohesion: 0.29
+Nodes (6): fs, have, idx, lines, missing, need
+
+### Community 450 - "ENGINE.md — Decisión de motor de IA local"
+Cohesion: 0.40
+Nodes (4): Decisión, Diagnóstico del 0% "Start to fetch params" (WebLLM 0.2.85), ENGINE.md — Decisión de motor de IA local, Modelos (GGUF, HTTPS, hash verificado)
+
+### Community 452 - "pdf-K0DICxDV.js"
+Cohesion: 0.01
+Nodes (111): addChangedExistingAnnotation(), addContainer(), addDeletedAnnotationElement(), addHighlightHCMFilter(), addSelectionFilter(), addSelectionHCMFilter(), _allowedHtmlElements(), _allowedRichTextAttributes() (+103 more)
+
 ### Community 453 - "交付模板"
 Cohesion: 0.67
 Nodes (3): AI Visibility Audit, Run-Level Log, 交付模板
@@ -2138,25 +2359,397 @@ Nodes (3): Recruitment Data Analytics, Recruitment Funnel Analysis, Recruitment 
 Cohesion: 0.67
 Nodes (3): 招聘健康度看板, 招聘数据分析, 招聘漏斗分析
 
+### Community 459 - "Building Animations"
+Cohesion: 0.15
+Nodes (13): 1. Should this animate at all?, 2. What is the purpose?, 3. Pick the tool — cheapest that works, 6. Interruption and exit, 7. Reduced motion and pointer gating, Building Animations, Hard Rules, Initial Response (+5 more)
+
+### Community 460 - "move-css.js"
+Cohesion: 0.33
+Nodes (5): block, end, fs, s, start
+
+### Community 462 - "createWasm"
+Cohesion: 0.12
+Nodes (17): applySignatureConversions(), assignWasmExports(), createWasm(), receiveInstance(), receiveInstantiationResult(), _emscripten_notify_memory_growth(), findWasmBinary(), getBinarySync() (+9 more)
+
+### Community 463 - "destroy"
+Cohesion: 0.15
+Nodes (17): create_once_callable(), wrapper(), create_promise_handles(), checkUsed(), destroy(), onFulfilled(), onRejected(), createPromising() (+9 more)
+
+### Community 465 - "cut-old-send.js"
+Cohesion: 0.40
+Nodes (4): after, fs, kept, lines
+
+### Community 466 - "finish-gen.js"
+Cohesion: 0.50
+Nodes (4): fs, J(), rep(), s
+
+### Community 467 - "DESIGN-RESOURCES.md — Tabla de recursos de diseño (MISIÓN premium)"
+Cohesion: 0.50
+Nodes (3): DESIGN-RESOURCES.md — Tabla de recursos de diseño (MISIÓN premium), Detalles de nivel total (checklist de implementación), Paleta obligatoria (tokens)
+
+### Community 468 - "deneon.js"
+Cohesion: 0.50
+Nodes (3): files, fs, pairs
+
+### Community 469 - "deneon2.js"
+Cohesion: 0.50
+Nodes (3): files, fs, pairs
+
+### Community 470 - "rebrand.js"
+Cohesion: 0.50
+Nodes (3): files, fs, SKIP
+
+### Community 479 - "Worst-Case Catalog"
+Cohesion: 0.07
+Nodes (25): Collections, Emails, URLs, identifiers, Environment, Images and media, Labels, titles, and copy from data, Numbers and money, States, Time (+17 more)
+
+### Community 481 - "destroy"
+Cohesion: 0.15
+Nodes (17): create_once_callable(), wrapper(), create_promise_handles(), checkUsed(), destroy(), onFulfilled(), onRejected(), createPromising() (+9 more)
+
+### Community 487 - "unreachable"
+Cohesion: 0.02
+Nodes (26): AlternateCS, BasePdfManager, BasePDFStreamRangeReader, BasePDFStreamReader, BaseShading, BaseStream, buildMeshVertexData(), ColorSpace (+18 more)
+
+### Community 489 - "highlightSelection"
+Cohesion: 0.14
+Nodes (15): CMYK_HTML(), CMYK_RGB(), commentSelection(), G_HTML(), getIR(), getSelectionBoxes(), hasTextLayer(), hexNums() (+7 more)
+
+### Community 490 - "LLMClient"
+Cohesion: 0.16
+Nodes (5): handler, LLMClient, loadWebLLM(), toMessage(), @mlc-ai/web-llm
+
+### Community 491 - "Datasets"
+Cohesion: 0.20
+Nodes (4): hf(), Datasets, datasets_Data, DatasetsNamespace
+
+### Community 492 - "registry.ts"
+Cohesion: 0.07
+Nodes (36): AgentStep, extractJson(), normalizeParsedJson(), runAgentLoop(), WEB_TOOL_ALIASES, PythonExecutionResult, pythonRunner, getToolsSystemPromptDescription() (+28 more)
+
+### Community 493 - "Improving Animations"
+Cohesion: 0.18
+Nodes (11): Hard Rules, Improving Animations, Initial Response, Invocation Variants, Operating Posture, Phase 1 — Recon (always first), Phase 2 — Audit (parallel), Phase 3 — Vet, prioritize, confirm (+3 more)
+
+### Community 494 - "_call"
+Cohesion: 0.05
+Nodes (52): add_input_labels(), _build_translation_inputs(), CA(), calc_num_image_tokens_from_image_size(), _call(), _call_moonshine(), _call_supertonic(), _call_text_to_spectrogram() (+44 more)
+
+### Community 495 - ".compile"
+Cohesion: 0.10
+Nodes (13): buildPostScriptWasmFunction(), encodeASCIIString(), interpolate(), lexer_Lexer, parsePostScriptFunction(), PDFFunction, PSStackBasedInterpreter, section() (+5 more)
+
+### Community 496 - "jr"
+Cohesion: 0.21
+Nodes (12): Gr(), jr(), g(), k(), P(), Kr(), u(), zr() (+4 more)
+
+### Community 501 - "ke"
+Cohesion: 0.29
+Nodes (8): appendEmptyThinkingReplyHeader(), appendReplyHeader(), finishReply(), getPromptArray(), getPromptArrayInternal(), getPromptArrayLastRound(), ke(), r()
+
+### Community 502 - "IMPROVEMENTS LOG — Jinx"
+Cohesion: 0.15
+Nodes (12): Ciclo 10 - Premium sobrio (5 recursos + taste-skill), Ciclo 11 - Chat mejorado + tests, Ciclo 1 (2026-10-06) — seguridad + accesibilidad (agentes: security-engineer, accessibility-auditor), Ciclo 2 — UI/perf (agentes: frontend-developer, mobile-app-builder, code-reviewer), Ciclo 3 — auditoría lifecycle/batería + bug de concurrencia (agentes: code-reviewer, mobile-app-builder), Ciclo 4 — robustez de arranque (agentes: code-reviewer, sre), Ciclo 6 — diagnóstico 0% + motor nativo (agentes: mobile-builder, code-reviewer, security-engineer), Ciclo 7 — rediseño total + chat nativo (agentes: frontend-developer, mobile-builder, code-reviewer, a11y) (+4 more)
+
+### Community 503 - "getTypeTag"
+Cohesion: 0.22
+Nodes (9): getTypeTag(), hasMethod(), hasProperty(), JsProxy_Bool_js(), JsProxy_compute_typeflags(), JsvArray_Check(), JsvAsyncGenerator_Check(), JsvGenerator_Check() (+1 more)
+
+### Community 504 - "onmessage"
+Cohesion: 0.53
+Nodes (6): handleTask(), ge(), onmessage(), postMessage(), reloadIfUnmatched(), Xt()
+
+### Community 507 - "schema-CPvCPVj5.js"
+Cohesion: 0.06
+Nodes (93): ei(), Ur(), app_src_main_assets_www_assets_rolldown_runtime_c0fnf6b9_r, a(), ae(), an(), at(), b() (+85 more)
+
+### Community 510 - "o"
+Cohesion: 0.16
+Nodes (37): p(), b(), c(), l(), u(), S(), f(), c() (+29 more)
+
+### Community 512 - "#g"
+Cohesion: 0.05
+Nodes (106): _applySMaskOOBAlpha(), applyToCanvas(), applyToImageData(), applyTransferMapsToBitmap(), applyTransferMapsToCanvas(), areConic(), B(), beginAnnotation() (+98 more)
+
+### Community 513 - "lib-FbOxj-PF.js"
+Cohesion: 0.07
+Nodes (67): acquire(), asyncGenerate(), calculateCropShape(), calculateResizeShape(), chatCompletion(), completion(), computeImageEmbedSize(), constructor() (+59 more)
+
+### Community 514 - "assert"
+Cohesion: 0.09
+Nodes (10): assert(), compileFontInfo(), writeBuffer(), convertBlackAndWhiteToRGBA(), convertToRGBA(), encodeStrings(), ImageResizer, PDFImage (+2 more)
+
+### Community 515 - "getTypeTag"
+Cohesion: 0.22
+Nodes (9): getTypeTag(), hasMethod(), hasProperty(), JsProxy_Bool_js(), JsProxy_compute_typeflags(), JsvArray_Check(), JsvAsyncGenerator_Check(), JsvGenerator_Check() (+1 more)
+
+### Community 516 - ".getTextContent"
+Cohesion: 0.09
+Nodes (21): BaseLocalCache, GlobalColorSpaceCache, LocalGStateCache, LocalImageCache, LocalTilingPatternCache, addFakeSpaces(), appendEOL(), applyInverseRotation() (+13 more)
+
+### Community 517 - "qrGenerator.ts"
+Cohesion: 0.31
+Nodes (9): generateQrMatrix(), generateQrSvg(), GF_EXP, GF_LOG, gfMul(), QrCodeOptions, rsCalculateEC(), rsGeneratorPoly() (+1 more)
+
+### Community 518 - "t"
+Cohesion: 0.08
+Nodes (58): a(), Ee(), r(), i(), n(), c(), i(), o() (+50 more)
+
+### Community 520 - "llm.worker-BrQfiY_G.js"
+Cohesion: 0.05
+Nodes (63): appendEmptyThinkingReplyHeader(), appendMessage(), appendReplyHeader(), calculateCropShape(), calculateResizeShape(), computeImageEmbedSize(), constructor(), curRoundRuntimeStatsText() (+55 more)
+
+### Community 521 - "embedding"
+Cohesion: 0.29
+Nodes (8): embedding(), embedStep(), getCurRoundEmbedTokensPerSec(), getCurRoundEmbedTotalTokens(), k(), Sr(), Ar(), xt()
+
+### Community 522 - "doRun"
+Cohesion: 0.29
+Nodes (7): callMain(), initRuntime(), postRun(), preMain(), preRun(), run(), doRun()
+
+### Community 523 - "_Mix_LoadMUS"
+Cohesion: 0.38
+Nodes (7): _IMG_Load(), _Mix_LoadMUS(), _Mix_LoadMUS_RW(), _Mix_LoadWAV(), _Mix_LoadWAV_RW(), _SDL_FreeRW(), _SDL_RWFromFile()
+
+### Community 524 - "doRun"
+Cohesion: 0.29
+Nodes (7): callMain(), initRuntime(), postRun(), preMain(), preRun(), run(), doRun()
+
+### Community 525 - "_Mix_LoadMUS"
+Cohesion: 0.38
+Nodes (7): _IMG_Load(), _Mix_LoadMUS(), _Mix_LoadMUS_RW(), _Mix_LoadWAV(), _Mix_LoadWAV_RW(), _SDL_FreeRW(), _SDL_RWFromFile()
+
+### Community 526 - "Component Building Principles"
+Cohesion: 0.25
+Nodes (8): Animate enter states with @starting-style, Buttons must feel responsive, Component Building Principles, Make popovers origin-aware, Never animate from scale(0), Tooltips: skip delay on subsequent hovers, Use blur to mask imperfect transitions, Use CSS transitions over keyframes for interruptible UI
+
+### Community 527 - "loop-C5jk66NB.js"
+Cohesion: 0.07
+Nodes (47): a(), app_src_main_assets_www_assets_coderunner_bj2c_hmm_n, o(), app_src_main_assets_www_assets_coderunner_bj2c_hmm_r, s(), app_src_main_assets_www_assets_coderunner_bj2c_hmm_t, d(), D() (+39 more)
+
+### Community 528 - "_pumpOperatorList"
+Cohesion: 0.33
+Nodes (7): _continue(), getOperatorList(), growOperationsCount(), operatorListChanged(), _pumpOperatorList(), _renderPageChunk(), _scheduleNext()
+
+### Community 529 - "Spring Animations"
+Cohesion: 0.40
+Nodes (5): Interruptibility advantage, Spring Animations, Spring-based mouse interactions, Spring configuration, When to use springs
+
+### Community 530 - "T"
+Cohesion: 0.03
+Nodes (155): addAlphaFilter(), addAltText(), addButton(), addButtonBefore(), addColorPicker(), addComment(), addDeleteButton(), addEditSignatureButton() (+147 more)
+
+### Community 531 - "bufferAsUint8Array"
+Cohesion: 0.33
+Nodes (6): bufferAsUint8Array(), JsvBuffer_assignFromPtr(), JsvBuffer_assignToPtr(), JsvBuffer_intoFile(), JsvBuffer_readFromFile(), JsvBuffer_writeToFile()
+
+### Community 532 - "t"
+Cohesion: 0.10
+Nodes (58): p(), Be(), d(), f(), l(), o(), s(), u() (+50 more)
+
+### Community 534 - "normalizeReservedWords"
+Cohesion: 0.33
+Nodes (6): isReservedWord(), JsProxy_DelAttr_js(), JsProxy_Dir_js(), JsProxy_GetAttr_js(), JsProxy_SetAttr_js(), normalizeReservedWords()
+
+### Community 535 - "cleanup"
+Cohesion: 0.47
+Nodes (5): wrap_async_generator(), cleanup(), wrap(), wrap_generator(), wrap()
+
+### Community 536 - "bufferAsUint8Array"
+Cohesion: 0.33
+Nodes (6): bufferAsUint8Array(), JsvBuffer_assignFromPtr(), JsvBuffer_assignToPtr(), JsvBuffer_intoFile(), JsvBuffer_readFromFile(), JsvBuffer_writeToFile()
+
+### Community 537 - "me"
+Cohesion: 0.09
+Nodes (41): ht(), de(), _e(), fe(), ke(), t(), me(), a() (+33 more)
+
+### Community 538 - "add"
+Cohesion: 0.03
+Nodes (97): add(), addEditListeners(), addFakeAnnotation(), addHighlightArea(), addLayer(), addNewEditorFromKeyboard(), addOrRebuild(), addUndoableEditor() (+89 more)
+
+### Community 539 - "normalizeReservedWords"
+Cohesion: 0.33
+Nodes (6): isReservedWord(), JsProxy_DelAttr_js(), JsProxy_Dir_js(), JsProxy_GetAttr_js(), JsProxy_SetAttr_js(), normalizeReservedWords()
+
+### Community 540 - "B"
+Cohesion: 0.08
+Nodes (23): B(), de(), fe(), ce(), de(), le(), Ne(), ue() (+15 more)
+
+### Community 541 - "cleanup"
+Cohesion: 0.47
+Nodes (5): wrap_async_generator(), cleanup(), wrap(), wrap_generator(), wrap()
+
+### Community 542 - "commit"
+Cohesion: 0.13
+Nodes (17): addToAnnotationStorage(), center(), clonePage(), commit(), deleteAnnotationElement(), deletePage(), disableEditing(), disableEditMode() (+9 more)
+
+### Community 543 - "startDrawing"
+Cohesion: 0.05
+Nodes (56): _addDrawingListeners(), addNewEditor(), addPoints(), Be(), build(), buildFocusOutline(), cleanUndoStack(), clear() (+48 more)
+
+### Community 545 - "setGState"
+Cohesion: 0.12
+Nodes (18): _bakeSMaskCanvas(), beginSMaskMode(), checkSMaskState(), _clearPreparedSMask(), _ensurePreparedSMask(), Nn(), _prepareSMaskCanvas(), recordSimpleDataFromNamed() (+10 more)
+
+### Community 546 - "getFullscreenElement"
+Cohesion: 0.40
+Nodes (5): _emscripten_enter_soft_fullscreen(), restoreWindowedState(), fullscreenChange(), getFullscreenElement(), restoreOldStyle()
+
+### Community 548 - "getFullscreenElement"
+Cohesion: 0.40
+Nodes (5): _emscripten_enter_soft_fullscreen(), restoreWindowedState(), fullscreenChange(), getFullscreenElement(), restoreOldStyle()
+
+### Community 549 - "tt"
+Cohesion: 0.06
+Nodes (20): g(), nt(), Se(), te(), wr(), x(), tt(), Er() (+12 more)
+
+### Community 550 - "getTextContent"
+Cohesion: 0.33
+Nodes (6): getTextContent(), getXfa(), shouldBuildText(), streamTextContent(), textContent(), i()
+
+### Community 551 - "me"
+Cohesion: 0.09
+Nodes (30): _e(), me(), d(), d(), _e(), n(), ke(), L() (+22 more)
+
+### Community 552 - "DownloadService"
+Cohesion: 0.08
+Nodes (22): activitymanager, DownloadService, Context, LocalBinder, Context, componentname, connectivitymanager, IBinder (+14 more)
+
+### Community 553 - "it"
+Cohesion: 0.06
+Nodes (29): appendMessage(), g(), bt(), k(), Se(), Ft(), it(), Ft() (+21 more)
+
+### Community 554 - "python.worker-BAqkQJVF.js"
+Cohesion: 0.09
+Nodes (29): be(), ce(), D(), de(), _e(), G(), ge(), he() (+21 more)
+
+### Community 556 - "Nt"
+Cohesion: 0.10
+Nodes (25): K(), Nt(), ai(), bi(), ci(), di(), fi(), gi() (+17 more)
+
+### Community 557 - "qe"
+Cohesion: 0.08
+Nodes (24): bt, Ft(), I(), It, mt, P, qe(), be() (+16 more)
+
+### Community 558 - "enterTask"
+Cohesion: 0.50
+Nodes (4): enterTask(), evictStackUpTo(), we(), setStackPosition()
+
+### Community 559 - "ffi_prep_closure_loc_js"
+Cohesion: 0.50
+Nodes (3): ffi_call_js(), ffi_prep_closure_loc_js(), unbox_small_structs()
+
+### Community 560 - "_strptime"
+Cohesion: 0.50
+Nodes (3): _strptime(), initDate(), _strptime_l()
+
+### Community 561 - "enterTask"
+Cohesion: 0.50
+Nodes (4): enterTask(), evictStackUpTo(), we(), setStackPosition()
+
+### Community 562 - "f"
+Cohesion: 0.16
+Nodes (10): a(), c(), d(), f(), h(), m(), p(), f() (+2 more)
+
+### Community 563 - "ffi_prep_closure_loc_js"
+Cohesion: 0.50
+Nodes (3): ffi_call_js(), ffi_prep_closure_loc_js(), unbox_small_structs()
+
+### Community 564 - "_strptime"
+Cohesion: 0.50
+Nodes (3): _strptime(), initDate(), _strptime_l()
+
+### Community 567 - "_emscripten_request_animation_frame_loop"
+Cohesion: 1.00
+Nodes (3): _emscripten_request_animation_frame_loop(), tick(), tick()
+
+### Community 568 - "getLEB"
+Cohesion: 1.00
+Nodes (3): getLEB(), getString(), getStringList()
+
+### Community 569 - "getWasmTrampolineModule"
+Cohesion: 0.67
+Nodes (3): getPyEMTrampolinePtr(), getWasmTrampolineModule(), hexStringToUTF8Array()
+
+### Community 570 - "p"
+Cohesion: 0.15
+Nodes (15): a(), c(), d(), f(), h(), m(), p(), f() (+7 more)
+
+### Community 571 - "_SDL_ConvertSurface"
+Cohesion: 0.67
+Nodes (3): _SDL_ConvertSurface(), _SDL_DisplayFormat(), _SDL_DisplayFormatAlpha()
+
+### Community 572 - "_emscripten_request_animation_frame_loop"
+Cohesion: 1.00
+Nodes (3): _emscripten_request_animation_frame_loop(), tick(), tick()
+
+### Community 573 - "getLEB"
+Cohesion: 1.00
+Nodes (3): getLEB(), getString(), getStringList()
+
+### Community 574 - "getWasmTrampolineModule"
+Cohesion: 0.67
+Nodes (3): getPyEMTrampolinePtr(), getWasmTrampolineModule(), hexStringToUTF8Array()
+
+### Community 575 - ".getOperatorList"
+Cohesion: 0.02
+Nodes (42): addCachedImageOps(), Annotation, argIsDict(), CheckedOperatorList, CMapFactory, EvalState, fetchBinaryData(), getColorConversionBatchSize() (+34 more)
+
+### Community 576 - "_SDL_ConvertSurface"
+Cohesion: 0.67
+Nodes (3): _SDL_ConvertSurface(), _SDL_DisplayFormat(), _SDL_DisplayFormatAlpha()
+
+### Community 577 - "devDependencies"
+Cohesion: 0.12
+Nodes (16): devDependencies, oxlint, tailwindcss, @tailwindcss/vite, @types/node, @types/react, @types/react-dom, typescript (+8 more)
+
+### Community 580 - "processDrawnLines"
+Cohesion: 0.25
+Nodes (8): createBezierPoints(), extractContoursFromText(), getDrawnSignature(), getFromImage(), getFromText(), getSignaturePreview(), process(), processDrawnLines()
+
+### Community 581 - "st"
+Cohesion: 0.40
+Nodes (6): st(), ct(), i(), ot(), st(), st()
+
+### Community 582 - "The Sonner Principles (Building Loved Components)"
+Cohesion: 0.40
+Nodes (5): Asymmetric enter/exit timing, Cohesion matters, Review your work the next day, The opacity + height combination, The Sonner Principles (Building Loved Components)
+
+### Community 583 - "fe"
+Cohesion: 0.26
+Nodes (13): ce(), he(), le(), fe(), Ge(), he(), K(), Pe() (+5 more)
+
+### Community 584 - "Pr"
+Cohesion: 0.12
+Nodes (17): er(), gt(), hn(), Hr(), Ir(), jn(), kn(), mr() (+9 more)
+
+### Community 587 - "Script"
+Cohesion: 0.29
+Nodes (6): Script, DataStore 标准, RemoteEvent / RemoteFunction 规则, 关键规则, 客户端-服务端安全模型, 模块架构
+
+### Community 588 - "The Animation Decision Framework"
+Cohesion: 0.33
+Nodes (6): 1. Should this animate at all?, 2. What is the purpose?, 3. What easing should it use?, 4. How fast should it be?, Perceived performance, The Animation Decision Framework
+
 ## Knowledge Gaps
-- **5228 isolated node(s):** `gr`, `_r`, `R`, `oe`, `le` (+5223 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 6777 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
-- **48 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **5719 isolated node(s):** `gr`, `_r`, `R`, `oe`, `le` (+5714 more)
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 8797 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **103 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `Ut()` connect `Nt` to `it`, `pdf.worker.min-CjEcRF4W.mjs`, `index-D1jQENGW.js`?**
-  _High betweenness centrality (0.070) - this node is a cross-community bridge._
-- **Why does `nr` connect `push` to `pdf.worker.min-CjEcRF4W.mjs`, `embed.worker-BeDNRRQ6.js`, `warn`?**
-  _High betweenness centrality (0.028) - this node is a cross-community bridge._
-- **Why does `Nt()` connect `Nt` to `ke`, `qe`, `B`, `it`, `t`, `Ge`, `I`, `me`, `p`, `st`, `lib-FbOxj-PF.js`, `onmessage`, `nl`?**
-  _High betweenness centrality (0.010) - this node is a cross-community bridge._
-- **Are the 22 inferred relationships involving `Ge()` (e.g. with `ci()` and `di()`) actually correct?**
-  _`Ge()` has 22 INFERRED edges - model-reasoned connections that need verification._
-- **Are the 85 inferred relationships involving `t()` (e.g. with `A()` and `add()`) actually correct?**
-  _`t()` has 85 INFERRED edges - model-reasoned connections that need verification._
-- **Are the 103 inferred relationships involving `n()` (e.g. with `A()` and `add()`) actually correct?**
-  _`n()` has 103 INFERRED edges - model-reasoned connections that need verification._
+- **Why does `_createPyodideModule()` connect `_createPyodideModule` to `doRun`, `abort`, `_Mix_LoadMUS`, `_createPyodideModule`, `bufferAsUint8Array`, `normalizeReservedWords`, `cleanup`, `sw.js`, `createWasm`, `getFullscreenElement`, `loadModule`, `enterTask`, `ffi_prep_closure_loc_js`, `W`, `_strptime`, `www/pyodide/pyodide.asm.mjs`, `_emscripten_request_animation_frame_loop`, `getLEB`, `getWasmTrampolineModule`, `_SDL_ConvertSurface`, `pyodide_js_init`, `_boxRGBA`, `convertReturnValue`, `doCallback`, `_emscripten_asm_const_double_sync_on_main_thread`, `_emscripten_promise_destroy`, `emscripten_set_up_async_input_device_js`, `destroy`, `_emscripten_set_window_title`, `_getaddrinfo`, `isPromise`, `_Mix_FadeInMusicPos`, `onPersistComplete`, `_rotozoomSurface`, `_SDL_GetAudioDriver`, `_SDL_SetColors`, `_TTF_RenderText_Shaded`, `getTypeTag`?**
+  _High betweenness centrality (0.107) - this node is a cross-community bridge._
+- **Why does `pyodide_js_init()` connect `pyodide_js_init` to `destroy`, `lib-CE-Ivkxm.js`, `public/pyodide/pyodide.js`, `Pr`, `_createPyodideModule`, `Ge`, `abort`, `jr`, `W`, `enterTask`, `schema-CPvCPVj5.js`?**
+  _High betweenness centrality (0.090) - this node is a cross-community bridge._
+- **Why does `pyodide_js_init()` connect `pyodide_js_init` to `setGState`, `lib-CE-Ivkxm.js`, `Pr`, `abort`, `Ge`, `enterTask`, `destroy`, `jr`, `_createPyodideModule`, `W`, `schema-CPvCPVj5.js`, `www/pyodide/pyodide.js`?**
+  _High betweenness centrality (0.089) - this node is a cross-community bridge._
+- **Are the 691 inferred relationships involving `_createPyodideModule()` (e.g. with `_agen_handle_result_js()` and `array_to_js()`) actually correct?**
+  _`_createPyodideModule()` has 691 INFERRED edges - model-reasoned connections that need verification._
+- **Are the 691 inferred relationships involving `_createPyodideModule()` (e.g. with `_agen_handle_result_js()` and `array_to_js()`) actually correct?**
+  _`_createPyodideModule()` has 691 INFERRED edges - model-reasoned connections that need verification._
+- **Are the 23 inferred relationships involving `Ge()` (e.g. with `ci()` and `di()`) actually correct?**
+  _`Ge()` has 23 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `gr`, `_r`, `R` to the rest of the system?**
-  _5228 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _5719 weakly-connected nodes found - possible documentation gaps or missing edges._

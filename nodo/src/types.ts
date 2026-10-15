@@ -48,6 +48,38 @@ export interface ChatRecord {
   updatedAt: number
 }
 
+export interface VisionAnalysis {
+  width: number
+  height: number
+  aspectRatio: string
+  category: 'screenshot' | 'document' | 'photo' | 'diagram' | 'artwork'
+  dominantColors: string[]
+  brightnessScore: number
+  contrastScore: number
+  detectedText?: string
+  summary: string
+}
+
+export interface Attachment {
+  id: string
+  name: string
+  type: 'image' | 'document' | 'file'
+  mimeType: string
+  size: number
+  dataUrl?: string
+  textContent?: string
+  visionAnalysis?: VisionAnalysis
+}
+
+export interface GenerationStats {
+  promptTokens: number
+  generatedTokens: number
+  ttftMs: number
+  totalTimeMs: number
+  tokensPerSecond: number
+  backend: string
+}
+
 export interface MessageRecord {
   id: number
   chatId: number
@@ -55,6 +87,8 @@ export interface MessageRecord {
   content: string
   citations: Citation[]
   toolCalls: ToolCall[]
+  attachments?: Attachment[]
+  stats?: GenerationStats
   createdAt: number
 }
 

@@ -26,15 +26,15 @@ export function OfflineBadge({ online, status, llm }: OfflineBadgeProps) {
   }
 
   const toneClass = {
-    ok: 'border-signal-500/40 bg-signal-500/10 text-signal-400 shadow-[0_0_15px_-3px_rgba(47,163,124,0.25)]',
+    ok: 'border-signal-500/40 bg-signal-500/10 text-signal-400 shadow-[0_0_15px_-3px_rgba(255,255,255,0.25)]',
     warn: 'border-ember-500/40 bg-ember-500/10 text-ember-400 shadow-[0_0_15px_-3px_rgba(201,150,60,0.25)]',
-    busy: 'border-cyan-500/40 bg-cyan-500/10 text-cyan-300 shadow-[0_0_15px_-3px_rgba(107,140,174,0.25)]',
+    busy: 'border-cyan-500/40 bg-cyan-500/10 text-cyan-300 shadow-[0_0_15px_-3px_rgba(34,211,238,0.25)]',
   }[tone]
 
   const dotClass = {
-    ok: 'bg-signal-400 shadow-[0_0_8px_#2fa37c]',
-    warn: 'bg-ember-400 shadow-[0_0_8px_#c9963c]',
-    busy: 'bg-cyan-400 animate-pulse shadow-[0_0_8px_#6b8cae]',
+    ok: 'bg-signal-400 shadow-[0_0_8px_rgba(255,255,255,0.8)]',
+    warn: 'bg-ember-400 shadow-[0_0_8px_#facc15]',
+    busy: 'bg-cyan-400 animate-pulse shadow-[0_0_8px_#22d3ee]',
   }[tone]
 
   return (

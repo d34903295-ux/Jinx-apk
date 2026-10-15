@@ -31,8 +31,17 @@ export type IconName =
   | 'mic'
   | 'share'
   | 'edit'
+  | 'paperclip'
+  | 'image'
+  | 'eye'
+  | 'code'
+  | 'terminal'
+  | 'play'
+  | 'folder'
+  | 'cloud'
 
 const paths: Record<IconName, string> = {
+  folder: 'M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z',
   send: 'M5 12h13M12 5l7 7-7 7',
   stop: 'M7 7h10v10H7z',
   copy: 'M9 9h10v10H9zM5 15V5h10',
@@ -55,12 +64,19 @@ const paths: Record<IconName, string> = {
   library: 'M4 19.5A2.5 2.5 0 016.5 17H20 M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z',
   search: 'M11 19a8 8 0 100-16 8 8 0 000 16z M21 21l-4.35-4.35',
   upload: 'M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4 M17 8l-5-5-5 5 M12 3v12',
+  code: 'M16 18l6-6-6-6 M8 6l-6 6 6 6',
+  terminal: 'M4 17l6-6-6-6 M12 19h8',
+  play: 'M5 3l14 9-14 9V3z',
   message: 'M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z',
   settings: 'M12 15a3 3 0 100-6 3 3 0 000 6z M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z',
   speak: 'M11 5L6 9H2v6h4l5 4z M15.5 8.5a5 5 0 010 7 M18.5 5.5a9.4 9.4 0 010 13',
   mic: 'M12 2a3 3 0 013 3v6a3 3 0 01-6 0V5a3 3 0 013-3z M19 10v1a7 7 0 01-14 0v-1 M12 18v4 M8 22h8',
   share: 'M4 12v7a1 1 0 001 1h14a1 1 0 001-1v-7 M16 6l-4-4-4 4 M12 2v13',
   edit: 'M17 3a2.8 2.8 0 114 4L7.5 20.5 2 22l1.5-5.5z',
+  paperclip: 'M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48',
+  image: 'M21 19V5a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2zM8.5 10a1.5 1.5 0 100-3 1.5 1.5 0 000 3zm12.5 5l-5-5-6 6-2-2-4 4',
+  eye: 'M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8zM12 15a3 3 0 100-6 3 3 0 000 6z',
+  cloud: 'M18 10h-1.26A8 8 0 109 20h9a5 5 0 000-10z',
 }
 
 interface IconProps extends SVGProps<SVGSVGElement> {
@@ -87,15 +103,16 @@ export function Icon({ name, size = 18, ...rest }: IconProps) {
   )
 }
 
-/** Logo de Jinx: monograma JX. */
-export function Logo({ size = 28 }: { size?: number }) {
+/** Logo de Jinx: monograma JX circular. */
+export function Logo({ size = 28, className = '' }: { size?: number; className?: string }) {
   return (
     <img
       src="/logo-jinx.png"
       width={size}
       height={size}
       alt="Jinx"
-      style={{ borderRadius: Math.max(6, size * 0.22) }}
+      className={`select-none object-contain rounded-full ${className}`}
+      style={{ borderRadius: '50%' }}
       draggable={false}
     />
   )

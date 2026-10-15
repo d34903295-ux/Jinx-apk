@@ -15,15 +15,22 @@ android {
         applicationId = "com.example.jinx"
         minSdk = 24
         targetSdk = 37
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 2
+        versionName = "1.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         externalNativeBuild {
             cmake {
-                arguments += listOf("-DANDROID_STL=c++_shared")
-                // Debug rápido: solo arm64. Release compila todos los ABI.
+                arguments += listOf(
+                    "-DANDROID_STL=c++_shared",
+                    "-DCMAKE_BUILD_TYPE=Release",
+                    "-DGGML_OPENMP=OFF",
+                    "-DLLAMA_NATIVE=OFF"
+                )
+                cppFlags += listOf("-O3", "-DNDEBUG", "-fexceptions", "-frtti")
+                cFlags += listOf("-O3", "-DNDEBUG")
+                // arm64 con aceleración NEON
                 abiFilters += listOf("arm64-v8a")
             }
         }
@@ -64,6 +71,7 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.7.0")
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("com.alphacephei:vosk-android:0.3.47")
+    implementation("com.google.ai.edge.litertlm:litertlm-android:0.16.0")
     testImplementation(libs.junit)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)

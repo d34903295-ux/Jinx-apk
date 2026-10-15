@@ -13,11 +13,21 @@ export interface IngestProgress {
 
 export async function ingestDocument(
   file: File,
-  onProgress?: (progress: IngestProgress) => void
+  onProgress?: (progress: IngestProgress) => void,
+  signal?: AbortSignal
 ): Promise<number> {
+  const checkAbort = () => {
+    if (signal?.aborted) throw new DOMException('Importación cancelada', 'AbortError')
+  }
+
+  // 0. Duplicados accidentales (mismo nombre y tamaño)
+  const dup = await db.documents.where('name').equals(file.name).and((d) => d.size === file.size).first()
+  if (dup) throw new Error(`"${file.name}" ya está en la biblioteca.`)
+
   // 1. Extracción
   onProgress?.({ stage: 'extracting', text: `Extrayendo texto de ${file.name}...` })
   const extracted = await extractFile(file)
+  checkAbort()
 
   if (!extracted.totalText || extracted.pages.length === 0) {
     throw new Error(`No se pudo extraer texto del archivo "${file.name}".`)
@@ -48,27 +58,33 @@ export async function ingestDocument(
       total,
     })
   })
+  checkAbort()
+  if (vectors.length !== chunks.length) {
+    throw new Error('El cálculo de vectores devolvió un resultado incompleto.')
+  }
 
-  // 4. Guardado en IndexedDB
+  // 4. Guardado atómico en IndexedDB (sin registros parciales)
   onProgress?.({ stage: 'saving', text: 'Guardando documento en base de datos local...' })
 
-  const docId = (await db.documents.add({
-    name: extracted.name,
-    type: extracted.type,
-    pages: extracted.pages.length,
-    size: extracted.size,
-    createdAt: Date.now(),
-  } as DocumentRecord)) as number
+  const docId = await db.transaction('rw', db.documents, db.chunks, async () => {
+    const id = (await db.documents.add({
+      name: extracted.name,
+      type: extracted.type,
+      pages: extracted.pages.length,
+      size: extracted.size,
+      createdAt: Date.now(),
+    } as DocumentRecord)) as number
 
-  const chunkRecords: Omit<ChunkRecord, 'id'>[] = chunks.map((c, idx) => ({
-    docId,
-    page: c.page,
-    position: c.position,
-    text: c.text,
-    vector: vectors[idx] ?? new Float32Array(0),
-  }))
-
-  await db.chunks.bulkAdd(chunkRecords as ChunkRecord[])
+    const chunkRecords: Omit<ChunkRecord, 'id'>[] = chunks.map((c, idx) => ({
+      docId: id,
+      page: c.page,
+      position: c.position,
+      text: c.text,
+      vector: vectors[idx]!,
+    }))
+    await db.chunks.bulkAdd(chunkRecords as ChunkRecord[])
+    return id
+  })
 
   onProgress?.({ stage: 'done', text: '¡Documento indexado con éxito!' })
   return docId

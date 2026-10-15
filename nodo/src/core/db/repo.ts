@@ -5,7 +5,7 @@ import { db } from './schema'
 
 // ---------- Ajustes ----------
 
-export type SettingKey = 'activeModel' | 'theme' | 'perfMode'
+export type SettingKey = 'activeModel' | 'theme' | 'perfMode' | 'cloudApiKey' | 'cloudProvider'
 
 export async function getSetting<T>(key: SettingKey): Promise<T | undefined> {
   const row = await db.settings.get(key)
@@ -56,6 +56,8 @@ export async function addMessage(
   content: string,
   citations: import('../../types').Citation[] = [],
   toolCalls: import('../../types').ToolCall[] = [],
+  attachments: import('../../types').Attachment[] = [],
+  stats?: import('../../types').GenerationStats,
 ): Promise<number> {
   const now = Date.now()
   const id = await db.messages.add({
@@ -64,6 +66,8 @@ export async function addMessage(
     content,
     citations,
     toolCalls,
+    attachments,
+    stats,
     createdAt: now,
   })
   await db.chats.update(chatId, { updatedAt: now })

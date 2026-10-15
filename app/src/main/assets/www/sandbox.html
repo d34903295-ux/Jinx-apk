@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' 'unsafe-eval' blob: data: 'wasm-unsafe-eval' https://appassets.androidplatform.net; style-src 'unsafe-inline' https://fonts.googleapis.com *; font-src data: https://fonts.gstatic.com *; img-src data: blob: https: *; media-src data: blob: *; connect-src 'self' blob: data: https://appassets.androidplatform.net; frame-src 'none'; object-src 'none';">
+  <title>Jinx Isolated Sandbox</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      background-color: transparent;
+      color: #f1f5f9;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    #preview-container {
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background: #090d14;
+    }
+    .sandbox-empty {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      color: #64748b;
+      font-size: 13px;
+      font-family: monospace;
+      text-align: center;
+      padding: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div id="preview-container">
+    <div class="sandbox-empty">
+      <span>Jinx Safe Execution Sandbox</span>
+      <span style="font-size: 11px; margin-top: 4px; opacity: 0.6;">Aislamiento seguro de subprocesos</span>
+    </div>
+  </div>
+
+  <script>
+    // 1. Garantizar aislamiento estricto del bridge nativo
+    try { delete window.NodoNative; } catch (_) {}
+    try { delete window.NodoBridge; } catch (_) {}
+    window.NodoNative = undefined;
+    window.NodoBridge = undefined;
+    try {
+      Object.defineProperty(window, 'NodoNative', { value: undefined, writable: false, configurable: false });
+      Object.defineProperty(window, 'NodoBridge', { value: undefined, writable: false, configurable: false });
+    } catch (_) {}
+
+    // Estado del ejecutor
+    let activeWorker = null;
+    let watchdogTimer = null;
+    let pyodideWorker = null;
+    let pyodideWatchdog = null;
+    let activeExecutionId = null;
+
+    // Helper para formatear valores en logs
+    function formatVal(v) {
+      if (v === null) return 'null';
+      if (v === undefined) return 'undefined';
+      if (typeof v === 'object') {
+        try { return JSON.stringify(v, null, 2); } catch (_) { return String(v); }
+      }
+      return String(v);
+    }
+
+    // Código fuente del Web Worker para JavaScript seguro
+    const JS_WORKER_CODE = `
+      self.onmessage = async function(e) {
+        const { id, code, session } = e.data;
+        const logs = [];
+        const benchmarks = [];
+
+        function formatValue(v) {
+          if (v === null) return 'null';
+          if (v === undefined) return 'undefined';
+          if (typeof v === 'object') {
+            try { return JSON.stringify(v); } catch(_) { return String(v); }
+          }
+          return String(v);
+        }
+
+        const customConsole = {
+          log: (...args) => {
+            const text = args.map(formatValue).join(' ');
+            logs.push(text);
+            self.postMessage({ type: 'LOG', id, level: 'log', text });
+          },
+          info: (...args) => {
+            const text = '[INFO] ' + args.map(formatValue).join(' ');
+            logs.push(text);
+            self.postMessage({ type: 'LOG', id, level: 'info', text });
+          },
+          warn: (...args) => {
+            const text = '[WARN] ' + args.map(formatValue).join(' ');
+            logs.push(text);
+            self.postMessage({ type: 'LOG', id, level: 'warn', text });
+          },
+          error: (...args) => {
+            const text = '[ERROR] ' + args.map(formatValue).join(' ');
+            logs.push(text);
+            self.postMessage({ type: 'LOG', id, level: 'error', text });
+          }
+        };
+
+        const sessionContext = session || {};
+        const jinx = {
+          bench: (name, fn, iterations = 1000) => {
+            const t0 = performance.now();
+            for (let i = 0; i < iterations; i++) fn();
+            const totalTimeMs = performance.now() - t0;
+            const opsPerSec = Math.round((iterations / (totalTimeMs || 0.001)) * 1000);
+            const record = { name, iterations, totalTimeMs: Math.round(totalTimeMs * 100) / 100, opsPerSec };
+            benchmarks.push(record);
+            const bLog = '⏱ [BENCHMARK] "' + name + '": ' + iterations + ' ejecuciones en ' + record.totalTimeMs + 'ms (' + opsPerSec.toLocaleString() + ' ops/s)';
+            logs.push(bLog);
+            self.postMessage({ type: 'BENCH', id, benchmark: record, text: bLog });
+            return record;
+          },
+          storage: {
+            get: (k) => sessionContext[k],
+            set: (k, v) => { sessionContext[k] = v; return v; },
+            keys: () => Object.keys(sessionContext),
+            clear: () => { for (const k in sessionContext) delete sessionContext[k]; }
+          },
+          crypto: {
+            uuid: () => (typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : 'id_' + Math.random().toString(36).substring(2, 11)),
+            base64Encode: (str) => btoa(unescape(encodeURIComponent(str))),
+            base64Decode: (str) => decodeURIComponent(escape(atob(str)))
+          },
+          system: {
+            hardwareConcurrency: navigator.hardwareConcurrency || 4,
+            now: () => Date.now()
+          }
+        };
+
+        const abs = Math.abs;
+        const round = (val, dec = 0) => { const f = Math.pow(10, dec); return Math.round(val * f) / f; };
+        const min = Math.min;
+        const max = Math.max;
+        const len = (v) => (v == null ? 0 : typeof v === 'object' ? (Array.isArray(v) ? v.length : Object.keys(v).length) : String(v).length);
+        const range = (n, m, step = 1) => {
+          const start = m !== undefined ? n : 0;
+          const end = m !== undefined ? m : n;
+          const res = [];
+          if (step > 0) { for (let i = start; i < end; i += step) res.push(i); }
+          else { for (let i = start; i > end; i += step) res.push(i); }
+          return res;
+        };
+        const sum = (arr) => (Array.isArray(arr) ? arr.reduce((a, b) => a + Number(b), 0) : 0);
+        const mean = (arr) => (Array.isArray(arr) && arr.length ? sum(arr) / arr.length : 0);
+        const math = Math;
+
+        const AsyncFunction = Object.getPrototypeOf(async function(){}).constructor;
+        let fn = null;
+        let execJs = code.trim();
+
+        // Si es una expresión simple sin sentencias múltiples
+        if (!execJs.includes('return ') && !/^(let|const|var|function|class|for|while|if|switch|try)\\b/.test(execJs) && !execJs.includes('\\n')) {
+          try {
+            fn = new AsyncFunction('console', 'jinx', 'range', 'sum', 'mean', 'abs', 'round', 'min', 'max', 'len', 'math', 'session', '"use strict";\\nreturn (' + execJs.replace(/;+$/, '') + ');');
+          } catch (_) {}
+        }
+
+        // Si es multilínea sin return explícito, intentar devolver la última línea
+        if (!fn && !execJs.includes('return ')) {
+          const lines = execJs.split('\\n');
+          const last = lines[lines.length - 1].trim();
+          if (last && !/^(let|const|var|function|class|for|while|if|switch|try|import|export|\\}|return)\\b/.test(last) && !last.endsWith('{')) {
+            const body = lines.slice(0, -1).join('\\n') + '\\nreturn (' + last.replace(/;+$/, '') + ');';
+            try {
+              fn = new AsyncFunction('console', 'jinx', 'range', 'sum', 'mean', 'abs', 'round', 'min', 'max', 'len', 'math', 'session', '"use strict";\\n' + body);
+            } catch (_) {}
+          }
+        }
+
+        if (!fn) {
+          try {
+            fn = new AsyncFunction('console', 'jinx', 'range', 'sum', 'mean', 'abs', 'round', 'min', 'max', 'len', 'math', 'session', '"use strict";\\n' + execJs);
+          } catch (compileErr) {
+            self.postMessage({
+              type: 'DONE',
+              id,
+              success: false,
+              logs,
+              benchmarks,
+              error: compileErr.message || String(compileErr)
+            });
+            return;
+          }
+        }
+
+        try {
+          const rawResult = await fn(customConsole, jinx, range, sum, mean, abs, round, min, max, len, math, sessionContext);
+          let formattedResult = undefined;
+          if (rawResult !== undefined) {
+            formattedResult = typeof rawResult === 'object' ? JSON.stringify(rawResult, null, 2) : String(rawResult);
+          }
+          self.postMessage({
+            type: 'DONE',
+            id,
+            success: true,
+            result: formattedResult,
+            logs,
+            benchmarks,
+            session: sessionContext
+          });
+        } catch (runErr) {
+          self.postMessage({
+            type: 'DONE',
+            id,
+            success: false,
+            logs,
+            benchmarks,
+            error: runErr.message || String(runErr),
+            session: sessionContext
+          });
+        }
+      };
+    `;
+
+    const jsWorkerBlob = new Blob([JS_WORKER_CODE], { type: 'application/javascript' });
+    const jsWorkerUrl = URL.createObjectURL(jsWorkerBlob);
+
+    // Ejecutar JavaScript en Web Worker con Watchdog y Detención
+    function executeJavaScript(id, code, timeoutMs = 8000, session = {}) {
+      if (activeWorker) {
+        try { activeWorker.terminate(); } catch (_) {}
+        activeWorker = null;
+      }
+      if (watchdogTimer) {
+        clearTimeout(watchdogTimer);
+        watchdogTimer = null;
+      }
+
+      activeExecutionId = id;
+      const startTime = performance.now();
+      const logs = [];
+
+      try {
+        activeWorker = new Worker(jsWorkerUrl);
+      } catch (err) {
+        window.parent.postMessage({
+          type: 'SANDBOX_RESULT',
+          id,
+          success: false,
+          logs: [],
+          error: 'Error iniciando Web Worker: ' + (err.message || String(err)),
+          executionTimeMs: 0
+        }, '*');
+        return;
+      }
+
+      // Timeout watchdog
+      watchdogTimer = setTimeout(() => {
+        if (activeWorker && activeExecutionId === id) {
+          activeWorker.terminate();
+          activeWorker = null;
+          const duration = Math.round(performance.now() - startTime);
+          window.parent.postMessage({
+            type: 'SANDBOX_RESULT',
+            id,
+            success: false,
+            logs,
+            error: 'Tiempo límite excedido (' + (timeoutMs / 1000) + 's). Sandbox detenido para proteger la batería y evitar bucles infinitos.',
+            executionTimeMs: duration
+          }, '*');
+        }
+      }, timeoutMs);
+
+      activeWorker.onmessage = function(e) {
+        const data = e.data;
+        if (!data || data.id !== id) return;
+
+        if (data.type === 'LOG') {
+          logs.push(data.text);
+          window.parent.postMessage({
+            type: 'SANDBOX_LOG',
+            id,
+            level: data.level,
+            text: data.text
+          }, '*');
+        } else if (data.type === 'BENCH') {
+          window.parent.postMessage({
+            type: 'SANDBOX_BENCH',
+            id,
+            benchmark: data.benchmark,
+            text: data.text
+          }, '*');
+        } else if (data.type === 'DONE') {
+          if (watchdogTimer) {
+            clearTimeout(watchdogTimer);
+            watchdogTimer = null;
+          }
+          activeWorker.terminate();
+          activeWorker = null;
+          const duration = Math.round(performance.now() - startTime);
+
+          window.parent.postMessage({
+            type: 'SANDBOX_RESULT',
+            id,
+            success: data.success,
+            logs: data.logs || logs,
+            benchmarks: data.benchmarks || [],
+            result: data.result,
+            error: data.error,
+            executionTimeMs: duration
+          }, '*');
+        }
+      };
+
+      activeWorker.onerror = function(err) {
+        if (watchdogTimer) {
+          clearTimeout(watchdogTimer);
+          watchdogTimer = null;
+        }
+        if (activeWorker) {
+          activeWorker.terminate();
+          activeWorker = null;
+        }
+        const duration = Math.round(performance.now() - startTime);
+        window.parent.postMessage({
+          type: 'SANDBOX_RESULT',
+          id,
+          success: false,
+          logs,
+          error: 'Error de ejecución en Worker: ' + (err.message || 'Error no especificado'),
+          executionTimeMs: duration
+        }, '*');
+      };
+
+      activeWorker.postMessage({ id, code, session });
+    }
+
+    // Detener cualquier ejecución activa inmediatamente
+    function stopExecution() {
+      let stopped = false;
+      if (activeWorker) {
+        try { activeWorker.terminate(); } catch (_) {}
+        activeWorker = null;
+        stopped = true;
+      }
+      if (watchdogTimer) {
+        clearTimeout(watchdogTimer);
+        watchdogTimer = null;
+      }
+      if (pyodideWorker) {
+        try { pyodideWorker.terminate(); } catch (_) {}
+        pyodideWorker = null;
+        stopped = true;
+      }
+      if (pyodideWatchdog) {
+        clearTimeout(pyodideWatchdog);
+        pyodideWatchdog = null;
+      }
+
+      window.parent.postMessage({
+        type: 'SANDBOX_STOPPED',
+        id: activeExecutionId,
+        stopped
+      }, '*');
+    }
+
+    // Renderizado seguro de HTML/UI con captura de errores y logs
+    function renderHtml(htmlContent) {
+      const container = document.getElementById('preview-container');
+      if (!container) return;
+
+      container.innerHTML = '';
+
+      // Crear un shadow iframe o inyectar directamente dentro del sandbox aislado
+      const innerFrame = document.createElement('iframe');
+      innerFrame.style.width = '100%';
+      innerFrame.style.height = '100%';
+      innerFrame.style.border = 'none';
+      innerFrame.setAttribute('sandbox', 'allow-scripts allow-modals');
+
+      // Script interceptor para console y errores del HTML del usuario
+      const interceptScript = `
+        <script>
+          try { delete window.NodoNative; delete window.NodoBridge; } catch(_) {}
+          window.NodoNative = undefined; window.NodoBridge = undefined;
+          const _log = console.log;
+          console.log = function(...args) {
+            _log.apply(console, args);
+            window.parent.postMessage({ type: 'SANDBOX_LOG', level: 'log', text: args.join(' ') }, '*');
+          };
+          console.error = function(...args) {
+            window.parent.postMessage({ type: 'SANDBOX_LOG', level: 'error', text: args.join(' ') }, '*');
+          };
+          window.onerror = function(msg, url, line) {
+            window.parent.postMessage({ type: 'SANDBOX_LOG', level: 'error', text: '✕ Error [L' + line + ']: ' + msg }, '*');
+            return true;
+          };
+        <\\/script>
+      `;
+
+      let finalHtml = htmlContent || '';
+      if (finalHtml.includes('<head>')) {
+        finalHtml = finalHtml.replace('<head>', '<head>' + interceptScript);
+      } else if (finalHtml.includes('<html>')) {
+        finalHtml = finalHtml.replace('<html>', '<html><head>' + interceptScript + '</head>');
+      } else {
+        finalHtml = interceptScript + finalHtml;
+      }
+
+      innerFrame.srcdoc = finalHtml;
+      container.appendChild(innerFrame);
+    }
+
+    // Ejecutar Python con Pyodide offline o Transpiler determinista
+    function executePython(id, code, timeoutMs = 10000) {
+      activeExecutionId = id;
+      const startTime = performance.now();
+      const logs = [];
+
+      // Notificar inicio
+      window.parent.postMessage({
+        type: 'SANDBOX_LOG',
+        id,
+        level: 'info',
+        text: '🐍 Iniciando entorno Python offline...'
+      }, '*');
+
+      // Si Pyodide Web Worker no está disponible, usar transpilador local inmediato
+      function runTranspiledFallback() {
+        const transpiled = transpilePythonToJsLocal(code);
+        executeJavaScript(id, transpiled, timeoutMs);
+      }
+
+      // Worker dedicado para Pyodide
+      const PY_WORKER_CODE = `
+        let pyodideInstance = null;
+        self.onmessage = async function(e) {
+          const { id, code } = e.data;
+          try {
+            if (!pyodideInstance) {
+              importScripts('/pyodide/pyodide.js');
+              pyodideInstance = await loadPyodide({
+                indexURL: '/pyodide/'
+              });
+            }
+
+            pyodideInstance.setStdout({
+              batched: (text) => {
+                self.postMessage({ type: 'LOG', id, text });
+              }
+            });
+
+            pyodideInstance.setStderr({
+              batched: (text) => {
+                self.postMessage({ type: 'LOG', id, text: '[STDERR] ' + text });
+              }
+            });
+
+            const result = await pyodideInstance.runPythonAsync(code);
+            self.postMessage({
+              type: 'DONE',
+              id,
+              success: true,
+              result: result !== undefined ? String(result) : undefined
+            });
+          } catch (err) {
+            self.postMessage({
+              type: 'DONE',
+              id,
+              success: false,
+              error: err.message || String(err)
+            });
+          }
+        };
+      `;
+
+      try {
+        const pyBlob = new Blob([PY_WORKER_CODE], { type: 'application/javascript' });
+        const pyUrl = URL.createObjectURL(pyBlob);
+        pyodideWorker = new Worker(pyUrl);
+
+        pyodideWatchdog = setTimeout(() => {
+          if (pyodideWorker && activeExecutionId === id) {
+            pyodideWorker.terminate();
+            pyodideWorker = null;
+            window.parent.postMessage({
+              type: 'SANDBOX_RESULT',
+              id,
+              success: false,
+              logs,
+              error: 'Tiempo límite excedido en ejecución Python (' + (timeoutMs / 1000) + 's).',
+              executionTimeMs: Math.round(performance.now() - startTime)
+            }, '*');
+          }
+        }, timeoutMs);
+
+        pyodideWorker.onmessage = function(e) {
+          const d = e.data;
+          if (!d || d.id !== id) return;
+          if (d.type === 'LOG') {
+            logs.push(d.text);
+            window.parent.postMessage({ type: 'SANDBOX_LOG', id, level: 'log', text: d.text }, '*');
+          } else if (d.type === 'DONE') {
+            if (pyodideWatchdog) clearTimeout(pyodideWatchdog);
+            pyodideWatchdog = null;
+            window.parent.postMessage({
+              type: 'SANDBOX_RESULT',
+              id,
+              success: d.success,
+              logs,
+              result: d.result,
+              error: d.error,
+              executionTimeMs: Math.round(performance.now() - startTime)
+            }, '*');
+          }
+        };
+
+        pyodideWorker.onerror = function() {
+          if (pyodideWatchdog) clearTimeout(pyodideWatchdog);
+          pyodideWatchdog = null;
+          if (pyodideWorker) { pyodideWorker.terminate(); pyodideWorker = null; }
+          // Si Pyodide falla (ej. memoria), intentar transpilador offline
+          runTranspiledFallback();
+        };
+
+        pyodideWorker.postMessage({ id, code });
+      } catch (_) {
+        runTranspiledFallback();
+      }
+    }
+
+    // Transpilador Python a JS offline ultraligero
+    function transpilePythonToJsLocal(pyCode) {
+      let js = pyCode;
+      js = js.replace(/import\s+math/g, '// import math');
+      js = js.replace(/from\s+math\s+import\s+([a-zA-Z0-9_,\s]+)/g, '// from math import $1');
+      js = js.replace(/print\s*\((.*)\)/g, 'console.log($1)');
+      js = js.replace(/Math\.random\(\)/g, 'Math.random()');
+      js = js.replace(/math\.pi/gi, 'Math.PI');
+      js = js.replace(/math\.sqrt/gi, 'Math.sqrt');
+      js = js.replace(/math\.sin/gi, 'Math.sin');
+      js = js.replace(/math\.cos/gi, 'Math.cos');
+      js = js.replace(/math\.tan/gi, 'Math.tan');
+      js = js.replace(/math\.pow/gi, 'Math.pow');
+      js = js.replace(/math\.floor/gi, 'Math.floor');
+      js = js.replace(/math\.ceil/gi, 'Math.ceil');
+      js = js.replace(/math\.exp/gi, 'Math.exp');
+      js = js.replace(/math\.log/gi, 'Math.log');
+      js = js.replace(/\bTrue\b/g, 'true');
+      js = js.replace(/\bFalse\b/g, 'false');
+      js = js.replace(/\bNone\b/g, 'null');
+      js = js.replace(/\band\b/g, '&&');
+      js = js.replace(/\bor\b/g, '||');
+      js = js.replace(/\bnot\s+/g, '!');
+      js = js.replace(/for\s+([a-zA-Z0-9_]+)\s+in\s+range\(([^)]+)\)\s*:/g, (_, v, r) => {
+        const parts = r.split(',').map(s => s.trim());
+        if (parts.length === 1) return 'for (let ' + v + ' = 0; ' + v + ' < ' + parts[0] + '; ' + v + '++) {';
+        if (parts.length === 2) return 'for (let ' + v + ' = ' + parts[0] + '; ' + v + ' < ' + parts[1] + '; ' + v + '++) {';
+        return 'for (let ' + v + ' = ' + parts[0] + '; ' + v + ' < ' + parts[1] + '; ' + v + ' += ' + parts[2] + ') {';
+      });
+      return js;
+    }
+
+    // Receptor de mensajes desde el componente React de la app principal
+    window.addEventListener('message', function(event) {
+      const data = event.data;
+      if (!data || typeof data !== 'object') return;
+
+      switch (data.type) {
+        case 'EXECUTE_JS':
+          executeJavaScript(data.id, data.code, data.timeoutMs || 8000, data.session);
+          break;
+        case 'EXECUTE_PY':
+          executePython(data.id, data.code, data.timeoutMs || 10000);
+          break;
+        case 'RENDER_HTML':
+          renderHtml(data.html);
+          break;
+        case 'STOP':
+          stopExecution();
+          break;
+        case 'PING':
+          window.parent.postMessage({ type: 'PONG' }, '*');
+          break;
+      }
+    });
+
+    // Notificar que el sandbox está listo
+    window.parent.postMessage({ type: 'SANDBOX_READY' }, '*');
+  </script>
+</body>
+</html>

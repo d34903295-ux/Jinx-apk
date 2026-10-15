@@ -79,6 +79,23 @@ class ModelsActivity : ComponentActivity() {
         }
     }
 
+    private var pendingImportModel: NativeModel? = null
+    private val importLauncher = registerForActivityResult(
+        androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        val uri = result.data?.data
+        val m = pendingImportModel
+        pendingImportModel = null
+        if (result.resultCode == android.app.Activity.RESULT_OK && uri != null && m != null) {
+            ModelImporter.startImport(this, m.id, uri) { _, _ ->
+                runOnUiThread { refresh() }
+            }
+        } else {
+            ModelImporter.cancelImport()
+            refresh()
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         LlamaEngine.attach(this)
@@ -90,6 +107,14 @@ class ModelsActivity : ComponentActivity() {
                         filesDir = filesDir,
                         statesFlow = states,
                         onDownload = { m -> DownloadService.start(this, m.id); refreshSoon() },
+                        onImport = { m ->
+                            pendingImportModel = m
+                            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+                                addCategory(Intent.CATEGORY_OPENABLE)
+                                type = "*/*"
+                            }
+                            importLauncher.launch(intent)
+                        },
                         onPause = { service?.let { (it as DownloadService).onPauseCommand() } ?: refresh() },
                         onResume = { m -> DownloadService.start(this, m.id); refreshSoon() },
                         onDelete = { m -> deleteModel(m); refresh() },
@@ -123,11 +148,13 @@ class ModelsActivity : ComponentActivity() {
 
     override fun onStart() {
         super.onStart()
+        ModelImporter.onProgressUpdate = { refresh() }
         bindService(Intent(this, DownloadService::class.java), conn, Context.BIND_AUTO_CREATE)
         refresh()
     }
 
     override fun onStop() {
+        ModelImporter.onProgressUpdate = null
         try {
             unbindService(conn)
         } catch (_: Exception) {
@@ -148,6 +175,14 @@ class ModelsActivity : ComponentActivity() {
     }
 
     private fun localStateOf(m: NativeModel): DownloadState {
+        val importProg = ModelImporter.currentProgress
+        if (importProg != null && importProg.modelId == m.id) {
+            if (importProg.error != null) return DownloadState.Error(importProg.error)
+            val tot = if (importProg.totalBytes > 0) importProg.totalBytes else m.expectedBytes
+            return DownloadState.Running(
+                DownloadProgress(importProg.copiedBytes, tot, importProg.bytesPerSecond, importProg.etaSeconds)
+            )
+        }
         if (LlamaEngine.isDownloaded(filesDir, m)) return DownloadState.Done(LlamaEngine.modelFile(filesDir, m))
         val part = File(LlamaEngine.modelsDir(filesDir), m.fileName + ".part")
         if (part.exists() && part.length() > 0) return DownloadState.Paused(part.length(), m.expectedBytes)
@@ -189,6 +224,7 @@ private fun ModelsScreen(
     filesDir: File,
     statesFlow: MutableStateFlow<Map<String, DownloadState>>,
     onDownload: (NativeModel) -> Unit,
+    onImport: (NativeModel) -> Unit,
     onPause: () -> Unit,
     onResume: (NativeModel) -> Unit,
     onDelete: (NativeModel) -> Unit,
@@ -218,6 +254,7 @@ private fun ModelsScreen(
                     state = states[m.id] ?: DownloadState.Idle,
                     filesDir = filesDir,
                     onDownload = { onDownload(m) },
+                    onImport = { onImport(m) },
                     onPause = onPause,
                     onResume = { onResume(m) },
                     onDelete = { onDelete(m) },
@@ -239,6 +276,7 @@ private fun ModelCard(
     state: DownloadState,
     filesDir: File,
     onDownload: () -> Unit,
+    onImport: () -> Unit,
     onPause: () -> Unit,
     onResume: () -> Unit,
     onDelete: () -> Unit,
@@ -293,13 +331,21 @@ private fun ModelCard(
             }
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 when (state) {
-                    is DownloadState.Idle -> Button(onClick = onDownload) { Text("Descargar") }
+                    is DownloadState.Idle -> {
+                        Button(onClick = onDownload) { Text("Descargar") }
+                        OutlinedButton(onClick = onImport) { Text("Importar desde archivo") }
+                    }
                     is DownloadState.Paused -> {
                         Button(onClick = onResume) { Text("Reanudar") }
+                        OutlinedButton(onClick = onImport) { Text("Importar desde archivo") }
                         OutlinedButton(onClick = onDelete) { Text("Eliminar") }
                     }
                     is DownloadState.Running -> {
-                        OutlinedButton(onClick = onPause) { Text("Pausar") }
+                        if (ModelImporter.isImporting(model.id)) {
+                            OutlinedButton(onClick = { ModelImporter.cancelImport() }) { Text("Cancelar") }
+                        } else {
+                            OutlinedButton(onClick = onPause) { Text("Pausar") }
+                        }
                     }
                     is DownloadState.Done -> {
                         Button(
@@ -311,6 +357,7 @@ private fun ModelCard(
                     }
                     is DownloadState.Error -> {
                         Button(onClick = onResume) { Text("Reintentar") }
+                        OutlinedButton(onClick = onImport) { Text("Importar desde archivo") }
                         OutlinedButton(onClick = onDelete) { Text("Eliminar") }
                     }
                     is DownloadState.Verifying -> {

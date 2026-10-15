@@ -16,3 +16,29 @@ local.properties
 build_out.txt
 build*.txt
 third_party/
+
+# Build artifacts & packages
+*.apk
+*.aab
+*.dex
+*.class
+*.tsbuildinfo
+
+# Dependencies & distribution
+node_modules/
+dist/
+dist-ssr/
+
+# Logs & temp
+*.log
+devserver.log
+
+# Keystores & credentials
+*.jks
+*.keystore
+.env
+.env.*
+
+# Graphify cache & history snapshots
+graphify-out/cache/
+graphify-out/2026-*/

@@ -62,33 +62,33 @@ export function ToolCallCard({ toolCall, isLive = false }: ToolCallCardProps) {
   }
 
   return (
-    <div className="w-full my-2 overflow-hidden rounded-xl border border-white/10 bg-[#0a0d14]/90 backdrop-blur-md shadow-lg shadow-black/30 transition-all">
+    <div className="w-full my-2 overflow-hidden rounded-2xl border border-white/12 bg-black/75 backdrop-blur-xl shadow-xl transition-all">
       {/* Barra superior de terminal */}
-      <div className="flex items-center justify-between px-3 py-1.5 border-b border-white/[0.06] bg-white/[0.02]">
+      <div className="flex items-center justify-between px-3.5 py-2 border-b border-white/[0.08] bg-white/[0.03]">
         <div className="flex items-center gap-1.5">
-          <span className="size-2 rounded-full bg-danger-500/80" />
-          <span className="size-2 rounded-full bg-ember-400/80" />
-          <span className="size-2 rounded-full bg-signal-400/80" />
-          <span className="ml-2 font-mono text-[10px] tracking-wider text-ink-400 uppercase">
+          <span className="size-2 rounded-full bg-white/30" />
+          <span className="size-2 rounded-full bg-white/20" />
+          <span className="size-2 rounded-full bg-white/10" />
+          <span className="ml-2 font-mono text-[10px] tracking-wider text-ink-400 dark:text-white/50 uppercase">
             TERMINAL // {toolCall.name}
           </span>
         </div>
 
         <div className="flex items-center gap-2">
           {isLive ? (
-            <span className="inline-flex items-center gap-1 font-mono text-[10px] text-signal-400 font-bold uppercase tracking-wider">
-              <span className="size-1.5 rounded-full bg-signal-400 animate-pulse" />
-              RUNNING
+            <span className="inline-flex items-center gap-1.5 font-mono text-[9.5px] text-white/90 font-bold uppercase tracking-wider bg-white/10 border border-white/20 px-2 py-0.5 rounded-full">
+              <span className="size-1.5 rounded-full bg-white animate-pulse shadow-[0_0_6px_rgba(255,255,255,0.8)]" />
+              EN CURSO
             </span>
           ) : toolCall.error ? (
-            <span className="inline-flex items-center gap-1 font-mono text-[10px] text-danger-400 font-bold uppercase tracking-wider">
+            <span className="inline-flex items-center gap-1.5 font-mono text-[9.5px] text-danger-400 font-bold uppercase tracking-wider bg-danger-500/10 border border-danger-500/30 px-2 py-0.5 rounded-full">
               <span className="size-1.5 rounded-full bg-danger-400" />
-              FAILED
+              ERROR
             </span>
           ) : (
-            <span className="inline-flex items-center gap-1 font-mono text-[10px] text-signal-400 font-bold uppercase tracking-wider">
-              <span className="size-1.5 rounded-full bg-signal-400 shadow-[0_0_6px_#2fa37c]" />
-              DONE 200
+            <span className="inline-flex items-center gap-1.5 font-mono text-[9.5px] text-white font-bold uppercase tracking-wider bg-white/10 border border-white/20 px-2 py-0.5 rounded-full shadow-[0_0_10px_rgba(255,255,255,0.1)]">
+              <span className="size-1.5 rounded-full bg-white shadow-[0_0_6px_rgba(255,255,255,0.9)]" />
+              ÉXITO
             </span>
           )}
         </div>
@@ -98,18 +98,19 @@ export function ToolCallCard({ toolCall, isLive = false }: ToolCallCardProps) {
       <button
         type="button"
         onClick={() => setExpanded(!expanded)}
-        className="w-full flex items-center justify-between p-3 text-left transition hover:bg-white/[0.03] cursor-pointer"
+        aria-expanded={expanded}
+        className="w-full flex items-center justify-between p-3.5 min-h-[48px] text-left transition hover:bg-white/[0.03] cursor-pointer"
       >
-        <div className="flex items-center gap-2.5 min-w-0">
-          <div className="size-7 rounded-lg bg-signal-500/10 border border-signal-500/20 text-signal-400 flex items-center justify-center shrink-0 shadow-[0_0_10px_-2px_rgba(47,163,124,0.2)]">
+        <div className="flex items-center gap-3 min-w-0">
+          <div className="size-7 rounded-full bg-white/10 border border-white/20 text-white flex items-center justify-center shrink-0 shadow-[0_0_10px_rgba(255,255,255,0.15)]">
             <Icon name={toolIcon(toolCall.name)} size={14} />
           </div>
           <div className="flex flex-col min-w-0">
-            <span className="text-xs font-semibold text-ink-100 truncate">
+            <span className="text-xs font-semibold text-white truncate">
               {toolNameLabel(toolCall.name)}
             </span>
-            <span className="font-mono text-[10px] text-ink-400 truncate">
-              call: <span className="text-signal-400">{toolCall.name}</span>(...)
+            <span className="font-mono text-[10px] text-ink-400 dark:text-white/45 truncate">
+              call: <span className="text-white font-semibold">{toolCall.name}</span>(...)
             </span>
           </div>
         </div>
@@ -118,20 +119,20 @@ export function ToolCallCard({ toolCall, isLive = false }: ToolCallCardProps) {
           <Icon
             name="chevronDown"
             size={14}
-            className={`text-ink-400 transition-transform duration-200 ${expanded ? 'rotate-180' : ''}`}
+            className={`text-ink-400 dark:text-white/40 transition-transform duration-200 ${expanded ? 'rotate-180' : ''}`}
           />
         </div>
       </button>
 
       {/* Contenido Desplegable */}
       {expanded && (
-        <div className="border-t border-white/[0.06] p-3 flex flex-col gap-2.5 bg-black/40 text-xs animate-fade-up">
+        <div className="border-t border-white/[0.08] p-3.5 flex flex-col gap-3 bg-black/60 text-xs animate-fade-up">
           {/* Argumentos */}
           <div>
-            <span className="font-mono text-[10px] uppercase font-bold tracking-wider text-ink-400 block mb-1">
-              INPUT PARAMETERS:
+            <span className="font-mono text-[10px] uppercase font-bold tracking-wider text-ink-400 dark:text-white/40 block mb-1">
+              PARÁMETROS DE ENTRADA:
             </span>
-            <pre className="font-mono text-[11px] text-ink-200 bg-[#080b11] border border-white/[0.05] p-2.5 rounded-lg overflow-x-auto whitespace-pre-wrap max-h-32 scroll-thin">
+            <pre className="font-mono text-[11px] text-ink-200 bg-black/80 border border-white/10 p-2.5 rounded-xl overflow-x-auto whitespace-pre-wrap max-h-32 scroll-thin">
               {JSON.stringify(toolCall.args, null, 2)}
             </pre>
           </div>
@@ -141,35 +142,37 @@ export function ToolCallCard({ toolCall, isLive = false }: ToolCallCardProps) {
             <div>
               <div className="flex items-center justify-between mb-1">
                 <span className="font-mono text-[10px] uppercase font-bold tracking-wider text-danger-400">
-                  STDERR / EXCEPTION:
+                  ERROR / EXCEPCIÓN:
                 </span>
                 <button
                   type="button"
                   onClick={copyOutput}
-                  className="font-mono text-[10px] text-ink-400 hover:text-white transition"
+                  aria-label="Copiar error"
+                  className="font-mono text-[10px] text-ink-400 hover:text-white transition px-2.5 py-1 rounded-full border border-white/10 hover:border-white/25 cursor-pointer"
                 >
-                  {copied ? 'COPIED' : 'COPY'}
+                  {copied ? 'COPIADO' : 'COPIAR'}
                 </button>
               </div>
-              <pre className="font-mono text-[11px] text-danger-300 bg-danger-500/10 border border-danger-500/30 p-2.5 rounded-lg overflow-x-auto whitespace-pre-wrap max-h-36 scroll-thin">
+              <pre className="font-mono text-[11px] text-danger-300 bg-danger-500/10 border border-danger-500/30 p-2.5 rounded-xl overflow-x-auto whitespace-pre-wrap max-h-36 scroll-thin">
                 {toolCall.error}
               </pre>
             </div>
           ) : toolCall.result ? (
             <div>
               <div className="flex items-center justify-between mb-1">
-                <span className="font-mono text-[10px] uppercase font-bold tracking-wider text-signal-400">
-                  STDOUT / OUTPUT:
+                <span className="font-mono text-[10px] uppercase font-bold tracking-wider text-white">
+                  SALIDA / RESULTADO:
                 </span>
                 <button
                   type="button"
                   onClick={copyOutput}
-                  className="font-mono text-[10px] text-ink-400 hover:text-white transition"
+                  aria-label="Copiar resultado"
+                  className="font-mono text-[10px] text-ink-400 hover:text-white transition px-2.5 py-1 rounded-full border border-white/10 hover:border-white/25 cursor-pointer"
                 >
-                  {copied ? 'COPIED' : 'COPY'}
+                  {copied ? 'COPIADO' : 'COPIAR'}
                 </button>
               </div>
-              <pre className="font-mono text-[11px] text-emerald-200 bg-[#06100c] border border-signal-500/30 p-2.5 rounded-lg overflow-x-auto whitespace-pre-wrap max-h-48 scroll-thin shadow-[inset_0_0_15px_rgba(47,163,124,0.05)]">
+              <pre className="font-mono text-[11px] text-white/90 bg-black/80 border border-white/15 p-2.5 rounded-xl overflow-x-auto whitespace-pre-wrap max-h-48 scroll-thin shadow-[inset_0_0_15px_rgba(255,255,255,0.05)]">
                 {toolCall.result}
               </pre>
             </div>

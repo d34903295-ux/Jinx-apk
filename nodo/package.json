@@ -8,6 +8,7 @@
     "build": "tsc -b && vite build",
     "build:android": "tsc -b && vite build && node -e \"require('fs').rmSync('../app/src/main/assets/www', {recursive: true, force: true})\" && node -e \"require('fs').cpSync('dist', '../app/src/main/assets/www', {recursive: true})\"",
     "lint": "oxlint",
+    "test": "node --test tests/embedder.test.mjs",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -16,14 +17,18 @@
     "@fontsource/space-grotesk": "^5.3.0",
     "@huggingface/transformers": "^4.3.0",
     "@mlc-ai/web-llm": "^0.2.85",
+    "@types/three": "^0.186.0",
     "dexie": "^4.4.6",
     "dexie-react-hooks": "^4.4.0",
+    "framer-motion": "^14.1.0",
+    "lucide-react": "^1.55.0",
     "mammoth": "^1.13.0",
     "pdfjs-dist": "^6.4.299",
     "pyodide": "^314.0.7",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
-    "thinking-orbs": "^0.3.2"
+    "thinking-orbs": "^0.3.2",
+    "three": "^0.186.1"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.3.3",

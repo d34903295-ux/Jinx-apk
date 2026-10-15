@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="/logo-jinx.png" />
+    <link rel="apple-touch-icon" href="/icons/pwa-192.png" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content"
+    />
+    <meta name="theme-color" content="#0C0C0C" />
+    <meta name="color-scheme" content="dark" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self' 'wasm-unsafe-eval' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; worker-src 'self' blob: https://cdn.jsdelivr.net; connect-src 'self' https: data: blob:; media-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'none'"
+    />
+    <title>Jinx — 100% Offline Sovereign AI Agent for Android</title>
+    <meta
+      name="description"
+      content="Jinx is an off-grid sovereign AI agent running 100% locally on Android. On-device WebGPU neural LLMs, NotebookLM-grade vector RAG, and an autonomous Pyodide Python sandbox."
+    />
+    <!-- Open Graph / Social Meta -->
+    <meta property="og:title" content="Jinx — 100% Offline Sovereign AI Agent" />
+    <meta
+      property="og:description"
+      content="On-device WebGPU LLMs, Document Vector RAG, and Python sandbox. Zero cloud, zero subscriptions, 100% private."
+    />
+    <meta property="og:image" content="/jinx_hero_visual.jpg" />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Jinx — 100% Offline Sovereign AI Agent" />
+    <meta
+      name="twitter:description"
+      content="Zero cloud servers, zero telemetry. High-performance offline intelligence on Android."
+    />
+    <meta name="twitter:image" content="/jinx_hero_visual.jpg" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="bg-[#0C0C0C] text-[#D7E2EA] antialiased">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

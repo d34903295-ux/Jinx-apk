@@ -1,6 +1,3 @@
-import * as pdfjsLib from 'pdfjs-dist'
-import mammoth from 'mammoth'
-
 export interface ExtractedPage {
   page: number
   text: string
@@ -14,8 +11,8 @@ export interface ExtractedDocument {
   totalText: string
 }
 
-/** Configuración diferida del worker de PDF.js */
-function ensurePdfWorker(): void {
+export async function extractPdf(arrayBuffer: ArrayBuffer): Promise<ExtractedPage[]> {
+  const pdfjsLib = await import('pdfjs-dist')
   if (!pdfjsLib.GlobalWorkerOptions.workerSrc) {
     try {
       pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
@@ -28,10 +25,7 @@ function ensurePdfWorker(): void {
         'https://cdn.jsdelivr.net/npm/pdfjs-dist@6.4.299/build/pdf.worker.min.mjs'
     }
   }
-}
 
-export async function extractPdf(arrayBuffer: ArrayBuffer): Promise<ExtractedPage[]> {
-  ensurePdfWorker()
   const loadingTask = pdfjsLib.getDocument({
     data: new Uint8Array(arrayBuffer),
     useSystemFonts: true,
@@ -55,6 +49,7 @@ export async function extractPdf(arrayBuffer: ArrayBuffer): Promise<ExtractedPag
 }
 
 export async function extractDocx(arrayBuffer: ArrayBuffer): Promise<ExtractedPage[]> {
+  const mammoth = await import('mammoth')
   const result = await mammoth.extractRawText({ arrayBuffer })
   return [{ page: 1, text: result.value.trim() }]
 }
@@ -63,25 +58,89 @@ export async function extractText(fileText: string): Promise<ExtractedPage[]> {
   return [{ page: 1, text: fileText.trim() }]
 }
 
+export const SUPPORTED_EXTENSIONS = [
+  'pdf',
+  'docx',
+  'txt',
+  'md',
+  'markdown',
+  'json',
+  'csv',
+  'tsv',
+  'py',
+  'js',
+  'ts',
+  'tsx',
+  'jsx',
+  'html',
+  'css',
+  'xml',
+  'yaml',
+  'yml',
+  'log',
+  'rtf',
+  'sql',
+  'sh',
+  'kt',
+  'java',
+  'c',
+  'cpp',
+  'rs',
+  'go',
+]
+
 export async function extractFile(file: File): Promise<ExtractedDocument> {
-  const extension = file.name.split('.').pop()?.toLowerCase() ?? ''
+  const extension = file.name.includes('.') ? (file.name.split('.').pop()?.toLowerCase() ?? '') : ''
+  const isPdf = extension === 'pdf' || file.type === 'application/pdf'
+  const isDocx = extension === 'docx' || (file.type && file.type.includes('wordprocessingml'))
+  const isText =
+    SUPPORTED_EXTENSIONS.includes(extension) ||
+    (file.type && file.type.startsWith('text/')) ||
+    file.type === 'application/json' ||
+    file.type === 'application/xml'
+
+  if (!isPdf && !isDocx && !isText) {
+    throw new Error(
+      `Formato no compatible (.${extension || 'desconocido'}). Usa PDF, DOCX, TXT, Markdown, CSV, JSON o código.`
+    )
+  }
+  if (file.size === 0) {
+    throw new Error(`El archivo "${file.name}" está vacío.`)
+  }
+
   let pages: ExtractedPage[] = []
 
-  if (extension === 'pdf') {
-    const buffer = await file.arrayBuffer()
-    pages = await extractPdf(buffer)
-  } else if (extension === 'docx') {
-    const buffer = await file.arrayBuffer()
-    pages = await extractDocx(buffer)
-  } else {
-    const text = await file.text()
-    pages = await extractText(text)
+  try {
+    if (isPdf) {
+      pages = await extractPdf(await file.arrayBuffer())
+    } else if (isDocx) {
+      pages = await extractDocx(await file.arrayBuffer())
+    } else {
+      pages = await extractText(await file.text())
+    }
+  } catch (err) {
+    const name = (err as { name?: string })?.name
+    if (name === 'PasswordException') {
+      throw new Error(`El PDF "${file.name}" está protegido con contraseña.`)
+    }
+    throw new Error(
+      `No se pudo leer "${file.name}": archivo dañado o no válido (${err instanceof Error ? err.message : 'error desconocido'}).`
+    )
+  }
+
+  pages = pages.filter((p) => p.text.length > 0)
+  if (pages.length === 0) {
+    throw new Error(
+      isPdf
+        ? `"${file.name}" no contiene texto seleccionable (probablemente es un PDF escaneado). El OCR no está disponible sin conexión.`
+        : `"${file.name}" no contiene texto.`
+    )
   }
 
   const totalText = pages.map((p) => p.text).join('\n\n')
   return {
     name: file.name,
-    type: file.type || extension,
+    type: file.type || extension || 'document',
     size: file.size,
     pages,
     totalText,

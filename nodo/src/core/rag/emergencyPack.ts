@@ -1,5 +1,6 @@
 import { ingestDocument, type IngestProgress } from './ingest'
 import { getSetting, setSetting } from '../db/repo'
+import { db } from '../db/schema'
 
 const EMERGENCY_FILES = [
   {
@@ -18,7 +19,14 @@ const EMERGENCY_FILES = [
 
 export async function isEmergencyPackInstalled(): Promise<boolean> {
   const installed = await getSetting<boolean>('emergencyPackInstalled' as any)
-  return Boolean(installed)
+  if (!installed) return false
+  const docs = await db.documents.toArray()
+  const exists = EMERGENCY_FILES.some((f) => docs.some((d) => d.name === f.name))
+  if (!exists) {
+    await setSetting('emergencyPackInstalled' as any, false)
+    return false
+  }
+  return true
 }
 
 export async function installEmergencyPack(

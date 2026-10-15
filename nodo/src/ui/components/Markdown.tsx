@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import { Icon } from './Icon'
+import { detectLanguage } from '../../core/code/codePipeline'
 
 /**
  * Markdown mínimo sin dependencias (negrita, cursiva, código, listas,
@@ -108,35 +110,81 @@ function Inline({ text }: { text: string }) {
   )
 }
 
-export function Markdown({ text, copyCode }: { text: string; copyCode: (code: string) => void }) {
+export function Markdown({
+  text,
+  copyCode,
+  onOpenCode,
+}: {
+  text: string
+  copyCode: (code: string) => void
+  onOpenCode?: (payload: { code: string; lang?: 'javascript' | 'python' | 'html'; autoRun?: boolean }) => void
+}) {
   const [copiedIdx, setCopiedIdx] = useState<number | null>(null)
   const blocks = parseBlocks(text)
   return (
     <div className="flex flex-col gap-2 break-words">
       {blocks.map((b, i) => {
         if (b.type === 'code') {
+          const rawCode = b.text ?? ''
+          const detectedLang = detectLanguage(rawCode, b.lang)
+          const lineCount = rawCode.split('\n').length
+          const isLargeCode = lineCount >= 3 || detectedLang === 'html'
+
           return (
-            <div key={i} className="overflow-hidden rounded-xl border border-white/10 bg-black/40">
-              <div className="flex items-center justify-between border-b border-white/[0.06] px-3 py-1.5">
-                <span className="font-mono text-[10px] uppercase tracking-wider text-ink-400">
-                  {b.lang || 'código'}
-                </span>
-                <button
-                  type="button"
-                  onClick={() => {
-                    copyCode(b.text ?? '')
-                    setCopiedIdx(i)
-                    setTimeout(() => setCopiedIdx((v) => (v === i ? null : v)), 1500)
-                  }}
-                  className="font-mono text-[10px] text-ink-400 hover:text-white transition cursor-pointer"
-                  aria-label="Copiar código" title="Copiar código"
-                >
-                  {copiedIdx === i ? 'COPIADO' : 'COPIAR'}
-                </button>
+            <div key={i} className="my-1.5 overflow-hidden rounded-2xl border border-black/10 dark:border-white/15 bg-black/[0.03] dark:bg-white/[0.05] p-3 backdrop-blur-md shadow-xs">
+              <div className="flex items-center justify-between gap-3">
+                <div className="flex items-center gap-2.5 min-w-0">
+                  <div className="p-2 rounded-xl bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/25 shrink-0">
+                    <Icon name="code" size={16} />
+                  </div>
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-2">
+                      <span className="font-semibold text-xs text-neutral-900 dark:text-neutral-100 truncate">
+                        {detectedLang === 'html' ? 'Aplicación Web / UI' : detectedLang === 'python' ? 'Script Python' : 'Script JavaScript'}
+                      </span>
+                      <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-black/5 dark:bg-white/10 text-neutral-600 dark:text-neutral-300 uppercase">
+                        {detectedLang === 'html' ? 'UI' : detectedLang.toUpperCase()}
+                      </span>
+                    </div>
+                    <span className="text-[11px] text-neutral-500 dark:text-neutral-400 font-mono">
+                      {lineCount} líneas • {detectedLang === 'html' ? 'Renderizable en vivo' : 'Listo para ejecutar'}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-1.5 shrink-0">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      copyCode(rawCode)
+                      setCopiedIdx(i)
+                      setTimeout(() => setCopiedIdx((v) => (v === i ? null : v)), 1500)
+                    }}
+                    className="px-2.5 py-1.5 rounded-full border border-black/10 dark:border-white/15 text-[11px] font-mono text-neutral-600 dark:text-neutral-300 hover:text-black dark:hover:text-white transition cursor-pointer"
+                    title="Copiar código fuente"
+                  >
+                    {copiedIdx === i ? 'COPIADO' : 'COPIAR'}
+                  </button>
+
+                  {onOpenCode && (
+                    <button
+                      type="button"
+                      onClick={() => onOpenCode({ code: rawCode, lang: detectedLang, autoRun: detectedLang === 'html' })}
+                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-full font-medium text-xs text-white bg-black dark:bg-white dark:text-black hover:opacity-90 active:scale-95 transition shadow-sm cursor-pointer"
+                      title="Abrir en Code Studio Pro y ejecutar"
+                    >
+                      <Icon name="play" size={12} />
+                      <span>Abrir en Código</span>
+                    </button>
+                  )}
+                </div>
               </div>
-              <pre className="overflow-x-auto p-3 font-mono text-[12.5px] leading-relaxed text-ink-100 scroll-thin">
-                {b.text}
-              </pre>
+
+              {!isLargeCode && (
+                <pre className="mt-2.5 overflow-x-auto p-2.5 rounded-xl bg-black/40 font-mono text-[11.5px] leading-relaxed text-neutral-200 border border-white/5 scroll-thin">
+                  {rawCode}
+                </pre>
+              )}
             </div>
           )
         }

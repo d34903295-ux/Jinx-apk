@@ -10,6 +10,11 @@ set(GGML_OPENMP OFF CACHE BOOL "" FORCE)
 set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
 set(LLAMA_NATIVE OFF CACHE BOOL "" FORCE)
 
+add_compile_options(-O3 -DNDEBUG)
+if(${ANDROID_ABI} STREQUAL "arm64-v8a")
+    add_compile_options(-march=armv8.2-a+dotprod+fp16)
+endif()
+
 add_subdirectory(
     ${CMAKE_CURRENT_SOURCE_DIR}/../../../../third_party/llama.cpp
     ${CMAKE_BINARY_DIR}/llama.cpp-build)

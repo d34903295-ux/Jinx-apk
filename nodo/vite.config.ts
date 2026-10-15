@@ -21,8 +21,8 @@ export default defineConfig({
     strictPort: true,
     // Permite el dominio aleatorio del túnel (*.trycloudflare.com / ngrok).
     allowedHosts: true,
-    // HMR por el túnel HTTPS (wss en 443).
-    hmr: { clientPort: 443, protocol: 'wss' },
+    // HMR dinámico: puerto 443 wss solo si hay túnel (TUNNEL=1), localmente usa el puerto normal de Vite (3000).
+    hmr: process.env.TUNNEL ? { clientPort: 443, protocol: 'wss' } : true,
   },
   plugins: [
     erudaDev(),
@@ -45,8 +45,8 @@ export default defineConfig({
         scope: '/',
         display: 'standalone',
         orientation: 'any',
-        background_color: '#0a0c11',
-        theme_color: '#0a0c11',
+        background_color: '#000000',
+        theme_color: '#000000',
         icons: [
           { src: '/icons/pwa-192.png', sizes: '192x192', type: 'image/png' },
           { src: '/icons/pwa-512.png', sizes: '512x512', type: 'image/png' },

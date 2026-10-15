@@ -115,8 +115,8 @@ export function SetupWizard({ onComplete, canCancel = false, onCancel }: SetupWi
       <div className="w-full max-w-2xl flex flex-col gap-6">
         {/* Cabecera / Branding */}
         <div className="flex flex-col items-center text-center gap-2">
-          <div className="size-14 rounded-2xl bg-linear-to-br from-signal-400 to-signal-600 flex items-center justify-center shadow-xl shadow-signal-500/20 text-ink-950 mb-1">
-            <Logo size={32} />
+          <div className="size-14 rounded-full bg-ink-950/90 border border-signal-400/40 flex items-center justify-center shadow-xl shadow-signal-500/25 mb-1 overflow-hidden">
+            <Logo size={42} />
           </div>
           <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-ink-900 dark:text-white">
             {t('setup.title')}
@@ -147,7 +147,7 @@ export function SetupWizard({ onComplete, canCancel = false, onCancel }: SetupWi
           ) : isDone ? (
             /* Vista de éxito / Instalación completa */
             <div className="flex flex-col items-center text-center py-8 gap-5 animate-fade-up">
-              <div className="size-16 rounded-full bg-signal-500/20 border border-signal-500/40 text-signal-400 flex items-center justify-center shadow-[0_0_20px_rgba(47,163,124,0.4)]">
+              <div className="size-16 rounded-full bg-signal-500/20 border border-signal-500/40 text-signal-400 flex items-center justify-center shadow-[0_0_20px_rgba(255,255,255,0.25)]">
                 <Icon name="check" size={32} />
               </div>
               <div className="flex flex-col gap-1.5">
@@ -161,7 +161,7 @@ export function SetupWizard({ onComplete, canCancel = false, onCancel }: SetupWi
               <button
                 type="button"
                 onClick={onComplete}
-                className="btn-primary w-full sm:w-auto px-8 py-3 text-base mt-2 shadow-[0_0_25px_rgba(47,163,124,0.4)]"
+                className="btn-primary w-full sm:w-auto px-8 py-3 text-base mt-2 shadow-[0_0_25px_rgba(255,255,255,0.25)]"
               >
                 <Icon name="sparkles" size={18} />
                 {t('setup.start')}
@@ -182,7 +182,7 @@ export function SetupWizard({ onComplete, canCancel = false, onCancel }: SetupWi
                     <span className="font-mono text-sm font-semibold flex items-center gap-1.5 text-white">
                       <span
                         className={`size-2 rounded-full ${
-                          hw?.webgpu ? 'bg-signal-400 shadow-[0_0_6px_#2fa37c]' : 'bg-danger-400'
+                          hw?.webgpu ? 'bg-signal-400 shadow-[0_0_6px_rgba(255,255,255,0.7)]' : 'bg-danger-400'
                         }`}
                       />
                       {hw?.webgpu ? t('setup.yes') : t('setup.no')}
@@ -195,7 +195,7 @@ export function SetupWizard({ onComplete, canCancel = false, onCancel }: SetupWi
                     <span className="font-mono text-sm font-semibold flex items-center gap-1.5 text-white">
                       <span
                         className={`size-2 rounded-full ${
-                          hw?.shaderF16 ? 'bg-signal-400 shadow-[0_0_6px_#2fa37c]' : 'bg-ember-400'
+                          hw?.shaderF16 ? 'bg-signal-400 shadow-[0_0_6px_rgba(255,255,255,0.7)]' : 'bg-ember-400'
                         }`}
                       />
                       {hw?.shaderF16 ? t('setup.yes') : t('setup.no')}

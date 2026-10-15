@@ -27,9 +27,25 @@ object LlamaBridge {
     interface GenerateCallback {
         fun onToken(piece: String)
         fun onDone(fullText: String)
+        fun onStats(promptTokens: Int, genTokens: Int, ttftMs: Long, totalMs: Long, tokPerSec: Float) {}
     }
 
-    external fun generate(handle: Long, prompt: String, maxTokens: Int, callback: GenerateCallback): String
+    external fun generateFull(
+        handle: Long,
+        prompt: String,
+        maxTokens: Int,
+        temp: Float,
+        topP: Float,
+        topK: Int,
+        minP: Float,
+        repeatPenalty: Float,
+        callback: GenerateCallback
+    ): String
+
+    fun generate(handle: Long, prompt: String, maxTokens: Int, callback: GenerateCallback): String {
+        return generateFull(handle, prompt, maxTokens, 0.65f, 0.9f, 40, 0.05f, 1.1f, callback)
+    }
+
     external fun stop(handle: Long)
     external fun free(handle: Long)
 }
