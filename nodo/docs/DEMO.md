@@ -1,15 +1,15 @@
-# Guion de Demostración — NODO (Hack47 OFFGRID)
+# Guion de Demostración — Jinx (Hack47 OFFGRID)
 
-Este documento es la guía paso a paso para la demostración en video o presentación en vivo de **NODO** ante el jurado del hackathon.
+Este documento es la guía paso a paso para la demostración en video o presentación en vivo de **Jinx** ante el jurado del hackathon.
 
 ---
 
 ## ⏱️ Duración Recomendada: 3 Minutos
 
 ### Escena 1: El Problema y Desconexión Total (0:00 - 0:30)
-- **Acción:** Muestra el dispositivo móvil o el navegador con la aplicación NODO abierta.
+- **Acción:** Muestra el dispositivo móvil o el navegador con la aplicación Jinx abierta.
 - **Demostración de Red:** Activa el **Modo Avión** en el teléfono o desactiva la conexión Wi-Fi/Ethernet en el navegador. Abre una pestaña nueva y muestra que Google o ChatGPT no cargan ("Sin conexión").
-- **Voz en Off / Mensaje:** *"En una catástrofe natural, rescate en montaña o en medio del océano, no hay internet. La IA en la nube es inútil. Les presento NODO: un agente inteligente 100% soberano y local que opera completamente desconectado."*
+- **Voz en Off / Mensaje:** *"En una catástrofe natural, rescate en montaña o en medio del océano, no hay internet. La IA en la nube es inútil. Les presento Jinx: un agente inteligente 100% soberano y local que opera completamente desconectado."*
 
 ---
 

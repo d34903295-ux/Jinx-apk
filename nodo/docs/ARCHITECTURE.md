@@ -1,6 +1,6 @@
-# Arquitectura de NODO (100% Offline AI Agent)
+# Arquitectura de Jinx (100% Offline AI Agent)
 
-Este documento detalla la arquitectura técnica de **NODO**, diseñado específicamente para el Hackathon **Hack47 OFFGRID**.
+Este documento detalla la arquitectura técnica de **Jinx**, diseñado específicamente para el Hackathon **Hack47 OFFGRID**.
 
 ---
 

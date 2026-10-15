@@ -1,4 +1,4 @@
-# NODO — 100% Offline AI Agent 🌐🚫
+# Jinx — 100% Offline AI Agent 🌐🚫
 
 > **Proyecto para Hack47 OFFGRID (Deadline: 15 de Octubre, 2026)**  
 > *Tu copiloto de inteligencia artificial autónomo, privado y 100% local en tu bolsillo, sin conexión a internet ni servidores externos.*
@@ -11,7 +11,7 @@ En situaciones de emergencia, misiones humanitarias, navegación marítima, expe
 
 La mayoría de los agentes de IA actuales son dependientes de la nube (OpenAI, Anthropic, Gemini). Si no hay señal 4G/5G ni satélite, la IA queda inútil.
 
-**NODO** resuelve esto de raíz:
+**Jinx** resuelve esto de raíz:
 - **Descárgalo una sola vez** mientras tengas conexión (PWA o APK Android).
 - **Funciona para siempre desconectado:** El modelo LLM, los embeddings, la base de datos vectorial, el motor de ejecución de código Python y las herramientas se ejecutan **100% dentro del dispositivo del usuario** vía WebGPU, WebAssembly y Workers en segundo plano.
 - **0 APIs, 0 Telemetría, 0 Costes por Token.**
@@ -71,7 +71,7 @@ El agente razona, planifica y ejecuta acciones autónomamente (hasta 5 iteracion
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                       NODO FRONTEND                         │
+│                       JINX FRONTEND                         │
 │             React 19 + Tailwind CSS + Lucide Icons          │
 │        (ChatView | LibraryView | NotesView | Settings)      │
 └──────────────┬──────────────────────────────┬───────────────┘
@@ -103,12 +103,12 @@ El agente razona, planifica y ejecuta acciones autónomamente (hasta 5 iteracion
 ### Prerrequisitos
 - Node.js 18+ y npm
 - Navegador moderno con soporte para **WebGPU** (Chrome 113+, Edge 113+, Android Chrome, Firefox Nightly).
-- *(Opcional para Android)* Android Studio Hedgehog+ con Android SDK 34+.
+- *(Opcional para Android)* Android Studio con Android SDK 34+.
 
 ### 1. Clonar e Instalar Dependencias
 ```bash
-git clone https://github.com/tu-usuario/nodo.git
-cd nodo/nodo
+git clone https://github.com/d34903295-ux/Jinx-apk.git
+cd Jinx-apk/nodo
 npm install
 ```
 
@@ -156,7 +156,7 @@ La aplicación cuenta con una shell Android nativa (`app/`) configurada con:
 
 ## 👥 Equipo y Hack47 OFFGRID
 
-- **Proyecto:** NODO (Jinx Engine)
+- **Proyecto:** Jinx
 - **Categoría:** Offline First / Sovereign AI / Disaster Tech
 - **Hackathon:** Hack47 OFFGRID (Octubre 2026)
 - **Licencia:** MIT License
